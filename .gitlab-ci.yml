@@ -9,3 +9,10 @@ build1:
     - echo "Do your build here"
     - echo $CI_JOB_ID
     - echo $SECRET
+    
+    
+# Example of building a docker container and publishing to project's gitlab docker registry
+
+# Example of using the docker container from the example above for a build job, and showing how different docker containers can be done per job.
+
+# Example of feature flags being set and environments being used with CD
