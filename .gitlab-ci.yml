@@ -1,18 +1,141 @@
-#### see https://docs.gitlab.com/ce/ci/yaml/README.html for all available options
+# Note: see https://docs.gitlab.com/ce/ci/yaml/README.html for all
+# available options.
 
-# you can delete this line if you're not using Docker
-image: busybox:latest
-   
-build1:
+# Establish the order of the CI pipeline jobs.  This is a list of
+# _stages_ for the whole pipeline, and the order here is the order in
+# which the stages are run.
+#
+# Stage names are arbitrary, but we recommend the set shown here.
+stages:
+- test
+- build
+- package
+- ci
+
+# This section can contain variable values for all jobs.  (Individual
+# jobs can also have a "variables" declaration, which can override
+# values set up here.)  This is not the only place variables can be
+# set; the gitlab UI also allows variables to be set, and that should
+# be used for sensitive values, such as login passwords.
+variables:
+  APP_NAME: "edp-helloworld-rest"
+  APP_VERSION: "1.0"
+  BUILD_NUMBER: "$CI_COMMIT_SHORT_SHA"
+
+# This is a _job_, as opposed to a stage.  Multiple jobs can be in a
+# given stage, in which case the jobs are run in parallel.
+#
+# Job names are also arbitrary, and need not match the stage names.
+# If there is only one job in the stage, it's probably best to give it
+# the same name as the stage; if there are multiple jobs, we suggest
+# using the stage name as a prefix, e.g., "test-unit",
+# "test-function", etc.
+test:
+  # Image to build with: contains Maven 3.3.9.
+  image: maven:3.3.9
+
+  # This job will be run in the "test" stage.
+  stage: test
+
+  # Shell script to run within the job.  In this case, we're doing a
+  # single step--running Maven with the "test" target--but multiple
+  # steps are possible; see the "package" job for an example.  The
+  # list is executed in order.
+  script:
+  - mvn test -DAPP_VERSION=$APP_VERSION -DBUILD_NUMBER=$BUILD_NUMBER
+
+  # This job happens to produce no artifacts we wish to save, but we
+  # could do that; see the "build" job for an example of how to save
+  # artifacts.
+
+# This is a "build" job that produces an artifact.
+build:
+  image: maven:3.3.9
   stage: build
   script:
-    - echo "Do your build here"
-    - echo $CI_JOB_ID
-    - echo $SECRET
-    
-    
-# Example of building a docker container and publishing to project's gitlab docker registry
+  - mvn package -DAPP_VERSION=$APP_VERSION -DBUILD_NUMBER=$BUILD_NUMBER
 
-# Example of using the docker container from the example above for a build job, and showing how different docker containers can be done per job.
+  # Artifacts are named collections of files.  Here, we're giving this
+  # artifact a name derived from the branch name and the commit SHA;
+  # this name will be used as the name of the downloadable ZIP file
+  # associated with the job.  Artifacts can be used by later stages.
+  artifacts:
+    # Name for the artifact.
+    name: '$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA'
 
-# Example of feature flags being set and environments being used with CD
+    # List of file globs that can be used to specify the files to
+    # include in the artifact.  Here, we're only saving the built .jar
+    # file, but additional files could be saved.
+    paths:
+    - target/*.jar
+
+    # We can specify a maximum time for the artifact to be saved.
+    # This specification will cause gitlab to delete the artifact
+    # after 1 week.
+    expire_in: 1 week
+
+# This is a "package" job that builds a docker container image using
+# the artifact that was created in the "build" job.
+package:
+  image: docker:latest
+  stage: package
+
+  # We only want to package up docker containers for our trunk
+  # ("tmo/master") and release ("tmo/release-x.y") branches; this rule
+  # accomplishes that by ensuring that the branch matches the given
+  # regular expression.
+  only:
+  - /^tmo\/.*$/
+
+  # To build a docker image from a gitlab job, we need a "service".  A
+  # number of services are already defined in gitlab, so we tell them
+  # we need the "dind" service; that just stands for
+  # "docker-in-docker", and is what allows building one docker
+  # container from inside an executing container.  (Jobs in gitlab run
+  # in isolated docker containers, not VMs.)
+  services:
+  - docker:dind
+
+  # We also have to let docker know it should use the "overlay"
+  # driver.  This is done through the environment variable
+  # DOCKER_DRIVER.
+  variables:
+    DOCKER_DRIVER: overlay
+
+  # These are the steps needed to construct the image.  Note the use
+  # of --build-arg to pass the full filename of the jar file.
+  script:
+  - docker build -t registry.gitlab.com/tmobile/edp/helloworld:$CI_COMMIT_SHORT_SHA .
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  - docker push registry.gitlab.com/tmobile/edp/helloworld:$CI_COMMIT_SHORT_SHA
+
+# This job is intended to run smoke tests on the constructed docker
+# image, and is the first step in the deployment process.  The design
+# chosen here is to start the built image as a service, then check
+# that it responds to its HTTP endpoint appropriately.
+ci:
+  # We don't need Java or Maven here, so use a base image.
+  image: busybox:latest
+  stage: ci
+
+  # Again, we only want to run this job on branches matching "tmo/*",
+  # since "package" is a dependency and won't run on other branches.
+  only:
+  - /^tmo\/.*$/
+
+  # Here again we're using a service; but this time, it's not a
+  # standard docker service--we're actually starting up the container
+  # from the "package" job as a service.  That will spin up a
+  # container for just this job, and we can run our smoke tests
+  # against it.  Notice the use of "alias" here to ensure a hostname
+  # we can predict for the wget in the script.
+  services:
+  - name: registry.gitlab.com/tmobile/edp/helloworld:$CI_COMMIT_SHORT_SHA
+    alias: helloworld
+
+  # This script should be a series of simple smoke tests that just
+  # validate that the image basically works.  In particular, extensive
+  # or intensive testing probably shouldn't be done here; that should
+  # be left to the dev, qa, and staging environments.
+  script:
+  - out=`wget -q -O- http://helloworld:19000/greeting?name=name` && [ "$out" == '{"id":1,"greeting":"Hello, name!"}' ]

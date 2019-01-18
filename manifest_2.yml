@@ -1,0 +1,5 @@
+---
+applications:
+- name: sb-helloworld
+  path: target/edp-helloworld-rest-0.1.0.jar
+  instances: 4
