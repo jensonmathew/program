@@ -11,6 +11,9 @@ stages:
 - build
 - package
 - ci
+- deploy-qa
+- deploy-stg
+- deploy-prod
 
 # This section can contain variable values for all jobs.  (Individual
 # jobs can also have a "variables" declaration, which can override
@@ -37,6 +40,10 @@ test:
   # This job will be run in the "test" stage.
   stage: test
 
+  # We don't want to run this job when a new tag is created.
+  except:
+  - tags
+
   # Shell script to run within the job.  In this case, we're doing a
   # single step--running Maven with the "test" target--but multiple
   # steps are possible; see the "package" job for an example.  The
@@ -52,6 +59,8 @@ test:
 build:
   image: maven:3.3.9
   stage: build
+  except:
+  - tags
   script:
   - mvn package -DAPP_VERSION=$APP_VERSION -DBUILD_NUMBER=$BUILD_NUMBER
 
@@ -83,9 +92,12 @@ package:
   # We only want to package up docker containers for our trunk
   # ("tmo/master") and release ("tmo/release-x.y") branches; this rule
   # accomplishes that by ensuring that the branch matches the given
-  # regular expression.
+  # regular expression.  Also note the "except", which ensures that
+  # this job is not created or run when a tag is created.
   only:
   - /^tmo\/.*$/
+  except:
+  - tags
 
   # To build a docker image from a gitlab job, we need a "service".  A
   # number of services are already defined in gitlab, so we tell them
@@ -122,6 +134,8 @@ ci:
   # since "package" is a dependency and won't run on other branches.
   only:
   - /^tmo\/.*$/
+  except:
+  - tags
 
   # Here again we're using a service; but this time, it's not a
   # standard docker service--we're actually starting up the container
@@ -139,3 +153,143 @@ ci:
   # be left to the dev, qa, and staging environments.
   script:
   - out=`wget -q -O- http://helloworld:19000/greeting?name=name` && [ "$out" == '{"id":1,"greeting":"Hello, name!"}' ]
+
+# At the same time we're running the smoke tests, we also want to
+# deploy our service to the dev environment.  This job is a stub for
+# how to accomplish deployment.
+deploy-dev:
+  image: busybox:latest
+
+  # Note that this job is also in the "ci" stage, meaning it will run
+  # in parallel with the "ci" job shown above.  This happens to be the
+  # only step in this example where we do this, but this feature could
+  # be used to, for example, parallelize tests.
+  stage: ci
+
+  only:
+  - /^tmo\/.*$/
+  except:
+  - tags
+
+  # This is a stub for a deployment job, so right now it just contains
+  # an "echo" statement.  Substitute the code you actually need to
+  # deploy to your dev environment.
+  script:
+  - echo "Deploy to dev"
+
+  # This section is specific to jobs that deploy to environments.  The
+  # gitlab API can keep track of which SHA is running in which
+  # environment, and this is how that happens.
+  environment:
+    name: dev
+
+    # The gitlab UI can also have a button to go directly to a URL for
+    # that environment.  This can be handy to try your UI code out and
+    # see if it does what it was intended to do.  If your service has
+    # a web-accessible UI, it might make sense to set this URL.  Our
+    # example service doesn't have a web UI, so we don't set that
+    # here...and of course, this job is just a stub, so it's not even
+    # actually deployed anywhere anyway.
+    #
+    # If you are using this example and want to make use of this
+    # feature, simply uncomment the line below and enter the correct
+    # URL for this environment.  You can also set this in the
+    # "environment" section of the other deploy jobs as well, though
+    # this example .gitlab-ci.yml does not show this.
+    #url: http://example.dev.t-mobile.com
+
+# This is the first curated environment deployment job--in this case,
+# to the QA environment.  It requires the user specifically click a
+# button to perform the deployment.  Pipelines pause here; it is not
+# allowed to deploy to the staging ("stg") environment unless the same
+# code has already been deployed to the QA ("qa") environment, and
+# certainly not to the production ("prod") environment.
+#
+# In addition to deploying to an environment, this job illustrates
+# setting a tag.  We recommend setting "release candidate", or "rc",
+# tags when deploying to the QA environment.
+deploy-qa:
+  image: busybox:latest
+  stage: deploy-qa
+  only:
+  - /^tmo\/.*$/
+  except:
+  - tags
+
+  # Note: The step to set an rc tag is currently stubbed out.  The
+  # design is to have the job set a tag of the form "tmo/rc/NNN",
+  # where "NNN" is a number starting from one and incrementing each
+  # time this job is triggered.  (There is also support for using
+  # short-lived release branches, which require a slightly different
+  # naming scheme: "tmo/rc/NNN.MMM".)
+  script:
+  - echo "Set rc tag here"
+  - echo "Deploy to QA"
+
+  # We use "qa" as the name of the environment to deploy to.
+  environment:
+    name: qa
+
+  # These two settings make this job function manually, and prevent
+  # the execution of the later jobs until this job has been executed,
+  # respectively.
+  when: manual
+  allow_failure: false
+
+# This job deploys to the staging environment.  This is the last step
+# before code can be promoted into the production environment.  As
+# with the deploy-qa job, pipelines pause here, and deployment to
+# production cannot occur until this job has been executed.
+#
+# In addition to deploying to the staging environment, this job
+# illustrates setting a "release" tag, which is recommended for
+# deployments to the staging environment.
+deploy-stg:
+  image: busybox:latest
+  stage: deploy-stg
+  only:
+  - /^tmo\/.*$/
+  except:
+  - tags
+
+  # Note: Again, the step to set a release tag is currently stubbed
+  # out.  The design is to have the job set a tag of the form
+  # "tmo/rel/NNN", where "NNN" matches the currently set "tmo/rc/NNN"
+  # tag for this commit.  (And again, there is also support for using
+  # short-lived release branches, which reqire a slightly different
+  # naming scheme: "tmo/rel/NNN.MMM".)
+  script:
+  - echo "Set rel tag here"
+  - echo "Deploy to STG"
+
+  # We use "stg" as the name of the environment to deploy to.
+  environment:
+    name: stg
+
+  # Again, make this job a manual job, and prohibit deployment to
+  # production unless successful deployment to staging has occurred.
+  when: manual
+  allow_failure: false
+
+# This is the final deployment job: deployment to production.
+deploy-prod:
+  image: busybox:latest
+  stage: deploy-prod
+  only:
+  - /^tmo\/.*$/
+  except:
+  - tags
+
+  # Note: The step to move the "tmo/prod" tag is currently stubbed
+  # out.
+  script:
+  - echo "Set prod tag here (?)"
+  - echo "Deploy to PROD"
+
+  # We use "prod" as the name of the environment to deploy to.
+  environment:
+    name: prod
+
+  # This again makes this job a manually-triggered job.
+  when: manual
+  allow_failure: false
