@@ -209,7 +209,7 @@ deploy-dev:
 # setting a tag.  We recommend setting "release candidate", or "rc",
 # tags when deploying to the QA environment.
 deploy-qa:
-  image: alpine:latest
+  image: registry.gitlab.com/tmobile/edp/autotag:latest
   stage: deploy-qa
   only:
   - /^tmo\/.*$/
@@ -222,23 +222,15 @@ deploy-qa:
   # support for using short-lived release branches, which require a
   # slightly different naming scheme: "tmo/rc/NNN.MMM".)
   #
-  # The first step of the script is to add the Alpine Linux packages
-  # required for the autotag script to run; this is the "apk" command
-  # line.  To search the Alpine Linux package cache for additional
-  # packages you may require, visit
-  # https://pkgs.alpinelinux.org/packages.
+  # The first step of the script is to invoke the autotag script.
+  # This script automates the task of creating the tags described
+  # above, but is extremely flexible; you may wish to check out if it
+  # fits other tagging needs you may have.
   #
-  # The next step of the script is to invoke the autotag script.  This
-  # script is currently checked into the repository and automates the
-  # task of creating the tags described above, but is extremely
-  # flexible; you may wish to check out if it fits other tagging needs
-  # you may have.
-  #
-  # The third step is the actual deployment to the environment.  In
+  # The next step is the actual deployment to the environment.  In
   # this case, it happens to be stubbed.
   script:
-  - apk add --update bash git coreutils
-  - ./autotag incr
+  - autotag incr
   - echo "Deploy to QA"
 
   # We use "qa" as the name of the environment to deploy to.
@@ -260,7 +252,7 @@ deploy-qa:
 # illustrates setting a "release" tag, which is recommended for
 # deployments to the staging environment.
 deploy-stg:
-  image: alpine:latest
+  image: registry.gitlab.com/tmobile/edp/autotag:latest
   stage: deploy-stg
   only:
   - /^tmo\/.*$/
@@ -274,8 +266,7 @@ deploy-stg:
   # naming scheme: "tmo/rel/NNN.MMM".)  The steps are similar to the
   # "deploy-qa" job, but notice the different invocation for autotag.
   script:
-  - apk add --update bash git coreutils
-  - ./autotag from
+  - autotag from
   - echo "Deploy to STG"
 
   # We use "stg" as the name of the environment to deploy to.
@@ -289,7 +280,7 @@ deploy-stg:
 
 # This is the final deployment job: deployment to production.
 deploy-prod:
-  image: alpine:latest
+  image: registry.gitlab.com/tmobile/edp/autotag:latest
   stage: deploy-prod
   only:
   - /^tmo\/.*$/
@@ -297,8 +288,7 @@ deploy-prod:
   - tags
 
   script:
-  - apk add --update bash git coreutils
-  - ./autotag move tmo/prod
+  - autotag move tmo/prod
   - echo "Deploy to PROD"
 
   # We use "prod" as the name of the environment to deploy to.
