@@ -118,7 +118,7 @@ package:
   # of --build-arg to pass the full filename of the jar file.
   script:
   - docker build -t registry.gitlab.com/tmobile/edp/helloworld:$CI_COMMIT_SHORT_SHA .
-  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
   - docker push registry.gitlab.com/tmobile/edp/helloworld:$CI_COMMIT_SHORT_SHA
 
 # This job is intended to run smoke tests on the constructed docker
