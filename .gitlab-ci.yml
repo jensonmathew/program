@@ -24,6 +24,7 @@ variables:
   APP_NAME: "edp-helloworld-rest"
   APP_VERSION: "1.0"
   BUILD_NUMBER: "$CI_COMMIT_SHORT_SHA"
+  AUTOTAG_IMG: "registry.gitlab.com/tmobile/edp/autotag:latest"
 
 # This is a _job_, as opposed to a stage.  Multiple jobs can be in a
 # given stage, in which case the jobs are run in parallel.
@@ -114,12 +115,11 @@ package:
   variables:
     DOCKER_DRIVER: overlay
 
-  # These are the steps needed to construct the image.  Note the use
-  # of --build-arg to pass the full filename of the jar file.
+  # These are the steps needed to construct the image.
   script:
-  - docker build -t registry.gitlab.com/tmobile/edp/helloworld:$CI_COMMIT_SHORT_SHA .
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-  - docker push registry.gitlab.com/tmobile/edp/helloworld:$CI_COMMIT_SHORT_SHA
+  - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
 
 # This job is intended to run smoke tests on the constructed docker
 # image, and is the first step in the deployment process.  The design
@@ -144,7 +144,7 @@ ci:
   # against it.  Notice the use of "alias" here to ensure a hostname
   # we can predict for the wget in the script.
   services:
-  - name: registry.gitlab.com/tmobile/edp/helloworld:$CI_COMMIT_SHORT_SHA
+  - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
     alias: helloworld
 
   # This script should be a series of simple smoke tests that just
@@ -209,7 +209,7 @@ deploy-dev:
 # setting a tag.  We recommend setting "release candidate", or "rc",
 # tags when deploying to the QA environment.
 deploy-qa:
-  image: registry.gitlab.com/tmobile/edp/autotag:latest
+  image: $AUTOTAG_IMG
   stage: deploy-qa
   only:
   - /^tmo\/.*$/
@@ -252,7 +252,7 @@ deploy-qa:
 # illustrates setting a "release" tag, which is recommended for
 # deployments to the staging environment.
 deploy-stg:
-  image: registry.gitlab.com/tmobile/edp/autotag:latest
+  image: $AUTOTAG_IMG
   stage: deploy-stg
   only:
   - /^tmo\/.*$/
@@ -280,7 +280,7 @@ deploy-stg:
 
 # This is the final deployment job: deployment to production.
 deploy-prod:
-  image: registry.gitlab.com/tmobile/edp/autotag:latest
+  image: $AUTOTAG_IMG
   stage: deploy-prod
   only:
   - /^tmo\/.*$/
