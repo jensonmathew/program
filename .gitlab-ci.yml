@@ -25,6 +25,7 @@ variables:
   APP_VERSION: "1.0"
   BUILD_NUMBER: "$CI_COMMIT_SHORT_SHA"
   AUTOTAG_IMG: "registry.gitlab.com/tmobile/edp/autotag:latest"
+  GITLAB_CORE_IMG: "registry.gitlab.com/tmobile/edp/gitlab-core:latest"
 
 # This is a _job_, as opposed to a stage.  Multiple jobs can be in a
 # given stage, in which case the jobs are run in parallel.
@@ -216,6 +217,12 @@ deploy-qa:
   except:
   - tags
 
+  # The gitlab-core service provides interfaces used by autotag to
+  # perform the repository tag manipulation that it does.
+  services:
+  - name: $GITLAB_CORE_IMG
+    alias: gitlab-core
+
   # Note: The design is to have the job set a tag of the form
   # "tmo/rc/NNN", where "NNN" is a number starting from one and
   # incrementing each time this job is triggered.  (There is also
@@ -258,6 +265,9 @@ deploy-stg:
   - /^tmo\/.*$/
   except:
   - tags
+  services:
+  - name: $GITLAB_CORE_IMG
+    alias: gitlab-core
 
   # Note: Again, the design is to have the job set a tag of the form
   # "tmo/rel/NNN", where "NNN" matches the currently set "tmo/rc/NNN"
@@ -286,6 +296,9 @@ deploy-prod:
   - /^tmo\/.*$/
   except:
   - tags
+  services:
+  - name: $GITLAB_CORE_IMG
+    alias: gitlab-core
 
   script:
   - autotag move tmo/prod
