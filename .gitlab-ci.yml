@@ -1,12 +1,22 @@
 # Note: see https://docs.gitlab.com/ce/ci/yaml/README.html for all
 # available options.
 
+# This section defines a remote include of .gitlab-ci.yml instructions
+# maintained by the CDP team.
+
+##CDP Global Include
+include:
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.cdp.shared.gitlab-ci.yml' 
+
 # Establish the order of the CI pipeline jobs.  This is a list of
 # _stages_ for the whole pipeline, and the order here is the order in
 # which the stages are run.
 #
 # Stage names are arbitrary, but we recommend the set shown here.
 stages:
+- cdp #Included for stage 0 CDP jobs
 - test
 - build
 - package
