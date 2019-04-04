@@ -8,7 +8,7 @@
 include:
   - project: 'tmobile/templates'
     ref: tmo/master
-    file: '/gitlab-ci/.cdp.shared.gitlab-ci.yml' 
+    file: '/gitlab-ci/.cdp.shared.gitlab-ci.yml'
 
 # Establish the order of the CI pipeline jobs.  This is a list of
 # _stages_ for the whole pipeline, and the order here is the order in
@@ -21,9 +21,7 @@ stages:
 - build
 - package
 - ci
-- deploy-qa
-- deploy-stg
-- deploy-prod
+- deploy
 
 # This section can contain variable values for all jobs.  (Individual
 # jobs can also have a "variables" declaration, which can override
@@ -34,8 +32,9 @@ variables:
   APP_NAME: "edp-helloworld-rest"
   APP_VERSION: "1.0"
   BUILD_NUMBER: "$CI_COMMIT_SHORT_SHA"
-  AUTOTAG_IMG: "registry.gitlab.com/tmobile/edp/autotag:latest"
-  GITLAB_CORE_IMG: "registry.gitlab.com/tmobile/edp/gitlab-core:latest"
+  AUTOTAG_IMG: "registry.gitlab.com/tmobile/cdp/autotag:latest"
+  CDP_SERVICE: "registry.gitlab.com/tmobile/cdp/cdp-service:0295f85c"
+  TMO_GITLAB_CORE: "cdp:8000"
 
 # This is a _job_, as opposed to a stage.  Multiple jobs can be in a
 # given stage, in which case the jobs are run in parallel.
@@ -209,6 +208,35 @@ deploy-dev:
     # this example .gitlab-ci.yml does not show this.
     #url: http://example.dev.t-mobile.com
 
+
+# This is a shared anchor function to be used in subsequent jobs.
+.deploy: &deploy
+  image: $AUTOTAG_IMG
+  stage: deploy
+
+ # The gitlab-core service provides interfaces used by autotag to
+ # perform the repository tag manipulation that it does.
+ # This eventually will be move to the gitlab-runner level once
+ # it supports alias
+  services:
+  - name: $CDP_SERVICE
+    alias: cdp
+
+  except:
+  - tags
+
+  only:
+  - /^tmo\/.*$/
+
+ # This setting make this job function manually by a user clicking the
+ # "Play" button through the gitlab.com Web UI. In order to stop
+ # from proceeding any future phases you could add allow_failure=false.
+  when: manual
+  tags:
+    - cdp
+    - tmo
+
+
 # This is the first curated environment deployment job--in this case,
 # to the QA environment.  It requires the user specifically click a
 # button to perform the deployment.  Pipelines pause here; it is not
@@ -220,19 +248,7 @@ deploy-dev:
 # setting a tag.  We recommend setting "release candidate", or "rc",
 # tags when deploying to the QA environment.
 deploy-qa:
-  image: $AUTOTAG_IMG
-  stage: deploy-qa
-  only:
-  - /^tmo\/.*$/
-  except:
-  - tags
-
-  # The gitlab-core service provides interfaces used by autotag to
-  # perform the repository tag manipulation that it does.
-  services:
-  - name: $GITLAB_CORE_IMG
-    alias: gitlab-core
-
+  <<: *deploy
   # Note: The design is to have the job set a tag of the form
   # "tmo/rc/NNN", where "NNN" is a number starting from one and
   # incrementing each time this job is triggered.  (There is also
@@ -254,12 +270,6 @@ deploy-qa:
   environment:
     name: qa
 
-  # These two settings make this job function manually, and prevent
-  # the execution of the later jobs until this job has been executed,
-  # respectively.
-  when: manual
-  allow_failure: false
-
 # This job deploys to the staging environment.  This is the last step
 # before code can be promoted into the production environment.  As
 # with the deploy-qa job, pipelines pause here, and deployment to
@@ -269,16 +279,7 @@ deploy-qa:
 # illustrates setting a "release" tag, which is recommended for
 # deployments to the staging environment.
 deploy-stg:
-  image: $AUTOTAG_IMG
-  stage: deploy-stg
-  only:
-  - /^tmo\/.*$/
-  except:
-  - tags
-  services:
-  - name: $GITLAB_CORE_IMG
-    alias: gitlab-core
-
+  <<: *deploy
   # Note: Again, the design is to have the job set a tag of the form
   # "tmo/rel/NNN", where "NNN" matches the currently set "tmo/rc/NNN"
   # tag for this commit.  (And again, there is also support for using
@@ -293,23 +294,10 @@ deploy-stg:
   environment:
     name: stg
 
-  # Again, make this job a manual job, and prohibit deployment to
-  # production unless successful deployment to staging has occurred.
-  when: manual
-  allow_failure: false
 
 # This is the final deployment job: deployment to production.
 deploy-prod:
-  image: $AUTOTAG_IMG
-  stage: deploy-prod
-  only:
-  - /^tmo\/.*$/
-  except:
-  - tags
-  services:
-  - name: $GITLAB_CORE_IMG
-    alias: gitlab-core
-
+  <<: *deploy
   script:
   - autotag move tmo/prod
   - echo "Deploy to PROD"
@@ -317,7 +305,3 @@ deploy-prod:
   # We use "prod" as the name of the environment to deploy to.
   environment:
     name: prod
-
-  # This again makes this job a manually-triggered job.
-  when: manual
-  allow_failure: false
