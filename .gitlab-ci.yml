@@ -210,6 +210,12 @@ deploy-dev:
 
 
 # This is a shared anchor function to be used in subsequent jobs.
+# This is basically a template that, when referenced, will indicate 
+# that the the attributes defined here will be copied into all jobs 
+# that reference this anchor by name. 
+# This is a great way to include the same attributes in many jobs
+# without having to cut and paste them into each job.
+# https://docs.gitlab.com/ee/ci/yaml/#anchors
 .deploy: &deploy
   image: $AUTOTAG_IMG
   stage: deploy
@@ -248,7 +254,9 @@ deploy-dev:
 # setting a tag.  We recommend setting "release candidate", or "rc",
 # tags when deploying to the QA environment.
 deploy-qa:
+  # The "<<: *deploy" here references the "deploy" anchor defined previously. 
   <<: *deploy
+  
   # Note: The design is to have the job set a tag of the form
   # "tmo/rc/NNN", where "NNN" is a number starting from one and
   # incrementing each time this job is triggered.  (There is also
