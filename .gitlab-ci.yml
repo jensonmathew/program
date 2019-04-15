@@ -9,6 +9,10 @@ include:
   - project: 'tmobile/templates'
     ref: tmo/master
     file: '/gitlab-ci/.cdp.shared.gitlab-ci.yml'
+#Inject https://gitlab.com/tmobile/templates/blob/tmo/master/gitlab-ci/.tmo.docker.gitlab-ci.yml
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.docker.gitlab-ci.yml'
 
 # Establish the order of the CI pipeline jobs.  This is a list of
 # _stages_ for the whole pipeline, and the order here is the order in
@@ -33,7 +37,7 @@ variables:
   APP_VERSION: "1.0"
   BUILD_NUMBER: "$CI_COMMIT_SHORT_SHA"
   AUTOTAG_IMG: "registry.gitlab.com/tmobile/cdp/autotag:latest"
-  CDP_SERVICE: "registry.gitlab.com/tmobile/cdp/cdp-service:0295f85c"
+  CDP_SERVICE: "registry.gitlab.com/tmobile/cdp/cdp-service:prd"
   TMO_GITLAB_CORE: "cdp:8000"
 
 # This is a _job_, as opposed to a stage.  Multiple jobs can be in a
@@ -94,43 +98,6 @@ build:
     # after 1 week.
     expire_in: 1 week
 
-# This is a "package" job that builds a docker container image using
-# the artifact that was created in the "build" job.
-package:
-  image: docker:latest
-  stage: package
-
-  # We only want to package up docker containers for our trunk
-  # ("tmo/master") and release ("tmo/release-x.y") branches; this rule
-  # accomplishes that by ensuring that the branch matches the given
-  # regular expression.  Also note the "except", which ensures that
-  # this job is not created or run when a tag is created.
-  only:
-  - /^tmo\/.*$/
-  except:
-  - tags
-
-  # To build a docker image from a gitlab job, we need a "service".  A
-  # number of services are already defined in gitlab, so we tell them
-  # we need the "dind" service; that just stands for
-  # "docker-in-docker", and is what allows building one docker
-  # container from inside an executing container.  (Jobs in gitlab run
-  # in isolated docker containers, not VMs.)
-  services:
-  - docker:dind
-
-  # We also have to let docker know it should use the "overlay"
-  # driver.  This is done through the environment variable
-  # DOCKER_DRIVER.
-  variables:
-    DOCKER_DRIVER: overlay
-
-  # These are the steps needed to construct the image.
-  script:
-  - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
-
 # This job is intended to run smoke tests on the constructed docker
 # image, and is the first step in the deployment process.  The design
 # chosen here is to start the built image as a service, then check
@@ -154,7 +121,7 @@ ci:
   # against it.  Notice the use of "alias" here to ensure a hostname
   # we can predict for the wget in the script.
   services:
-  - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  - name: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
     alias: helloworld
 
   # This script should be a series of simple smoke tests that just
@@ -225,7 +192,7 @@ deploy-dev:
  # This eventually will be move to the gitlab-runner level once
  # it supports alias
   services:
-  - name: $CDP_SERVICE
+  - name: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
     alias: cdp
 
   except:
