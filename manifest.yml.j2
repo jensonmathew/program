@@ -1,0 +1,9 @@
+---
+applications:
+- name: sb-helloworld
+  path: ./target/{{ CI_PROJECT_NAME }}-{{ APP_VERSION }}-{{ BUILD_NUMBER }}.jar
+  buildpacks: 
+    - java_buildpack_offline_tmo
+  env:
+    FORCE_HTTPS: true
+  

@@ -1,282 +1,77 @@
-# Note: see https://docs.gitlab.com/ce/ci/yaml/README.html for all
-# available options.
-
-# This section defines a remote include of .gitlab-ci.yml instructions
-# maintained by the CDP team.
-
-##CDP Global Include
+# Injection of templates
 include:
+  # Injects TMO Global Shared (handles certs, lists blacklisted files etc.)  
   - project: 'tmobile/templates'
     ref: tmo/master
-    file: '/gitlab-ci/.cdp.shared.gitlab-ci.yml'
-#Inject https://gitlab.com/tmobile/templates/blob/tmo/master/gitlab-ci/.tmo.docker.gitlab-ci.yml
+    file: '/gitlab-ci/.tmo.global.common.gitlab-ci.yml'
+    
+  # Injects Maven Test
   - project: 'tmobile/templates'
     ref: tmo/master
-    file: '/gitlab-ci/.tmo.docker.gitlab-ci.yml'
+    file: '/gitlab-ci/.tmo.job.mavenTest.gitlab-ci.yml'
 
-# Establish the order of the CI pipeline jobs.  This is a list of
-# _stages_ for the whole pipeline, and the order here is the order in
-# which the stages are run.
-#
-# Stage names are arbitrary, but we recommend the set shown here.
-stages:
-- cdp #Included for stage 0 CDP jobs
-- test
-- build
-- package
-- ci
-- deploy
+  # Injects Maven Build
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.job.mavenBuild.gitlab-ci.yml'
 
-# This section can contain variable values for all jobs.  (Individual
-# jobs can also have a "variables" declaration, which can override
-# values set up here.)  This is not the only place variables can be
-# set; the gitlab UI also allows variables to be set, and that should
-# be used for sensitive values, such as login passwords.
+  # Injects Maven Publish
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml'
+    
+  # Injects SonarScan capability
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.job.sonar.gitlab-ci.yml'
+    
+  # Injects PCF Deploy function
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.function.pcf.gitlab-ci.yml'
+
+stages: 
+  - cdp 
+  - test
+  - build
+  - scan
+  - publish
+  - deploy
+
 variables:
-  APP_NAME: "edp-helloworld-rest"
-  APP_VERSION: "1.0"
-  BUILD_NUMBER: "$CI_COMMIT_SHORT_SHA"
-  AUTOTAG_IMG: "registry.gitlab.com/tmobile/cdp/autotag:latest"
-  CDP_SERVICE: "registry.gitlab.com/tmobile/cdp/cdp-service:prd"
-  TMO_GITLAB_CORE: "cdp:8000"
+    # Common Parameters (used by build and deploy)
+    APP_VERSION: "1.0"
+    BUILD_NUMBER: "$CI_COMMIT_SHORT_SHA"
+    # Maven Parameters
+    MAVEN_PUBLISH_ARGS: "deploy -s ci-settings.xml"
+    # SonarScan Parameters
+    SONAR_PARAMS: "-Dsonar.java.binaries=target/classes"
+    # PCF Deploy Parameters
+    PCF_API: "api.sys.px-npe01.cf.t-mobile.com"
+    PCF_ORG: "enterprise-pipeline"
 
-# This is a _job_, as opposed to a stage.  Multiple jobs can be in a
-# given stage, in which case the jobs are run in parallel.
-#
-# Job names are also arbitrary, and need not match the stage names.
-# If there is only one job in the stage, it's probably best to give it
-# the same name as the stage; if there are multiple jobs, we suggest
-# using the stage name as a prefix, e.g., "test-unit",
-# "test-function", etc.
-test:
-  # Image to build with: contains Maven 3.3.9.
-  image: maven:3.3.9
-
-  # This job will be run in the "test" stage.
-  stage: test
-
-  # We don't want to run this job when a new tag is created.
-  except:
-  - tags
-
-  # Shell script to run within the job.  In this case, we're doing a
-  # single step--running Maven with the "test" target--but multiple
-  # steps are possible; see the "package" job for an example.  The
-  # list is executed in order.
-  script:
-  - mvn test -DAPP_VERSION=$APP_VERSION -DBUILD_NUMBER=$BUILD_NUMBER
-
-  # This job happens to produce no artifacts we wish to save, but we
-  # could do that; see the "build" job for an example of how to save
-  # artifacts.
-
-# This is a "build" job that produces an artifact.
-build:
-  image: maven:3.3.9
-  stage: build
-  except:
-  - tags
-  script:
-  - mvn package -DAPP_VERSION=$APP_VERSION -DBUILD_NUMBER=$BUILD_NUMBER
-
-  # Artifacts are named collections of files.  Here, we're giving this
-  # artifact a name derived from the branch name and the commit SHA;
-  # this name will be used as the name of the downloadable ZIP file
-  # associated with the job.  Artifacts can be used by later stages.
-  artifacts:
-    # Name for the artifact.
-    name: '$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA'
-
-    # List of file globs that can be used to specify the files to
-    # include in the artifact.  Here, we're only saving the built .jar
-    # file, but additional files could be saved.
-    paths:
-    - target/*.jar
-
-    # We can specify a maximum time for the artifact to be saved.
-    # This specification will cause gitlab to delete the artifact
-    # after 1 week.
-    expire_in: 1 week
-
-# This job is intended to run smoke tests on the constructed docker
-# image, and is the first step in the deployment process.  The design
-# chosen here is to start the built image as a service, then check
-# that it responds to its HTTP endpoint appropriately.
-ci:
-  # We don't need Java or Maven here, so use a base image.
-  image: busybox:latest
-  stage: ci
-
-  # Again, we only want to run this job on branches matching "tmo/*",
-  # since "package" is a dependency and won't run on other branches.
-  only:
-  - /^tmo\/.*$/
-  except:
-  - tags
-
-  # Here again we're using a service; but this time, it's not a
-  # standard docker service--we're actually starting up the container
-  # from the "package" job as a service.  That will spin up a
-  # container for just this job, and we can run our smoke tests
-  # against it.  Notice the use of "alias" here to ensure a hostname
-  # we can predict for the wget in the script.
-  services:
-  - name: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
-    alias: helloworld
-
-  # This script should be a series of simple smoke tests that just
-  # validate that the image basically works.  In particular, extensive
-  # or intensive testing probably shouldn't be done here; that should
-  # be left to the dev, qa, and staging environments.
-  script:
-  - out=`wget -q -O- http://helloworld:19000/greeting?name=name` && [ "$out" == '{"id":1,"greeting":"Hello, name!"}' ]
-
-# At the same time we're running the smoke tests, we also want to
-# deploy our service to the dev environment.  This job is a stub for
-# how to accomplish deployment.
+# Deploy to Development environment
 deploy-dev:
-  image: busybox:latest
-
-  # Note that this job is also in the "ci" stage, meaning it will run
-  # in parallel with the "ci" job shown above.  This happens to be the
-  # only step in this example where we do this, but this feature could
-  # be used to, for example, parallelize tests.
-  stage: ci
-
-  only:
-  - /^tmo\/.*$/
+  extends: .pcf-deploy
   except:
-  - tags
-
-  # This is a stub for a deployment job, so right now it just contains
-  # an "echo" statement.  Substitute the code you actually need to
-  # deploy to your dev environment.
-  script:
-  - echo "Deploy to dev"
-
-  # This section is specific to jobs that deploy to environments.  The
-  # gitlab API can keep track of which SHA is running in which
-  # environment, and this is how that happens.
+    - /^tmo\/.*$/
   environment:
     name: dev
-
-    # The gitlab UI can also have a button to go directly to a URL for
-    # that environment.  This can be handy to try your UI code out and
-    # see if it does what it was intended to do.  If your service has
-    # a web-accessible UI, it might make sense to set this URL.  Our
-    # example service doesn't have a web UI, so we don't set that
-    # here...and of course, this job is just a stub, so it's not even
-    # actually deployed anywhere anyway.
-    #
-    # If you are using this example and want to make use of this
-    # feature, simply uncomment the line below and enter the correct
-    # URL for this environment.  You can also set this in the
-    # "environment" section of the other deploy jobs as well, though
-    # this example .gitlab-ci.yml does not show this.
-    #url: http://example.dev.t-mobile.com
-
-
-# This is a shared anchor function to be used in subsequent jobs.
-# This is basically a template that, when referenced, will indicate 
-# that the the attributes defined here will be copied into all jobs 
-# that reference this anchor by name. 
-# This is a great way to include the same attributes in many jobs
-# without having to cut and paste them into each job.
-# https://docs.gitlab.com/ee/ci/yaml/#anchors
-.deploy: &deploy
-  image: $AUTOTAG_IMG
-  stage: deploy
-
- # The gitlab-core service provides interfaces used by autotag to
- # perform the repository tag manipulation that it does.
- # This eventually will be move to the gitlab-runner level once
- # it supports alias
-  services:
-  - name: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
-    alias: cdp
-
-  except:
-  - tags
-
-  only:
-  - /^tmo\/.*$/
-
- # This setting make this job function manually by a user clicking the
- # "Play" button through the gitlab.com Web UI. In order to stop
- # from proceeding any future phases you could add allow_failure=false.
-  when: manual
-  tags:
-    - cdp
-    - tmo
-
-
-# This is the first curated environment deployment job--in this case,
-# to the QA environment.  It requires the user specifically click a
-# button to perform the deployment.  Pipelines pause here; it is not
-# allowed to deploy to the staging ("stg") environment unless the same
-# code has already been deployed to the QA ("qa") environment, and
-# certainly not to the production ("prod") environment.
-#
-# In addition to deploying to an environment, this job illustrates
-# setting a tag.  We recommend setting "release candidate", or "rc",
-# tags when deploying to the QA environment.
-deploy-qa:
-  # The "<<: *deploy" here references the "deploy" anchor defined previously. 
-  <<: *deploy
   
-  # Note: The design is to have the job set a tag of the form
-  # "tmo/rc/NNN", where "NNN" is a number starting from one and
-  # incrementing each time this job is triggered.  (There is also
-  # support for using short-lived release branches, which require a
-  # slightly different naming scheme: "tmo/rc/NNN.MMM".)
-  #
-  # The first step of the script is to invoke the autotag script.
-  # This script automates the task of creating the tags described
-  # above, but is extremely flexible; you may wish to check out if it
-  # fits other tagging needs you may have.
-  #
-  # The next step is the actual deployment to the environment.  In
-  # this case, it happens to be stubbed.
-  script:
-  - autotag incr
-  - echo "Deploy to QA"
-
-  # We use "qa" as the name of the environment to deploy to.
-  environment:
-    name: qa
-
-# This job deploys to the staging environment.  This is the last step
-# before code can be promoted into the production environment.  As
-# with the deploy-qa job, pipelines pause here, and deployment to
-# production cannot occur until this job has been executed.
-#
-# In addition to deploying to the staging environment, this job
-# illustrates setting a "release" tag, which is recommended for
-# deployments to the staging environment.
+# Deploy to Staging environment   
 deploy-stg:
-  <<: *deploy
-  # Note: Again, the design is to have the job set a tag of the form
-  # "tmo/rel/NNN", where "NNN" matches the currently set "tmo/rc/NNN"
-  # tag for this commit.  (And again, there is also support for using
-  # short-lived release branches, which reqire a slightly different
-  # naming scheme: "tmo/rel/NNN.MMM".)  The steps are similar to the
-  # "deploy-qa" job, but notice the different invocation for autotag.
-  script:
-  - autotag from
-  - echo "Deploy to STG"
-
-  # We use "stg" as the name of the environment to deploy to.
+  extends: .pcf-deploy
+  only:
+    - /^tmo\/.*$/
   environment:
-    name: stg
-
-
-# This is the final deployment job: deployment to production.
-deploy-prod:
-  <<: *deploy
-  script:
-  - autotag move tmo/prod
-  - echo "Deploy to PROD"
-
-  # We use "prod" as the name of the environment to deploy to.
+    name: stg    
+  when: manual
+   
+# Deploy to Production environment    
+deploy-prd:
+  extends: .pcf-deploy
+  only:
+    - tmo/master
   environment:
-    name: prod
+    name: prd
+  when: manual 
