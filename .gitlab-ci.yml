@@ -31,7 +31,7 @@ include:
     file: '/gitlab-ci/.tmo.function.pcf.gitlab-ci.yml'
 
 stages: 
-  - cdp 
+  - tmo 
   - test
   - build
   - scan
