@@ -44,8 +44,6 @@ variables:
     BUILD_NUMBER: "$CI_COMMIT_SHORT_SHA"
     # Maven Parameters
     MAVEN_PUBLISH_ARGS: "deploy -s ci-settings.xml"
-    # SonarScan Parameters
-    SONAR_PARAMS: "-Dsonar.java.binaries=target/classes"
     # PCF Deploy Parameters
     PCF_API: "api.sys.px-npe01.cf.t-mobile.com"
     PCF_ORG: "enterprise-pipeline"
