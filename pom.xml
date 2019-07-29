@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.tmobile.edp.helloworld</groupId>
+    <groupId>com.tmobile.edp.helloworld1</groupId>
     <artifactId>${CI_PROJECT_NAME}</artifactId>
     <!-- <version>0.1.1</version>  -->
     <version>${APP_VERSION}-${BUILD_NUMBER}</version> 
@@ -101,8 +101,8 @@
             </plugin>
         </plugins>
     </build>
-    
-	
+
+
 	<repositories>
   		<repository>
     		<id>gitlab-maven</id>
@@ -120,5 +120,5 @@
     		<url>https://gitlab.com/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
   		</snapshotRepository>
 	</distributionManagement>
-	
+
 </project>
