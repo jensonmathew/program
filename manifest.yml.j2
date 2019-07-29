@@ -2,6 +2,7 @@
 applications:
 - name: sb-helloworld
   path: ./target/{{ CI_PROJECT_NAME }}-{{ APP_VERSION }}-{{ BUILD_NUMBER }}.jar
+  random-route: true
   buildpacks: 
     - java_buildpack_offline_tmo
   env:
