@@ -1,6 +1,6 @@
 ---
 applications:
-- name: sb-helloworld
+- name: {{ CI_PROJECT_NAME }}
   path: ./target/{{ CI_PROJECT_NAME }}-{{ APP_VERSION }}-{{ BUILD_NUMBER }}.jar
   random-route: true
   buildpacks: 
