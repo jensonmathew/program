@@ -19,7 +19,7 @@ include:
   - project: 'tmobile/templates'
     ref: tmo/master
     file: '/gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml'
-    
+
   # Injects SonarScan capability
   - project: 'tmobile/templates'
     ref: tmo/master
@@ -42,8 +42,10 @@ variables:
     # Common Parameters (used by build and deploy)
     APP_VERSION: "1.0"
     BUILD_NUMBER: "$CI_COMMIT_SHORT_SHA"
+    
     # Maven Parameters
-    MAVEN_PUBLISH_ARGS: "deploy -s ci-settings.xml"
+    MAVEN_PUBLISH_ARGS: "-Dfile=target/${CI_PROJECT_NAME}-${APP_VERSION}-$CI_COMMIT_SHORT_SHA.jar"
+    
     # PCF Deploy Parameters
     PCF_API: "api.sys.px-npe01.cf.t-mobile.com"
     PCF_ORG: "enterprise-pipeline"
