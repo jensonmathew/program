@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class GreetingTest {
 
     @Test
-    public void GreetingGettersTest() throws Exception{
+    public void greetingGettersTest(){
         Greeting greeting = new Greeting(12, "Hello");
         assertEquals( greeting.getId(), 12);
         assertEquals( greeting.getGreeting(), "Hello");

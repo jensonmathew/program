@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 public class HelloWorldControllerTest {
 
     @Test
-    public void testController() throws Exception {
+    public void testController() {
         HelloWorldController controller = new HelloWorldController();
         Greeting greeting = controller.sayHello("Moto");
         assertNotNull(greeting);

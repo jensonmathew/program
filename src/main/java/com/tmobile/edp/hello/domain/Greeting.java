@@ -6,11 +6,11 @@ package com.tmobile.edp.hello.domain;
 public class Greeting {
 
     private long id;
-    private String greeting;
+    private String greetingMessage;
 
-    public Greeting(long id, String greeting) {
+    public Greeting(long id, String greetingMessage) {
         this.id = id;
-        this.greeting = greeting;
+        this.greetingMessage = greetingMessage;
     }
 
     public long getId() {
@@ -18,6 +18,6 @@ public class Greeting {
     }
 
     public String getGreeting() {
-        return greeting;
+        return greetingMessage;
     }
 }
