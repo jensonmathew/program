@@ -35,8 +35,8 @@ include:
 
 stages: 
   - tmo 
-  - test
   - build
+  - test
   - scan
   - publish
   - deploy
