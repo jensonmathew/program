@@ -56,6 +56,7 @@ variables:
 # Deploy to Development environment
 deploy-dev:
   extends: .pcf-deploy
+  stage: deploy
   except:
     - /^tmo\/.*$/
   environment:
@@ -64,6 +65,7 @@ deploy-dev:
 # Deploy to Staging environment   
 deploy-stg:
   extends: .pcf-deploy
+  stage: deploy
   only:
     - /^tmo\/.*$/
   environment:
@@ -73,6 +75,7 @@ deploy-stg:
 # Deploy to Production environment    
 deploy-prd:
   extends: .pcf-deploy
+  stage: deploy
   only:
     - tmo/master
   environment:
