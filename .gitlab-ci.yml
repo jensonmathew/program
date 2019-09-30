@@ -40,6 +40,7 @@ stages:
   - scan
   - publish
   - deploy
+  - trigger-downstream
 
 variables:
     # Common Parameters (used by build and deploy)
@@ -52,6 +53,10 @@ variables:
     # PCF Deploy Parameters
     PCF_API: "api.sys.px-npe01.cf.t-mobile.com"
     PCF_ORG: "enterprise-pipeline"
+
+    UPSTREAM_BRANCH_NAME: ${CI_COMMIT_REF_NAME}
+
+    
 
 # Deploy to Development environment
 deploy-dev:
@@ -80,4 +85,23 @@ deploy-prd:
     - tmo/master
   environment:
     name: prd
-  when: manual 
+  when: manual
+
+
+# Trigger a multi project pipeline using a bridge job
+helloworld-downstream-bridge:
+# Downstream jobs can access all upstream variables
+# Save upstream gitlab predefined variables to pass downstream
+  variables:
+    UPSTREAM_PROJECT_ID: ${CI_PROJECT_ID}
+    UPSTREAM_JOB_NAME: ${CI_JOB_NAME}
+    UPSTREAM_JOB_STAGE: ${CI_JOB_STAGE}
+  stage: trigger-downstream
+  trigger: 
+    project: tmobile/templates_projects/helloworld-downstream
+    # make bridge job status mirror downstream pipeline status
+    strategy: depend
+    branch: tmo/master
+    
+
+
