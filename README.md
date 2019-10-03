@@ -11,13 +11,14 @@ To compile the app please run the following commad:
 
 	mvn clean package
 
-Test Coverage Report Using Clover:
+Test Coverage Report Using Jacoco
 ==================================
-	mvn clean clover:setup test clover:aggregate clover:clover
+	mvn -Djacoco.destFile=target/jacoco.exec clean jacoco:prepare-agent package
 
-The PDF and HTML reports will be located under:
-projecthome/target/clover/site/index.html
-projecthome/target/clover/site/clover.pdf
+The XML and HTML reports will be located under:
+projecthome/target/site/jacoco/index.html
+
+projecthome/target/clover/site/jacoco.xml
 	
 Running the App:
 ---------------
