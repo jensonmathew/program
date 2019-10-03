@@ -42,23 +42,26 @@
             </plugin>
 
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>clover-maven-plugin</artifactId>
-                <configuration>
-                    <generateHtml>true</generateHtml>
-                    <generatePdf>true</generatePdf>
-                    <generateXml>false</generateXml>
-                </configuration>
-                <executions>
+                 <groupId>org.jacoco</groupId>
+                 <artifactId>jacoco-maven-plugin</artifactId>
+                 <version>0.8.3</version>
+                 <executions>
                     <execution>
-                        <phase>site</phase>
-                        <goals>
-                            <goal>instrument</goal>
-                            <goal>clover</goal>
-                        </goals>
+                       <id>pre-unit-test</id>
+                       <goals>
+                          <goal>prepare-agent</goal>
+                       </goals>
                     </execution>
-                </executions>
+                    <execution>
+                       <id>post-unit-test</id>
+                       <phase>test</phase>
+                       <goals>
+                          <goal>report</goal>
+                       </goals>
+                    </execution>
+                 </executions>
             </plugin>
+
             <plugin>
             <!--Using the versions plugin to update dependancy-->
               <groupId>org.codehaus.mojo</groupId>
