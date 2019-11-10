@@ -77,7 +77,6 @@ deploy-stg:
     - /^tmo\/.*$/
   environment:
     name: stg    
-  when: manual
    
 # Deploy to Production environment    
 deploy-prd:
@@ -87,7 +86,6 @@ deploy-prd:
     - tmo/master
   environment:
     name: prd
-  when: manual
 
 
 # Trigger a multi project pipeline using a bridge job
