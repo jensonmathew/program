@@ -19,9 +19,6 @@ include:
   - project: 'tmobile/templates'
     ref: tmo/master
     file: '/gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml'
-  
-  # Inject Gitlab checks
-  - template: SAST.gitlab-ci.yml
 
   # Injects SonarScan capability
   - project: 'tmobile/templates'
