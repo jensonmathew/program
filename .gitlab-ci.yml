@@ -104,7 +104,7 @@ helloworld-downstream-bridge:
 pages:
   image: alpine:latest
   script:
-    - apk add jq
+    - apk add jq git
     - CONTRIB_COUNT=`git shortlog -s | wc -l`
     - jq --arg COUNT $CONTRIB_COUNT '.message=$COUNT' .gitlab/badge.template > contribute.json
     - CONTIB_DATE=`git log -1 --format=%cd --date=format:"%d %b %Y"`
