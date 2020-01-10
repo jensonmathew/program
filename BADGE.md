@@ -46,7 +46,7 @@ pages:
   image: alpine:latest
   script:
     - apk add jq git
-    - CONTRIB_COUNT=`git shortlog -s | wc -l`
+    - CONTRIB_COUNT=`git shortlog -s origin/tmo/master | wc -l`
     - jq --arg COUNT $CONTRIB_COUNT '.message=$COUNT' .gitlab/badge.template > contribute.json
     - mkdir -p ./public
     - cp ./*.json ./public/
