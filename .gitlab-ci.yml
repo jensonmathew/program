@@ -107,8 +107,8 @@ pages:
     - apk add jq git
     - CONTRIB_COUNT=`git shortlog -s | wc -l`
     - jq --arg COUNT $CONTRIB_COUNT '.message=$COUNT' .gitlab/badge.template > contribute.json
-    - CONTIB_DATE=`git log -1 --format=%cd --date=format:"%d %b %Y"`
-    - jq --arg DATE $CONTIB_DATE '.message=$DATE' .gitlab/badge.template > date.json
+    - CONTRIB_DATE=`git log -1 --format=%cd --date=format:"%d-%b-%Y"`
+    - jq --arg DATE $CONTRIB_DATE '.message=$DATE' .gitlab/badge.template > date.json
     - mkdir -p ./public
     - cp ./*.json ./public/
   artifacts:
