@@ -45,7 +45,7 @@ The json content is only limited by your creativity, but here is the basic conce
 pages:
   image: alpine:latest
   script:
-    - apk add jq
+    - apk add jq git
     - CONTRIB_COUNT=`git shortlog -s | wc -l`
     - jq --arg COUNT $CONTRIB_COUNT '.message=$COUNT' .gitlab/badge.template > contribute.json
     - mkdir -p ./public
