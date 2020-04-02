@@ -1,6 +1,10 @@
 Introduction:
 -------------
-This repository contains a sample spring boot Hello World example
+This repository contains a sample spring boot Hello World example. 
+
+This project is automatically committed/merged to by our cycle time collector every hour to generate smoke updates to ensure our systems work end to end.
+
+You can find the pipelines generating this here: https://gitlab.com/tmobile/cdp/IaC/gitlab-cycle-time/pipelines
 
 Requirement:
 -----------
