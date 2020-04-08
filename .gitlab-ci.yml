@@ -117,3 +117,11 @@ pages:
     expire_in: 90 days
   only:
     - tmo/master
+    
+tmo-job:
+  stage: tmo
+  only: 
+    - tmo/master
+  script: 
+    - exit 1
+  image: alpine
