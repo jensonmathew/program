@@ -2,9 +2,8 @@
 applications:
 - name: {{ CI_PROJECT_NAME }}
   path: ./target/{{ CI_PROJECT_NAME }}-{{ APP_VERSION }}-{{ BUILD_NUMBER }}.jar
-  random-route: true
   buildpacks: 
-    - java_buildpack_offline_tmo
+    - {{ BUILDPACK }}
   env:
     FORCE_HTTPS: true
   

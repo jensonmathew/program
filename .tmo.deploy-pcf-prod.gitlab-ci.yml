@@ -1,0 +1,66 @@
+#################################### Anchor Deploy PX-PRD #########################################
+.deploy-px-prd_prod:
+  stage: deploy-prod
+  extends: .pcf-deploy
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
+      when: always
+##################################### Deploy px-prd02 ###############################################
+   # Deploy to production environment    
+deploy-px-prd02-prd:
+  extends: 
+     - .deploy-px-prd_prod
+     - .vars_px-prd02_prod
+  environment:
+    name: prod/px-prd02/production/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy px-prd02c ################################################
+# Deploy to production environment    
+deploy-px-prd02c-prd:
+  extends: 
+     - .deploy-px-prd_prod
+     - .vars_px-prd02c_prod
+  environment:
+    name: prod/px-prd02c/production/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy px-prd04 ################################################
+# Deploy to production environment    
+deploy-px-prd04-prd:
+  extends: 
+     - .deploy-px-prd_prod
+     - .vars_px-prd04_prod
+  environment:
+    name: prod/px-prd04/production/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy px-prd03a ################################################
+# Deploy to production environment    
+deploy-px-prd03a-prd:
+  extends: 
+     - .deploy-px-prd_prod
+     - .vars_px-prd03a_prod
+  environment:
+    name: prod/px-prd03a/production/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy px-prd03b ################################################
+# Deploy to production environment    
+deploy-px-prd03b-prd:
+  extends: 
+     - .deploy-px-prd_prod
+     - .vars_px-prd03b_prod
+  environment:
+    name: prod/px-prd03b/production/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy px-prd03c ################################################
+# Deploy to production environment    
+deploy-px-prd03c-prd:
+  extends: 
+     - .deploy-px-prd_prod
+     - .vars_px-prd03c_prod
+  environment:
+    name: prod/px-prd03c/production/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}

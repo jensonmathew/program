@@ -1,0 +1,130 @@
+########################### Anchor Deploy PX-NPE ##############################################
+.deploy-px-npe_stg:
+  stage: deploy-npe
+  extends: .pcf-deploy
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
+      when: always
+
+.deploy-px-npe_dev:
+  stage: deploy-npe
+  extends: .pcf-deploy
+
+##################################### Deploy px-npe02a ################################################
+# Deploy to Development environment
+deploy-npe02a-dev:
+  extends: 
+     - .deploy-px-npe_dev
+     - .vars_px-npe02a_dev
+  environment:
+    name: dev01/px-npe02a/development/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+  
+# Deploy to Staging environment   
+deploy-npe02a-stg:
+  extends: 
+     - .deploy-px-npe_stg
+     - .vars_px-npe02a_stg
+  environment:
+    name: stg01/px-npe02a/staging/smoke 
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy px-npe02b ################################################
+# Deploy to Development environment
+deploy-npe02b-dev:
+  extends: 
+     - .deploy-px-npe_dev
+     - .vars_px-npe02b_dev
+  stage: deploy-npe
+  environment:
+    name: dev01/px-npe02b/development/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+  
+# Deploy to Staging environment   
+deploy-npe02b-stg:
+  extends: 
+     - .deploy-px-npe_stg
+     - .vars_px-npe02b_stg
+  environment:
+    name: stg01/px-npe02b/staging/smoke 
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy px-npe02c ################################################
+# Deploy to Development environment
+deploy-npe02c-dev:
+  extends: 
+     - .deploy-px-npe_dev
+     - .vars_px-npe02c_dev
+  stage: deploy-npe
+  environment:
+    name: dev01/px-npe02c/development/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+  
+# Deploy to Staging environment   
+deploy-npe02c-stg:
+  extends: 
+     - .deploy-px-npe_stg
+     - .vars_px-npe02c_stg
+  environment:
+    name: stg01/px-npe02c/staging/smoke 
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+  
+##################################### Deploy px-npe03a ################################################
+# Deploy to Development environment
+deploy-npe03a-dev:
+  extends: 
+     - .deploy-px-npe_dev
+     - .vars_px-npe03a_dev
+  stage: deploy-npe
+  environment:
+    name: dev01/px-npe03a/development/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+  
+  
+# Deploy to Staging environment   
+deploy-npe03a-stg:
+  extends: 
+     - .deploy-px-npe_stg
+     - .vars_px-npe03a_stg
+  environment:
+    name: stg01/px-npe03a/staging/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN} 
+
+##################################### Deploy px-npe03b ################################################
+# Deploy to Development environment
+deploy-npe03b-dev:
+  extends: 
+     - .deploy-px-npe_dev
+     - .vars_px-npe03b_dev
+  environment:
+    name: dev01/px-npe03b/development/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+  
+# Deploy to Staging environment   
+deploy-npe03b-stg:
+  extends: 
+     - .deploy-px-npe_stg
+     - .vars_px-npe03b_stg
+  environment:
+    name: stg01/px-npe03b/staging/smoke 
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy px-npe03d ################################################
+# Deploy to Development environment
+deploy-npe03d-dev:
+  extends: 
+     - .deploy-px-npe_dev
+     - .vars_px-npe03d_dev
+  stage: deploy-npe
+  environment:
+    name: dev01/px-npe03d/development/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+  
+# Deploy to Staging environment   
+deploy-npe03d-stg:
+  extends: 
+     - .deploy-px-npe_stg
+     - .vars_px-npe03d_stg
+  environment:
+    name: stg01/px-npe03d/staging/smoke 
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
