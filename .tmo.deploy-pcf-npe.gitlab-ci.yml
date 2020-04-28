@@ -4,12 +4,19 @@
   extends: .pcf-deploy
   rules:
     - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
-      when: always
+      when: always 
 
 .deploy-px-npe_dev:
   stage: deploy-npe
   extends: .pcf-deploy
-
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME != "tmo/master"'
+      when: always
+    
 ##################################### Deploy px-npe02a ################################################
 # Deploy to Development environment
 deploy-npe02a-dev:
