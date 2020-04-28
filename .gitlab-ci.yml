@@ -30,13 +30,25 @@ include:
     ref: tmo/master
     file: '/gitlab-ci/.tmo.function.pcf.gitlab-ci.yml'
 
+   # PCF NPE, CDE and PRD Variable file
+  - local : '.tmo.cdp-pcf-npe.vars.gitlab-ci.yml'
+  - local : '.tmo.cdp-pcf-cde.vars.gitlab-ci.yml'
+  - local : '.tmo.cdp-pcf-prod.vars.gitlab-ci.yml'
+
+   #Deploy to PCF NPE, CDE and PRD foundations
+  - local : '.tmo.deploy-pcf-npe.gitlab-ci.yml' 
+  - local : '.tmo.deploy-pcf-cde.gitlab-ci.yml'
+  - local : '.tmo.deploy-pcf-prod.gitlab-ci.yml'
+
 stages: 
   - tmo 
   - build
   - test
   - scan
   - publish
-  - deploy
+  - deploy-npe
+  - deploy-prod
+  - deploy-cde
   - trigger-downstream
 
 variables:
@@ -48,41 +60,15 @@ variables:
     MAVEN_PUBLISH_ARGS: "-Dfile=target/${CI_PROJECT_NAME}-${APP_VERSION}-$CI_COMMIT_SHORT_SHA.jar"
     MAVEN_VERSION: "3.6.1-jdk-8"
     JACOCO_COVERAGE_REPORT: "yes"
-    
-    # PCF Deploy Parameters
-    PCF_API: "api.sys.px-npe01.cf.t-mobile.com"
-    PCF_ORG: "enterprise-pipeline"
 
     UPSTREAM_BRANCH_NAME: ${CI_COMMIT_REF_NAME}
-
-    
-
-# Deploy to Development environment
-deploy-dev:
-  extends: .pcf-deploy
-  stage: deploy
-  except:
-    - /^tmo\/.*$/
-  environment:
-    name: dev
-  
-# Deploy to Staging environment   
-deploy-stg:
-  extends: .pcf-deploy
-  stage: deploy
-  only:
-    - /^tmo\/.*$/
-  environment:
-    name: stg    
-   
-# Deploy to Production environment    
-deploy-prd:
-  extends: .pcf-deploy
-  stage: deploy
-  only:
-    - tmo/master
-  environment:
-    name: prd
+    # PCF Parameters
+    PCF_CLI_VERSION: "6.49.0"
+    PCF_ORG: "Continuous-Delivery-Platform"
+    BUILDPACK: "java_buildpack_offline"
+    PCF_INSTANCES: "1" 
+    PCF_ROUTE_HOSTNAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
+    PCF_APP_NAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
 
 
 # Trigger a multi project pipeline using a bridge job
@@ -115,5 +101,6 @@ pages:
     paths:
     - public
     expire_in: 90 days
-  only:
-    - tmo/master
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
+      when: always

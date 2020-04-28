@@ -1,0 +1,47 @@
+#################################### Anchor Deploy PX-CDE #########################################
+.deploy-px-cde_prod:
+  stage: deploy-cde
+  extends: .pcf-deploy
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
+      when: always
+
+##################################### Deploy px-cde02 ################################################
+# Deploy to production environment    
+deploy-px-cde02a-prd:
+  extends: 
+     - .deploy-px-cde_prod
+     - .vars_px-cde02_prod
+  environment:
+    name: prod/px-cde02/production/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy px-cde03a ################################################
+# Deploy to production environment    
+deploy-px-cde03a-prd:
+  extends: 
+     - .deploy-px-cde_prod
+     - .vars_px-cde03a_prod
+  environment:
+    name: prod/px-cde03a/production/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy px-cde11a ################################################
+# Deploy to production environment    
+deploy-px-cde11a-prd:
+  extends: 
+     - .deploy-px-cde_prod
+     - .vars_px-cde11a_prod
+  environment:
+    name: prod/px-cde11a/production/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+
+##################################### Deploy tt-cde02a ################################################
+# Deploy to production environment    
+deploy-tt-cde02a-prd:
+  extends: 
+     - .deploy-px-cde_prod
+     - .vars_tt-cde02a_prod
+  environment:
+    name: prod/tt-cde02a/production/smoke
+    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
