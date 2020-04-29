@@ -30,6 +30,11 @@ include:
     ref: tmo/master
     file: '/gitlab-ci/.tmo.function.pcf.gitlab-ci.yml'
 
+  # Injects badging function
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.function.badge.gitlab-ci.yml'
+    
    # PCF NPE, CDE and PRD Variable file
   - local : '.tmo.cdp-pcf-npe.vars.gitlab-ci.yml'
   - local : '.tmo.cdp-pcf-cde.vars.gitlab-ci.yml'
@@ -60,8 +65,8 @@ variables:
     MAVEN_PUBLISH_ARGS: "-Dfile=target/${CI_PROJECT_NAME}-${APP_VERSION}-$CI_COMMIT_SHORT_SHA.jar"
     MAVEN_VERSION: "3.6.1-jdk-8"
     JACOCO_COVERAGE_REPORT: "yes"
-
     UPSTREAM_BRANCH_NAME: ${CI_COMMIT_REF_NAME}
+    
     # PCF Parameters
     PCF_CLI_VERSION: "6.49.0"
     PCF_ORG: "Continuous-Delivery-Platform"
@@ -70,6 +75,32 @@ variables:
     PCF_ROUTE_HOSTNAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
     PCF_APP_NAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
 
+# Deploy to Development environment
+deploy-dev:
+  extends: .pcf-deploy
+  stage: deploy
+  except:
+    - /^tmo\/.*$/
+  environment:
+    name: dev
+  
+# Deploy to Staging environment   
+deploy-stg:
+  extends: .pcf-deploy
+  stage: deploy
+  only:
+    - /^tmo\/.*$/
+  environment:
+    name: stg    
+   
+# Deploy to Production environment    
+deploy-prd:
+  extends: .pcf-deploy
+  stage: deploy
+  only:
+    - tmo/master
+  environment:
+    name: prd
 
 # Trigger a multi project pipeline using a bridge job
 helloworld-downstream-bridge:
@@ -86,21 +117,9 @@ helloworld-downstream-bridge:
     strategy: depend
     branch: tmo/master
     
-# Create json for badges   
+# Create json for badges 
 pages:
-  image: alpine:latest
-  script:
-    - apk add jq git
-    - CONTRIB_COUNT=`git shortlog -s origin/tmo/master | wc -l`
-    - jq --arg COUNT $CONTRIB_COUNT '.message=$COUNT' .gitlab/badge.template > contribute.json
-    - CONTRIB_DATE=`git log -1 --format=%cd --date=format:"%d-%b-%Y %H:%M %z"`
-    - jq --arg DATE "$CONTRIB_DATE" '.message=$DATE | .label="last commit"' .gitlab/badge.template > date.json
-    - mkdir -p ./public
-    - cp ./*.json ./public/
-  artifacts:
-    paths:
-    - public
-    expire_in: 90 days
+  extends: .badge_pages
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
-      when: always
+    - if: $CI_COMMIT_REF_NAME == "tmo/master"
+      when: on_success
