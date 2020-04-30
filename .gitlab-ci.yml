@@ -75,33 +75,6 @@ variables:
     PCF_ROUTE_HOSTNAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
     PCF_APP_NAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
 
-# Deploy to Development environment
-deploy-dev:
-  extends: .pcf-deploy
-  stage: deploy
-  except:
-    - /^tmo\/.*$/
-  environment:
-    name: dev
-  
-# Deploy to Staging environment   
-deploy-stg:
-  extends: .pcf-deploy
-  stage: deploy
-  only:
-    - /^tmo\/.*$/
-  environment:
-    name: stg    
-   
-# Deploy to Production environment    
-deploy-prd:
-  extends: .pcf-deploy
-  stage: deploy
-  only:
-    - tmo/master
-  environment:
-    name: prd
-
 # Trigger a multi project pipeline using a bridge job
 helloworld-downstream-bridge:
 # Downstream jobs can access all upstream variables
