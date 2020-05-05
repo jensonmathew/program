@@ -34,7 +34,12 @@ include:
   - project: 'tmobile/templates'
     ref: tmo/master
     file: '/gitlab-ci/.tmo.function.badge.gitlab-ci.yml'
-    
+
+  # Inject Artifactory functions
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.job.jfrog-artifact.gitlab-ci.yml'
+
    # PCF NPE, CDE and PRD Variable file
   - local : '.tmo.cdp-pcf-npe.vars.gitlab-ci.yml'
   - local : '.tmo.cdp-pcf-cde.vars.gitlab-ci.yml'
@@ -51,6 +56,7 @@ stages:
   - test
   - scan
   - publish
+  - tag
   - deploy-npe
   - deploy-prod
   - deploy-cde
@@ -74,6 +80,19 @@ variables:
     PCF_INSTANCES: "1" 
     PCF_ROUTE_HOSTNAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
     PCF_APP_NAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
+
+    # Artifactory Paramaters
+    ARTIFACT_REPO: "cdp-maven-prd"
+    TARGET_PATH: "${ARTIFACT_REPO}/${CI_PROJECT_NAME}/${APP_VERSION}/"
+    ARTIFACT_DIR: "./target/(*)"
+    GROUP_ID: "cdp/helloworld-1"
+
+# Tag Artifactory Artifact
+artifactory-tag-artifact:
+  extends: .tag-artifact
+  variables:
+    ARTIFACT_NAME: "helloworld-1-${APP_VERSION}-${CI_COMMIT_SHORT_SHA}.jar"
+    ARTIFACT_PROPS: "TAG_TEST=SUCCESSFUL"
 
 # Trigger a multi project pipeline using a bridge job
 helloworld-downstream-bridge:
