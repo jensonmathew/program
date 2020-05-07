@@ -50,6 +50,11 @@ include:
   - local : '.tmo.deploy-pcf-cde.gitlab-ci.yml'
   - local : '.tmo.deploy-pcf-prod.gitlab-ci.yml'
 
+  # Injects CTP
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml'
+
 stages: 
   - tmo 
   - build
@@ -58,6 +63,7 @@ stages:
   - publish
   - tag
   - deploy-npe
+  - e2egating
   - deploy-prod
   - deploy-cde
   - trigger-downstream
@@ -80,6 +86,18 @@ variables:
     PCF_INSTANCES: "1" 
     PCF_ROUTE_HOSTNAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
     PCF_APP_NAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
+  
+   # e2e gating/qTest parameters
+    CODE_LOCATION: "git@gitlab.com:tmobile/templates_projects/helloworld-1.git"
+    BIT_BUCKET_BRANCH: ${CI_COMMIT_REF_NAME}
+    BUILD_FILE_LOCATION: pom.xml
+    BUILD_TYPE: MAVEN
+    BUILD_COMMAND: "helloworld-cdp-qtest-tc.xlsx"
+    TEST_APPLICATION: ${CI_PROJECT_NAME}
+    WAIT: "2040"
+    TEST_FRAMEWORK: "CODELESS_BYOT"
+    TEST_SUITE: "CDP-qTest-POC"
+    TEST_ENVIRONMENT: "NA"
 
     # Artifactory Paramaters
     ARTIFACT_REPO: "cdp-maven-prd"
@@ -113,5 +131,18 @@ helloworld-downstream-bridge:
 pages:
   extends: .badge_pages
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     - if: $CI_COMMIT_REF_NAME == "tmo/master"
       when: on_success
+
+e2egating:
+    extends: .ctp
+    stage: e2egating
+    allow_failure: true
+    rules:
+      - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+        when: never
+      - if: $CI_PIPELINE_SOURCE == "schedule"
+        when: never
+      - when: on_success
