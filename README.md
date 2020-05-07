@@ -64,8 +64,14 @@ Simply login into PCF using
 and pushing the app using the following command
 
     cf push
-    
-   
+
+qTest Integreation:
+-------------------
+
+The e2egating stage running the test cases in the Codeless test framework and uploading the test results to [qTest](https://qtest-training.t-mobile.com/p/39/portal/project#tab=testexecution&object=2&id=316)
+
+How to run the tests on CTP and using Apigee API to upload the test results on the qTest [documentation](https://gitlab.com/tmobile/templates/-/blob/tmo/master/documentation/ctp-e2egating.md)
+
 
  
  
