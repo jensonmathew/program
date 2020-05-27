@@ -1,6 +1,6 @@
 ---
 applications:
-- name: {{ CI_PROJECT_NAME }}
+- name: cdp-helloworld-1
   path: ./target/{{ CI_PROJECT_NAME }}-{{ APP_VERSION }}-{{ BUILD_NUMBER }}.jar
   buildpacks: 
     - {{ BUILDPACK }}
