@@ -41,6 +41,7 @@
       DOMAIN: "test.px-npe02c.cf.t-mobile.com"
 
 ##################################### px-npe03a ################################################
+
 .vars_px-npe03a_dev:
     variables:
       PCF_API: "api.sys.px-npe03a.cf.t-mobile.com"
@@ -54,12 +55,12 @@
       DOMAIN: "test.px-npe03a.cf.t-mobile.com"
 
 ##################################### px-npe03b ################################################
+
 .vars_px-npe03b_dev:
     variables:
       PCF_API: "api.sys.px-npe03b.cf.t-mobile.com"
       PCF_SPACE: "development"
       DOMAIN: "dev.px-npe03b.cf.t-mobile.com"
-
 
 .vars_px-npe03b_stg:
     variables:

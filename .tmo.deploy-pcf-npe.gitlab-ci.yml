@@ -4,7 +4,7 @@
   extends: .pcf-deploy
   rules:
     - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
-      when: always
+      when: always 
 
 .deploy-px-npe_dev:
   stage: deploy-npe
@@ -77,7 +77,7 @@ deploy-npe02c-stg:
     url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
   
 ##################################### Deploy px-npe03a ################################################
-# Deploy to Development environment 
+# Deploy to Development environment
 deploy-npe03a-dev:
   extends: 
      - .deploy-px-npe_dev
@@ -86,8 +86,8 @@ deploy-npe03a-dev:
   environment:
     name: dev01/px-npe03a/development/smoke
     url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
-
-
+  
+  
 # Deploy to Staging environment   
 deploy-npe03a-stg:
   extends: 
@@ -98,16 +98,15 @@ deploy-npe03a-stg:
     url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN} 
 
 ##################################### Deploy px-npe03b ################################################
- #Deploy to Development environment 
+# Deploy to Development environment
 deploy-npe03b-dev:
   extends: 
      - .deploy-px-npe_dev
      - .vars_px-npe03b_dev
-  stage: deploy-npe
   environment:
     name: dev01/px-npe03b/development/smoke
     url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
-
+  
 # Deploy to Staging environment   
 deploy-npe03b-stg:
   extends: 
@@ -118,7 +117,7 @@ deploy-npe03b-stg:
     url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
 
 ##################################### Deploy px-npe03d ################################################
- #Deploy to Development environment 
+# Deploy to Development environment
 deploy-npe03d-dev:
   extends: 
      - .deploy-px-npe_dev
@@ -127,7 +126,7 @@ deploy-npe03d-dev:
   environment:
     name: dev01/px-npe03d/development/smoke
     url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
-
+  
 # Deploy to Staging environment   
 deploy-npe03d-stg:
   extends: 
