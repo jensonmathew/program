@@ -84,8 +84,9 @@ variables:
     PCF_ORG: "Continuous-Delivery-Platform"
     BUILDPACK: "java_buildpack_offline"
     PCF_INSTANCES: "1" 
-    PCF_ROUTE_HOSTNAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
-    PCF_APP_NAME: "${CI_PROJECT_NAME}-${PCF_SPACE}"
+    PCF_ROUTE_HOSTNAME: "cdp-helloworld-1-${PCF_SPACE}"
+    PCF_APP_NAME: "cdp-helloworld-1-${PCF_SPACE}"
+    PCF_APP_NAME_EXT: "${PCF_SPACE}"
   
    # e2e gating/qTest parameters
     CODE_LOCATION: "git@gitlab.com:tmobile/templates_projects/helloworld-1.git"
