@@ -25,7 +25,7 @@ deploy-npe02a-dev:
      - .vars_px-npe02a_dev
   environment:
     name: dev01/px-npe02a/development/smoke
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
   
 # Deploy to Staging environment   
 deploy-npe02a-stg:
@@ -34,7 +34,7 @@ deploy-npe02a-stg:
      - .vars_px-npe02a_stg
   environment:
     name: stg01/px-npe02a/staging/smoke 
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
 
 ##################################### Deploy px-npe02b ################################################
 # Deploy to Development environment
@@ -45,7 +45,7 @@ deploy-npe02b-dev:
   stage: deploy-npe
   environment:
     name: dev01/px-npe02b/development/smoke
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
   
 # Deploy to Staging environment   
 deploy-npe02b-stg:
@@ -54,7 +54,7 @@ deploy-npe02b-stg:
      - .vars_px-npe02b_stg
   environment:
     name: stg01/px-npe02b/staging/smoke 
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
 
 ##################################### Deploy px-npe02c ################################################
 # Deploy to Development environment
@@ -65,7 +65,7 @@ deploy-npe02c-dev:
   stage: deploy-npe
   environment:
     name: dev01/px-npe02c/development/smoke
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
   
 # Deploy to Staging environment   
 deploy-npe02c-stg:
@@ -74,7 +74,7 @@ deploy-npe02c-stg:
      - .vars_px-npe02c_stg
   environment:
     name: stg01/px-npe02c/staging/smoke 
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
   
 ##################################### Deploy px-npe03a ################################################
 # Deploy to Development environment
@@ -85,7 +85,7 @@ deploy-npe03a-dev:
   stage: deploy-npe
   environment:
     name: dev01/px-npe03a/development/smoke
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
   
   
 # Deploy to Staging environment   
@@ -95,7 +95,7 @@ deploy-npe03a-stg:
      - .vars_px-npe03a_stg
   environment:
     name: stg01/px-npe03a/staging/smoke
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN} 
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN} 
 
 ##################################### Deploy px-npe03b ################################################
 # Deploy to Development environment
@@ -105,7 +105,7 @@ deploy-npe03b-dev:
      - .vars_px-npe03b_dev
   environment:
     name: dev01/px-npe03b/development/smoke
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
   
 # Deploy to Staging environment   
 deploy-npe03b-stg:
@@ -114,7 +114,7 @@ deploy-npe03b-stg:
      - .vars_px-npe03b_stg
   environment:
     name: stg01/px-npe03b/staging/smoke 
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
 
 ##################################### Deploy px-npe03d ################################################
 # Deploy to Development environment
@@ -125,7 +125,7 @@ deploy-npe03d-dev:
   stage: deploy-npe
   environment:
     name: dev01/px-npe03d/development/smoke
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
   
 # Deploy to Staging environment   
 deploy-npe03d-stg:
@@ -134,4 +134,4 @@ deploy-npe03d-stg:
      - .vars_px-npe03d_stg
   environment:
     name: stg01/px-npe03d/staging/smoke 
-    url: ${CI_PROJECT_NAME}-${PCF_SPACE}.${DOMAIN}
+    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
