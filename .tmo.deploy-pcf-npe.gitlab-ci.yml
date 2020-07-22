@@ -4,7 +4,7 @@
   extends: .pcf-deploy
   rules:
     - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
-      when: always 
+      when: on_success 
 
 .deploy-px-npe_dev:
   stage: deploy-npe
@@ -15,7 +15,7 @@
     - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
       when: never
     - if: '$CI_COMMIT_REF_NAME != "tmo/master"'
-      when: always
+      when: on_success
     
 ##################################### Deploy px-npe02a ################################################
 # Deploy to Development environment

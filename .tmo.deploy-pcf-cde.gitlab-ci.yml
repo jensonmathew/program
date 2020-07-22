@@ -5,7 +5,7 @@
   extends: .pcf-deploy
   rules:
     - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
-      when: always
+      when: on_success
 
 ##################################### Deploy px-cde02 ################################################
 # Deploy to production environment    
