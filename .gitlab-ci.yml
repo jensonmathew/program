@@ -106,8 +106,8 @@ variables:
 
     # Artifactory Paramaters
     ARTIFACT_REPO: "cdp-maven-prd"
-    TARGET_PATH: "${ARTIFACT_REPO}/${CI_PROJECT_NAME}/${APP_VERSION}/"
-    ARTIFACT_DIR: "./target/(*)"
+    TARGET_PATH: "${ARTIFACT_REPO}/${CI_PROJECT_NAME}/${APP_VERSION}/${CI_PIPELINE_IID}/"
+    ARTIFACT_DIR: "./target/*.jar"
     GROUP_ID: "cdp/helloworld-1"
 
 # Tag Artifactory Artifact
