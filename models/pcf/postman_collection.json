@@ -15,7 +15,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "https://helloworld-1-staging.apps.px-npe02a.cf.t-mobile.com/greeting",
+					"raw": "https://helloworld-1-staging.apps.px-npe02a.cf.t-mobile.com/v1/greeting",
 					"protocol": "https",
 					"host": [
 						"helloworld-1-talkative-antelope-rp",
@@ -26,7 +26,7 @@
 						"com"
 					],
 					"path": [
-						"greeting"
+						"v1/greeting"
 					]
 				}
 			},

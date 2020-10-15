@@ -47,11 +47,11 @@ OR
 Testing the Application:
 ------------------------
 
-	curl http://localhost:19000/greeting?name=Moto
+	curl http://localhost:19000/v1/greeting?name=Moto
 
 In Web Browser
 
-    http://localhost:19000/greeting?name=Moto
+    http://localhost:19000/v1/greeting?name=Moto
     
 Deploying to Pivotal Cloud Foundry:
 -----------------------------------
