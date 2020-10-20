@@ -1,6 +1,4 @@
-# Injection of templates
 include:
-  # Injects TMO Global Shared (handles certs, lists blacklisted files etc.)  
   - project: 'tmobile/templates'
     ref: tmo/master
     file: '/gitlab-ci/.tmo.global.common.gitlab-ci.yml'
@@ -44,21 +42,21 @@ include:
   - project: 'tmobile/templates'
     ref: tmo/master
     file: '/gitlab-ci/.tmo.job.jfrog-artifact.gitlab-ci.yml'
-
-   # PCF NPE, CDE and PRD Variable file
-  - local : '.tmo.cdp-pcf-npe.vars.gitlab-ci.yml'
-  - local : '.tmo.cdp-pcf-cde.vars.gitlab-ci.yml'
-  - local : '.tmo.cdp-pcf-prod.vars.gitlab-ci.yml'
-
-   #Deploy to PCF NPE, CDE and PRD foundations
-  - local : '.tmo.deploy-pcf-npe.gitlab-ci.yml' 
-  - local : '.tmo.deploy-pcf-cde.gitlab-ci.yml'
-  - local : '.tmo.deploy-pcf-prod.gitlab-ci.yml'
-
+    
   # Injects CTP
   - project: 'tmobile/templates'
     ref: tmo/master
     file: '/gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml'
+
+   # PCF NPE, CDE and PRD Variable files
+  - local : '/gitlab-ci/vars/.tmo.cdp-pcf-npe.vars.gitlab-ci.yml'
+  - local : '/gitlab-ci/vars/.tmo.cdp-pcf-cde.vars.gitlab-ci.yml'
+  - local : '/gitlab-ci/vars/.tmo.cdp-pcf-prod.vars.gitlab-ci.yml'
+
+   #Deploy to PCF NPE, CDE and PRD foundations
+  - local : '/gitlab-ci/vars/.tmo.deploy-pcf-npe.gitlab-ci.yml' 
+  - local : '/gitlab-ci/vars/.tmo.deploy-pcf-cde.gitlab-ci.yml'
+  - local : '/gitlab-ci/vars/.tmo.deploy-pcf-prod.gitlab-ci.yml'
 
 stages: 
   - tmo 
@@ -68,10 +66,16 @@ stages:
   - publish
   - tag
   - deploy-npe
-  - e2egating
+  - validate
   - deploy-prod
   - deploy-cde
   - trigger-downstream
+
+testjob:
+  stage: tmo
+  image: alpine
+  script:
+    - echo $CI_REPOSITORY_URL
 
 variables:
     # Common Parameters (used by build and deploy)
@@ -93,7 +97,7 @@ variables:
     PCF_APP_NAME: "${PCF_ROUTE_HOSTNAME}"
   
    # e2e gating/qTest parameters
-    CODE_LOCATION: "git@gitlab.com:tmobile/templates_projects/helloworld-1.git"
+    CODE_LOCATION: "git@${CI_SERVER_HOST}:${CI_PROJECT_PATH}.git"
     BIT_BUCKET_BRANCH: ${CI_COMMIT_REF_NAME}
     BUILD_FILE_LOCATION: pom.xml
     BUILD_TYPE: MAVEN
@@ -138,12 +142,12 @@ pages:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
-    - if: $CI_COMMIT_REF_NAME == "tmo/master"
+    - if: $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"
       when: on_success
 
 e2egating:
     extends: .ctp
-    stage: e2egating
+    stage: validate
     allow_failure: true
     rules:
       - if: $CI_PIPELINE_SOURCE == "merge_request_event"
