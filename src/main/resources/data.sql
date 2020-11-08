@@ -1,11 +1,11 @@
 DROP TABLE IF EXISTS featureflags;  
 CREATE TABLE featureflags (
-id int(11) DEFAULT NULL, 
-user varchar(15) DEFAULT NULL, 
-email varchar(50) DEFAULT NULL, 
-password varchar(15) DEFAULT NULL, 
+id INT(11) DEFAULT NULL, 
+user VARCHAR2(15) DEFAULT NULL, 
+email VARCHAR2(50) DEFAULT NULL, 
+password VARCHAR2(15) DEFAULT NULL, 
 active boolean DEFAULT NULL, 
-roles varchar(15) DEFAULT NULL);
+roles VARCHAR2(15) DEFAULT NULL);
                         
 INSERT INTO featureflags
 (id, user, email, password, active, roles) 
