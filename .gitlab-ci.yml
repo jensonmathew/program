@@ -84,7 +84,7 @@ variables:
     
     # Maven Parameters
     MAVEN_PUBLISH_ARGS: "-Dfile=target/${CI_PROJECT_NAME}-${APP_VERSION}-$CI_COMMIT_SHORT_SHA.jar"
-    MAVEN_VERSION: "3.6.1-jdk-8"
+    MAVEN_VERSION: "3.6.1-jdk-11"
     JACOCO_COVERAGE_REPORT: "yes"
     UPSTREAM_BRANCH_NAME: ${CI_COMMIT_REF_NAME}
     
