@@ -73,21 +73,7 @@ public class Featureflags {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	/**
-	 * @return the active
-	 */
-	public boolean isActive() {
-		return active;
-	}
-
-	/**
-	 * @param active the active to set
-	 */
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
+	
 	/**
 	 * @return the active
 	 */
