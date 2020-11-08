@@ -31,7 +31,7 @@ public class SpringBootHelloWorldController {
             .unleashAPI("https://gitlab.com/api/v4/feature_flags/unleash/21892704")
             .build();
     Unleash unleash = new DefaultUnleash(config);
-//    UserWithIdStrategy unleash = new UserWithIdStrategy();
+
     @RequestMapping("/")
     String home(Principal principal) {
         String allUserMessage = getMessageForAllUser();
