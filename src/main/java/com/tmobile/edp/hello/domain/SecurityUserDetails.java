@@ -33,7 +33,7 @@ public class SecurityUserDetails implements UserDetails {
 	public SecurityUserDetails(Featureflags user) {
 		this.userName = user.getUser();
 		this.password = new BCryptPasswordEncoder().encode(user.getPassword());
-		this.isActive = user.isActive();
+		this.isActive = user.getIsActive();
 		this.authorities = Arrays.stream(user.getRoles().split(","))
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
