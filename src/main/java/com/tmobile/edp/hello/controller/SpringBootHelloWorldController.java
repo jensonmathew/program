@@ -37,7 +37,7 @@ public class SpringBootHelloWorldController {
         String something = "<div style='padding:15px;'>Logged in user as: " + principal.getName() + "</div><div style='position: absolute;top: 0;right: 150px; z-index:1'><img src='"+LOGO_IMAGE_BASE64+"'/> <a style='padding: 10px; text-decoration: none; vertical-align: middle; margin: auto 0; top: 15px; position: absolute; background: #e20074; color: white; margin-left: 40px;width: max-content;' href='\\login'>Log out</a></div>"
                             + "<ul>"
                             + "<li>"+allUserMessage+"</li>"
-                            + (userIdfeatureMessage == "" ? "" : "<li>" + userIdfeatureMessage + "</li>")
+                            + (userIdfeatureMessage.equals("") ? "" : "<li>" + userIdfeatureMessage + "</li>")
                             +"</ul>"
                             + "<div id=\"left\"></div>\r\n"
                             + "<div id=\"right\"></div>\r\n"
