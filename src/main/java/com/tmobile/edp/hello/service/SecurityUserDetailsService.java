@@ -27,8 +27,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<Featureflags> userOpt = userRepository.findByUser(username);
 		if (userOpt.isPresent()) {
-			SecurityUserDetails securityUserDetails = userOpt.map(SecurityUserDetails::new).get();
-			return securityUserDetails;
+			return userOpt.map(SecurityUserDetails::new).get();
 		} else {
 			throw new UsernameNotFoundException("Cannot find a user with user name '" + username + "'!");
 		}
