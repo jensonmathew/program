@@ -25,8 +25,8 @@ public class SpringBootHelloWorldController {
     
     UnleashConfig config = UnleashConfig.builder()
             .appName("all environments")
-            .instanceId("sFonHmECPdfJ9umZR8ED")
-            .unleashAPI("https://gitlab.com/api/v4/feature_flags/unleash/21892704")
+            .instanceId("PpzzkRXXSs5nokqqsrDc")
+            .unleashAPI("https://gitlab.com/api/v4/feature_flags/unleash/12679731")
             .build();
     Unleash unleash = new DefaultUnleash(config);
 
