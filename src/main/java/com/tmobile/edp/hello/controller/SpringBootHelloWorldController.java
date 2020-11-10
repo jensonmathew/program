@@ -1,5 +1,7 @@
 package com.tmobile.edp.hello.controller;
 
+import com.tmobile.edp.hello.exception.HelloworldException;
+
 import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +35,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
     Unleash unleash = new DefaultUnleash(config);
 
     @RequestMapping("/")
-    String home(Principal principal) throws Exception {
+    String home(Principal principal) throws HelloworldException {
         try{
             LOGGER.info("Info {}", unleash.toString());
             String allUserMessage = getMessageForAllUser();
@@ -68,7 +70,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
                             + "</style>";                    
         } catch (Exception exception) {
             LOGGER.error("ERROR", exception);
-            throw new Exception("ERROR", exception);
+            throw new HelloworldException("ERROR", exception);
         }                   
     }
     
