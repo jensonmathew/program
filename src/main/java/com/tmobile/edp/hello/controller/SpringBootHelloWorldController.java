@@ -68,6 +68,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
                             + "</style>";                    
         } catch (Exception exception) {
             LOGGER.error("ERROR", exception);
+            throw new Exception("ERROR", exception);
         }                   
     }
     
