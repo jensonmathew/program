@@ -33,12 +33,12 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
     Unleash unleash = new DefaultUnleash(config);
 
     @RequestMapping("/")
-    String home(Principal principal) {
+    String home(Principal principal) throws Exception {
         try{
-
-        String allUserMessage = getMessageForAllUser();
-        String userIdfeatureMessage = getMessageForUserIdFeature(principal.getName());
-        return "<div style='padding:15px;'>Logged in user as: " + principal.getName() + "</div><div style='position: absolute;top: 0;right: 150px; z-index:1'><img src='"+LOGO_IMAGE_BASE64+"'/> <a style='padding: 10px; text-decoration: none; vertical-align: middle; margin: auto 0; top: 15px; position: absolute; background: #e20074; color: white; margin-left: 40px;width: max-content;' href='\\login'>Log out</a></div>"
+            LOGGER.info("Info {}", unleash.toString());
+            String allUserMessage = getMessageForAllUser();
+            String userIdfeatureMessage = getMessageForUserIdFeature(principal.getName());
+            return "<div style='padding:15px;'>Logged in user as: " + principal.getName() + "</div><div style='position: absolute;top: 0;right: 150px; z-index:1'><img src='"+LOGO_IMAGE_BASE64+"'/> <a style='padding: 10px; text-decoration: none; vertical-align: middle; margin: auto 0; top: 15px; position: absolute; background: #e20074; color: white; margin-left: 40px;width: max-content;' href='\\login'>Log out</a></div>"
                             + "<ul>"
                             + "<li>"+allUserMessage+"</li>"
                             + (userIdfeatureMessage.equals("") ? "" : "<li>" + userIdfeatureMessage + "</li>")
