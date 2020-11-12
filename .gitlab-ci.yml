@@ -83,7 +83,6 @@ variables:
     BUILD_NUMBER: "$CI_COMMIT_SHORT_SHA"
     
     # Maven Parameters
-    MAVEN_CLI_OPTS: "-Dhttps.proxyHost=proxy.internal.t-mobile.com -Dhttps.proxyPort=9090 --batch-mode --errors --fail-at-end --show-version"
     MAVEN_PUBLISH_ARGS: "-Dfile=target/${CI_PROJECT_NAME}-${APP_VERSION}-$CI_COMMIT_SHORT_SHA.jar"
     MAVEN_VERSION: "3.6.1-jdk-8"
     JACOCO_COVERAGE_REPORT: "yes"
