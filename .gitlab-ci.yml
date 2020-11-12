@@ -39,9 +39,9 @@ include:
     file: '/gitlab-ci/.tmo.function.badge.gitlab-ci.yml'
 
   # Inject Artifactory functions
-  #- project: 'tmobile/templates'
-  #  ref: tmo/master
-  #  file: '/gitlab-ci/.tmo.job.jfrog-artifact.gitlab-ci.yml'
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.job.jfrog-artifact.gitlab-ci.yml'
     
   # Injects CTP
   - project: 'tmobile/templates'
@@ -63,7 +63,7 @@ stages:
   - build
   - test
   - scan
-  #- publish
+  - publish
   - tag
   - deploy-npe
   - validate
