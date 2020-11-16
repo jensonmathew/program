@@ -13,10 +13,10 @@ include:
     ref: tmo/master
     file: '/gitlab-ci/.tmo.job.mavenBuild.gitlab-ci.yml'
 
-  # Injects Maven Publish
-  #- project: 'tmobile/templates'
-  #  ref: tmo/master
-  #  file: '/gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml'
+   Injects Maven Publish
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml'
 
   # Injects Fortify Publish
   - project: 'tmobile/templates'
