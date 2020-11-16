@@ -72,7 +72,15 @@ The e2egating stage running the test cases in the Codeless test framework and up
 
 How to run the tests on CTP and using Apigee API to upload the test results on the qTest [documentation](https://gitlab.com/tmobile/templates/-/blob/tmo/master/documentation/ctp-e2egating.md)
 
+Feature Flags:
+-------------------
+Feature toggle(flags) is used to enable or disable the feature during runtime.
 
+Can be turn on/off application features by toggling flag(**Operations** -> **Feature Flags**) in GitLab.
+
+Available Feature Flags strategies in this project: [All Users](https://docs.gitlab.com/ee/operations/feature_flags.html#all-users) and [User IDs](https://docs.gitlab.com/ee/operations/feature_flags.html#user-ids)
+
+The CF routes will be the [link](http://cdp-helloworld-1-development.dev.px-npe02b.cf.t-mobile.com/) to application page with credentials as testuser(1..10) and password(1..10).
  
  
  
