@@ -1,14 +1,13 @@
 package com.tmobile.edp.hello.controller;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.security.Principal;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -29,8 +28,8 @@ public class SpringBootHelloWorldControllerTest {
 
 	@Test
 	public void testHome() throws HelloworldException {
-		Mockito.when(unleash.isEnabled(Matchers.any())).thenReturn(true);
-		Mockito.when(unleash.isEnabled(Matchers.any(), Matchers.any(UnleashContext.class))).thenReturn(true);
+		Mockito.when(unleash.isEnabled(ArgumentMatchers.any())).thenReturn(true);
+		Mockito.when(unleash.isEnabled(ArgumentMatchers.any(), ArgumentMatchers.any(UnleashContext.class))).thenReturn(true);
 		Principal principal = new Principal() {
 			
 			@Override
@@ -43,8 +42,8 @@ public class SpringBootHelloWorldControllerTest {
 
 	@Test
 	public void testHomeFalse() throws HelloworldException {
-		Mockito.when(unleash.isEnabled(Matchers.any())).thenReturn(false);
-		Mockito.when(unleash.isEnabled(Matchers.any(), Matchers.any(UnleashContext.class))).thenReturn(false);
+		Mockito.when(unleash.isEnabled(ArgumentMatchers.anyString())).thenReturn(false);
+		Mockito.when(unleash.isEnabled(ArgumentMatchers.any(), ArgumentMatchers.any(UnleashContext.class))).thenReturn(false);
 		Principal principal = new Principal() {
 			
 			@Override
@@ -57,6 +56,6 @@ public class SpringBootHelloWorldControllerTest {
 	
 	@Test(expected = Exception.class)
 	public void testHomeException() {
-		Mockito.when(unleash.isEnabled(Matchers.any())).thenThrow(Exception.class);
+		Mockito.when(unleash.isEnabled(ArgumentMatchers.any())).thenThrow(Exception.class);
 	}
 }
