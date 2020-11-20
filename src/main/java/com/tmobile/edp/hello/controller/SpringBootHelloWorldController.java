@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,8 +33,11 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
         try{
             LOGGER.info("Info {}", unleash.toString());
             String allUserMessage = getMessageForAllUser();
+            boolean envAllUserMessage = getMessageForEnvAllUser();
             String userIdfeatureMessage = getMessageForUserIdFeature(principal.getName());
-            return "<div style='padding:15px;'>Logged in user as: " + principal.getName() + "</div><div style='position: absolute;top: 0;right: 150px; z-index:1'><img src='"+LOGO_IMAGE_BASE64+"'/> <a style='padding: 10px; text-decoration: none; vertical-align: middle; margin: auto 0; top: 15px; position: absolute; background: #e20074; color: white; margin-left: 40px;width: max-content;' href='\\login'>Log out</a></div>"
+            return "<div style='position: absolute;top: 0;right: 150px; z-index:1'><img src='"+LOGO_IMAGE_BASE64+"'/> <a style='padding: 10px; text-decoration: none; vertical-align: middle; margin: auto 0; top: 15px; position: absolute; background: #e20074; color: white; margin-left: 40px;width: max-content;' href='\\login'>Log out</a></div>"
+            		+ "<div style='padding:15px;'>Logged in user as: " + principal.getName() + "</div>"
+            		+ (envAllUserMessage ? "<div style='padding:15px;'>Logged in env as: " + System.getenv("env") + "</div>" : "")
                             + "<ul>"
                             + "<li>"+allUserMessage+"</li>"
                             + (userIdfeatureMessage.equals("") ? "" : "<li>" + userIdfeatureMessage + "</li>")
@@ -75,6 +79,28 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
         else {
         	something = "<div style='padding:10px;'><div style='border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Disabled the feature for all users.</b> <p>To enable feature flag, go to Project Settings ->Operations ->Feature Flags</p> </div></div>";
         }
+        return something;
+    }
+    
+
+    private boolean getMessageForEnvAllUser() {
+
+    	boolean something = false;
+    	if (StringUtils.hasText(System.getenv("env"))) {
+        	UnleashConfig config1 = UnleashConfig.builder()
+                    .appName(System.getenv("env"))
+                    .instanceId("PpzzkRXXSs5nokqqsrDc")
+                    .unleashAPI("https://gitlab.com/api/v4/feature_flags/unleash/12679731")
+                    .build();
+            Unleash unleash1 = new DefaultUnleash(config1);
+            if (unleash1.isEnabled("envfeature")) {
+              	something = true;
+            } else {
+            	something = false;
+            }
+    	} else {
+    		LOGGER.info("Cannot find the environment 'env'");
+    	}
         return something;
     }
     
