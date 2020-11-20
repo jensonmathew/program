@@ -86,9 +86,9 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
     private boolean getMessageForEnvAllUser() {
 
     	boolean something = false;
-    	if (StringUtils.hasText(System.getenv("env"))) {
+    	if (StringUtils.hasText(System.getenv("ENVIRONMENT"))) {
         	UnleashConfig config1 = UnleashConfig.builder()
-                    .appName(System.getenv("env"))
+                    .appName(System.getenv("ENVIRONMENT"))
                     .instanceId("PpzzkRXXSs5nokqqsrDc")
                     .unleashAPI("https://gitlab.com/api/v4/feature_flags/unleash/12679731")
                     .build();
@@ -99,7 +99,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
             	something = false;
             }
     	} else {
-    		LOGGER.info("Cannot find the environment 'env'");
+    		LOGGER.info("Cannot find the environment 'ENVIRONMENT'");
     	}
         return something;
     }
