@@ -38,7 +38,7 @@ public class SpringBootHelloWorldControllerTest {
 	@Test
 	public void testHome() throws HelloworldException {
 		PowerMockito.mockStatic(System.class);
-		PowerMockito.when(System.getenv("ENVIRONMENT")).thenReturn("ENVIRONMENT");
+		PowerMockito.when(System.getenv("ENVIRONMENT")).thenReturn("CI_ENVIRONMENT_NAME");
 		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any())).thenReturn(true);
 		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any(), ArgumentMatchers.any(UnleashContext.class))).thenReturn(true);
 		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any())).thenReturn(true);
