@@ -8,3 +8,5 @@ applications:
     - {{ BUILDPACK }}
   env:
     FORCE_HTTPS: true
+    ENVIRONMENT: {{ CI_ENVIRONMENT_NAME }}
+    JAVA_OPTS: "-Dhttps.proxyHost=proxy.internal.t-mobile.com -Dhttps.proxyPort=9090"
