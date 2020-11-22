@@ -25,13 +25,15 @@ import no.finn.unleash.UnleashContext;
 @PrepareForTest({System.class})
 
 public class SpringBootHelloWorldControllerTest {
-	@Rule
-	public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
+	@ClassRule
+	public final EnvironmentVariables environmentVariables = new EnvironmentVariables()
+	.set("ENVIRONMENT", "dev");
+
 	@Test
 	public void setEnvironmentVariable() {
-		environmentVariables.set("ENVIRONMENT", "dev");
 		assertEquals("dev", System.getenv("ENVIRONMENT"));
 	}
+	
 	@InjectMocks
 	SpringBootHelloWorldController springBootHelloWorldController;
 	
