@@ -53,7 +53,7 @@ public class SpringBootHelloWorldControllerTest {
 		//PowerMockito.when(value).thenReturn("dev");
 		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any())).thenReturn(true);
 		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any(), ArgumentMatchers.any(UnleashContext.class))).thenReturn(true);
-		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any())).thenReturn(true);
+		//PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any())).thenReturn(true);
 		Principal principal = new Principal() {
 			
 			@Override
