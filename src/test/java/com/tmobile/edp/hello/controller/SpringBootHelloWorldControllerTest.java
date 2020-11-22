@@ -46,7 +46,7 @@ public class SpringBootHelloWorldControllerTest {
     }
 
 	@Test
-	public void testHome() throws HelloworldException {
+	public void testHome() throws Exception {
 		PowerMockito.mockStatic(System.class);
 		String value = withEnvironmentVariable("ENVIORNMENT", "dev")
     		.execute(() -> System.getenv("ENVIORNMENT"));
