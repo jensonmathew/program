@@ -24,9 +24,6 @@ import no.finn.unleash.UnleashContext;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({System.class})
 
-public class EnvironmentVariablesTest {
-
-
 public class SpringBootHelloWorldControllerTest {
 	@Rule
 	public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
