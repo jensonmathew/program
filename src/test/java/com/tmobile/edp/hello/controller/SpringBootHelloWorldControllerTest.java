@@ -50,7 +50,7 @@ public class SpringBootHelloWorldControllerTest {
 		PowerMockito.mockStatic(System.class);
 		String value = withEnvironmentVariable("ENVIORNMENT", "dev")
     		.execute(() -> System.getenv("ENVIORNMENT"));
-		PowerMockito.when(value).thenReturn("dev");
+		//PowerMockito.when(value).thenReturn("dev");
 		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any())).thenReturn(true);
 		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any(), ArgumentMatchers.any(UnleashContext.class))).thenReturn(true);
 		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any())).thenReturn(true);
