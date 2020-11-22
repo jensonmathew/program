@@ -16,6 +16,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
+import static org.junit.Assert.assertEquals;
 
 import com.tmobile.edp.hello.exception.HelloworldException;
 
