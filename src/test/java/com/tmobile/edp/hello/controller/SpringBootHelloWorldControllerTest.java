@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 import com.tmobile.edp.hello.exception.HelloworldException;
 
@@ -22,8 +23,18 @@ import no.finn.unleash.UnleashContext;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({System.class})
+
+public class EnvironmentVariablesTest {
+
+
 public class SpringBootHelloWorldControllerTest {
-	
+	@Rule
+	public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
+	@Test
+	public void setEnvironmentVariable() {
+		environmentVariables.set("ENVIRONMENT", "dev");
+		assertEquals("dev", System.getenv("ENVIRONMENT"));
+	}
 	@InjectMocks
 	SpringBootHelloWorldController springBootHelloWorldController;
 	
@@ -35,6 +46,7 @@ public class SpringBootHelloWorldControllerTest {
 		MockitoAnnotations.initMocks(this);
     }
 
+	@ignore
 	@Test
 	public void testHome() throws HelloworldException {
 		PowerMockito.mockStatic(System.class);
