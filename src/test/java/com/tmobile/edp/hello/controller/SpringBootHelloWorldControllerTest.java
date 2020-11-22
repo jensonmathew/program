@@ -44,7 +44,7 @@ public class SpringBootHelloWorldControllerTest {
 		MockitoAnnotations.initMocks(this);
     }
 
-	@ignore
+	@Ignore
 	@Test
 	public void testHome() throws HelloworldException {
 		PowerMockito.mockStatic(System.class);
