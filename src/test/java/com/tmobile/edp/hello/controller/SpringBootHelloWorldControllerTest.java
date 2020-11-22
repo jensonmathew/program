@@ -66,8 +66,8 @@ public class SpringBootHelloWorldControllerTest {
 
 	@Test
 	public void testHomeFalse() throws HelloworldException {
-		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.anyString())).thenReturn(false);
-		PowerMockito.when(unleash.isEnabled(ArgumentMatchers.any(), ArgumentMatchers.any(UnleashContext.class))).thenReturn(false);
+		PowerMockito.when(unleash.isDisabled(ArgumentMatchers.anyString())).thenReturn(false);
+		PowerMockito.when(unleash.isDisabled(ArgumentMatchers.any(), ArgumentMatchers.any(UnleashContext.class))).thenReturn(false);
 		Principal principal = new Principal() {
 			
 			@Override
