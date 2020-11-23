@@ -38,7 +38,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
             String userIdfeatureMessage = getMessageForUserIdFeature(principal.getName());
             return "<div style='position: absolute;top: 0;right: 150px; z-index:1'><img src='"+LOGO_IMAGE_BASE64+"'/> <a style='padding: 10px; text-decoration: none; vertical-align: middle; margin: auto 0; top: 15px; position: absolute; background: #e20074; color: white; margin-left: 40px;width: max-content;' href='\\login'>Log out</a></div>"
             		+ "<div style='padding:15px;'>Logged in user as: " + principal.getName() + "</div>"
-            		+ (envAllUserMessage ? "<ul><li><div style='padding:10px;'><div style='border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Logged in env as: " + System.getenv(ENVIRONMENT) + " </b> <p>Manage Evironment<a href=https://docs.gitlab.com/ee/operations/feature_flags.html#disable-a-feature-flag-for-a-specific-environment'></a> specific Feature Flags.</p> </div></div></li></ul>" : "")
+            		+ (envAllUserMessage ? "<ul><li><div style='padding:10px;'><div style='border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Logged in env as: " + System.getenv(ENVIRONMENT) + " </b> <p>Manage <a href=https://docs.gitlab.com/ee/operations/feature_flags.html#disable-a-feature-flag-for-a-specific-environment'>Evironment</a> specific Feature Flags.</p> </div></div></li></ul>" : "")
                             + "<ul>"
                             + "<li>"+allUserMessage+"</li>"
                             + (userIdfeatureMessage.equals("") ? "" : "<li>" + userIdfeatureMessage + "</li>")
