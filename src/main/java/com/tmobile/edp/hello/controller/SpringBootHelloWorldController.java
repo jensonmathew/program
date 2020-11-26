@@ -112,9 +112,6 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
         if (unleash.isEnabled("useridfeature", context)) {
           	something = "<div style='padding:10px;'><div style='background-color:#ff0080; border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Feature Flag Name: useridfeature </b><p>Enables the feature for a list of specific users.</p> <p>It is implemented using the Unleash <a href='https://unleash.github.io/docs/activation_strategy#userwithid'>userwithid</a> activation strategy.</p></div></div>";
         } 
-        else {
-        	something = "";
-        }
         return something;
     }
 }
