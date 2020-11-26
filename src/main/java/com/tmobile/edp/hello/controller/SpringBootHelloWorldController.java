@@ -106,7 +106,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
     }
     
     private String getMessageForUserIdFeature(String userId) {
-    	String something;
+    	String something="";
         UnleashContext context = UnleashContext.builder()
             .userId(userId).build();
         if (unleash.isEnabled("useridfeature", context)) {
