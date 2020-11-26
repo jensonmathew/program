@@ -38,7 +38,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
             String userIdfeatureMessage = getMessageForUserIdFeature(principal.getName());
             return "<div style='position: absolute;top: 0;right: 150px; z-index:1'><img src='"+LOGO_IMAGE_BASE64+"'/> <a style='padding: 10px; text-decoration: none; vertical-align: middle; margin: auto 0; top: 15px; position: absolute; background: #e20074; color: white; margin-left: 40px;width: max-content;' href='\\login'>Log out</a></div>"
             		+ "<div style='padding:15px;'>Logged in user as: " + principal.getName() + "</div>"
-            		+ (envAllUserMessage ? "<ul><li><div style='padding:10px;'><div style='background-color:#ffb3d9; width: 30%; border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Feature Flag Name: envfeature </b> <p>Logged in env as: " + System.getenv(ENVIRONMENT) + " </p><p>It is <a href=https://docs.gitlab.com/ee/operations/feature_flags.html#disable-a-feature-flag-for-a-specific-environment'>Evironment</a> specific Feature Flags.</p> </div></div></li></ul>" : "")
+            		+ (envAllUserMessage ? "<ul><li><div style='padding:10px;'><div style='background-color:#ffb3d9; width: 35%; border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Feature Flag Name: envfeature </b> <p>Logged in env as: " + System.getenv(ENVIRONMENT) + " </p><p>It is <a href=https://docs.gitlab.com/ee/operations/feature_flags.html#disable-a-feature-flag-for-a-specific-environment'>Evironment</a> specific Feature Flags.</p> </div></div></li></ul>" : "")
                             + "<ul>"
                             + "<li>"+allUserMessage+"</li>"
                             + (userIdfeatureMessage.equals("") ? "" : "<li>" + userIdfeatureMessage + "</li>")
@@ -75,10 +75,10 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
     private String getMessageForAllUser() {
     	String something;
         if (unleash.isEnabled("awesomefeature")) {
-          	something = "<div style='padding:10px;'><div style='background-color:#ff4da6; width: 30%; border-radius:5px; padding:10px; margin:5px; border:2px solid #e20074; display:inline-block;'><b>Feature Flag Name: awesomefeature </b><p>Enabled the Feature Flag for all users.</p> <p>It uses the <a href='https://docs.gitlab.com/ee/operations/feature_flags.html#all-users'>default</a> Unleash activation strategy.</p></div></div>";
+          	something = "<div style='padding:10px;'><div style='background-color:#ff4da6; width: 35%; border-radius:5px; padding:10px; margin:5px; border:2px solid #e20074; display:inline-block;'><b>Feature Flag Name: awesomefeature </b><p>Enabled the Feature Flag for all users.</p> <p>It uses the <a href='https://docs.gitlab.com/ee/operations/feature_flags.html#all-users'>default</a> Unleash activation strategy.</p></div></div>";
         } 
         else {
-        	something = "<div style='padding:10px;'><div style='background-color:#ff4da6; width: 30%; border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Feature Flag Name: awesomefeature </b><p>Disabled the Feature Flag for all users.</p> <p>To enable feature, go to Project Operations ->Feature Flags</p> </div></div>";
+        	something = "<div style='padding:10px;'><div style='background-color:#ff4da6; width: 35%; border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Feature Flag Name: awesomefeature </b><p>Disabled the Feature Flag for all users.</p> <p>To enable feature, go to Project Operations ->Feature Flags</p> </div></div>";
         }
         return something;
     }
@@ -110,7 +110,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
         UnleashContext context = UnleashContext.builder()
             .userId(userId).build();
         if (unleash.isEnabled("useridfeature", context)) {
-          	something = "<div style='padding:10px;'><div style='background-color:#ff0080; width: 30%; border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Feature Flag Name: useridfeature </b><p>Enables the feature for a list of specific users.</p> <p>It is implemented using the Unleash <a href='https://unleash.github.io/docs/activation_strategy#userwithid'>userwithid</a> activation strategy.</p></div></div>";
+          	something = "<div style='padding:10px;'><div style='background-color:#ff0080; width: 35%; border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Feature Flag Name: useridfeature </b><p>Enables the feature for a list of specific users.</p> <p>It is implemented using the Unleash <a href='https://unleash.github.io/docs/activation_strategy#userwithid'>userwithid</a> activation strategy.</p></div></div>";
         } 
         return something;
     }
