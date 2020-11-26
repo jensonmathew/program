@@ -75,7 +75,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootHelloWorl
     private String getMessageForAllUser() {
     	String something;
         if (unleash.isEnabled("awesomefeature")) {
-          	something = "<div style='padding:10px;'><div style='border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Enables the feature for all users.</b> <p>It uses the <a href='https://docs.gitlab.com/ee/operations/feature_flags.html#all-users'>default</a> Unleash activation strategy.</p></div></div>";
+          	something = "<div style='padding:10px;'><div style='background-color:#009933; color:#f2f2f2; border-radius:5px; padding:10px; margin:5px; border:2px solid #e20074; display:inline-block;'><b>Enabled the feature via Feature Flag: [awesomefeature] for all users.</b> <p>It uses the <a href='https://docs.gitlab.com/ee/operations/feature_flags.html#all-users'>default</a> Unleash activation strategy.</p></div></div>";
         } 
         else {
         	something = "<div style='padding:10px;'><div style='border-radius:5px; padding:10px; margin:5px; border:1px solid #e20074; display:inline-block;'><b>Disabled the feature for all users.</b> <p>To enable feature flag, go to Project Settings ->Operations ->Feature Flags</p> </div></div>";
