@@ -42,7 +42,7 @@ Running the App:
     
 OR
 
-    java -jar target/edp-helloworld-rest-0.1.0.jar 
+    java -jar target/helloworld-1.2.3-999.jar 
 
 Testing the Application:
 ------------------------
@@ -79,11 +79,13 @@ The feature flag maybe turned ON or OFF using the toggle switch at *Operations* 
 
 **How it works**
 
-GitLab uses [Unleash](https://github.com/Unleash/unleash), a feature toggle service. It comes with official client implementations for Java, Node.js, Go, Ruby, Python and .NET Core.
+GitLab uses [Unleash](https://github.com/Unleash/unleash), a feature toggle service. It supports official client implementations for Java, Node.js, Go, Ruby, Python and .NET Core.
 
 [Create feature flags](https://docs.gitlab.com/ee/operations/feature_flags.html#create-a-feature-flag) in GitLab and use the API from the application to get the list of feature flags and their statuses.
 
 The application must be configured to communicate with GitLab, so it’s up to developers to use a compatible client library and integrate the feature flags in the app.
+
+For this example project, pom.xml and Controller files were modified to incorporate Unleash libraries for achieving Feature Flag capability.
 
 **Examples**
 
