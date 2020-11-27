@@ -75,7 +75,7 @@ Feature Flags:
 -------------------
 Feature toggle(Flags) is used to enable or disable the features during runtime.
 
-Can be turn on/off application features by toggling flag(*Operations* -> *Feature Flags*) in GitLab.
+The feature flag maybe turned ON or OFF using the toggle switch at *Operations* -> *Feature Flags* for a particular project.
 
 **How it works**
 
