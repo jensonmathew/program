@@ -1,6 +1,6 @@
 Introduction:
 -------------
-This repository contains a sample spring boot Hello World example. 
+This repository contains a sample spring boot application. 
 
 This project is automatically committed/merged to by our cycle time collector every hour to generate smoke updates to ensure our systems work end to end.
 
@@ -47,11 +47,10 @@ OR
 Testing the Application:
 ------------------------
 
-	curl http://localhost:19000/cdp/v1/greeting?name=Moto
-
+	curl --user testuser1:password1 http://localhost
 In Web Browser
 
-    http://localhost:19000/cdp/v1/greeting?name=Moto
+    http://testuser1:password1@localhost
     
 Deploying to Pivotal Cloud Foundry:
 -----------------------------------
@@ -74,57 +73,20 @@ How to run the tests on CTP and using Apigee API to upload the test results on t
 
 Feature Flags:
 -------------------
-Feature toggle(flags) is used to enable or disable the feature during runtime.
+Feature toggle(Flags) is used to enable or disable the features during runtime.
 
-Can be turn on/off application features by toggling flag(**Operations** -> **Feature Flags**) in GitLab.
+Can be turn on/off application features by toggling flag(*Operations* -> *Feature Flags*) in GitLab.
 
+**How it works**
+
+GitLab uses [Unleash](https://github.com/Unleash/unleash), a feature toggle service. It comes with official client implementations for Java, Node.js, Go, Ruby, Python and .NET Core.
+
+[Create feature flags](https://docs.gitlab.com/ee/operations/feature_flags.html#create-a-feature-flag) in GitLab and use the API from the application to get the list of feature flags and their statuses.
+
+The application must be configured to communicate with GitLab, so it’s up to developers to use a compatible client library and integrate the feature flags in the app.
+
+**Test cases**
+Click here to see sample screenshots.
 Available Feature Flags strategies in this project: [All Users](https://docs.gitlab.com/ee/operations/feature_flags.html#all-users) and [User IDs](https://docs.gitlab.com/ee/operations/feature_flags.html#user-ids)
 
 The CF routes will be the [link](http://cdp-helloworld-1-development.dev.px-npe02b.cf.t-mobile.com/) to application page with credentials as testuser(1..10) and password(1..10).
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
