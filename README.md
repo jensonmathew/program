@@ -1,6 +1,6 @@
 Introduction:
 -------------
-This repository contains a sample spring boot Hello World example. 
+This repository contains a sample spring boot application. 
 
 This project is automatically committed/merged to by our cycle time collector every hour to generate smoke updates to ensure our systems work end to end.
 
@@ -42,16 +42,15 @@ Running the App:
     
 OR
 
-    java -jar target/edp-helloworld-rest-0.1.0.jar 
+    java -jar target/helloworld-1.2.3-999.jar 
 
 Testing the Application:
 ------------------------
 
-	curl http://localhost:19000/cdp/v1/greeting?name=Moto
-
+	curl --user testuser1:password1 http://localhost
 In Web Browser
 
-    http://localhost:19000/cdp/v1/greeting?name=Moto
+    http://testuser1:password1@localhost
     
 Deploying to Pivotal Cloud Foundry:
 -----------------------------------
@@ -72,51 +71,22 @@ The e2egating stage running the test cases in the Codeless test framework and up
 
 How to run the tests on CTP and using Apigee API to upload the test results on the qTest [documentation](https://gitlab.com/tmobile/templates/-/blob/tmo/master/documentation/ctp-e2egating.md)
 
+Feature Flags:
+-------------------
+Feature toggle(Flags) is used to enable or disable the features during runtime.
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+The feature flag maybe turned ON or OFF using the toggle switch at *Operations* -> *Feature Flags* for a particular project.
+
+**How it works**
+
+GitLab uses [Unleash](https://github.com/Unleash/unleash), a feature toggle service. It supports official client implementations for Java, Node.js, Go, Ruby, Python and .NET Core.
+
+[Create feature flags](https://docs.gitlab.com/ee/operations/feature_flags.html#create-a-feature-flag) in GitLab and use the API from the application to get the list of feature flags and their statuses.
+
+The application must be configured to communicate with GitLab, so it’s up to developers to use a compatible client library and integrate the feature flags in the app.
+
+For this example project, pom.xml and Controller files were modified to incorporate Unleash libraries for achieving Feature Flag capability.
+
+**Examples**
+
+Click [here](./docs/examples.md) to see all samples.
