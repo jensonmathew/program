@@ -1,11 +1,11 @@
 #!/bin/bash
-script_path=$(dirname $(realpath $0))
+script_path=$(dirname "$(realpath "$0")")
 clear
 echo ===============================================
-echo Executing suite $3
+echo Executing suite "$3"
 echo ===============================================
-lib_path=$(realpath $script_path/../lib)
-cd $lib_path
+lib_path=$(realpath "$script_path"/../lib)
+cd "${lib_path}" || exit
 
 java -DbuildMode="prod" -DexecutionId="$1" -DgroupExecutionID="$2" -jar tep_codeless_plugins.jar -suite="$3" -datasheet="$4"
 
@@ -13,9 +13,8 @@ echo ===============================================
 echo Collecting log files
 echo ===============================================
 
-parent_dir=$(realpath $script_path/../)
-cd $parent_dir
-
+parent_dir=$(realpath "$script_path"/../)
+cd "$parent_dir" || exit
 
 rm -rf logs
 mkdir -p logs
