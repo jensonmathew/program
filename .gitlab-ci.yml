@@ -48,7 +48,12 @@ include:
     ref: tmo/master
     file: '/gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml'
 
-   # PCF NPE, CDE and PRD Variable files
+  # Shell Check  
+  - project: 'tmobile/templates'
+    ref: tmo/master
+    file: '/gitlab-ci/.tmo.job.shellcheck.gitlab-ci.yml'
+
+    # PCF NPE, CDE and PRD Variable files
   - local : '/gitlab-ci/vars/.tmo.cdp-pcf-npe.vars.gitlab-ci.yml'
   - local : '/gitlab-ci/vars/.tmo.cdp-pcf-cde.vars.gitlab-ci.yml'
   - local : '/gitlab-ci/vars/.tmo.cdp-pcf-prod.vars.gitlab-ci.yml'
