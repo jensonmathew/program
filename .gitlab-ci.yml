@@ -1,58 +1,17 @@
 include:
   - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.global.common.gitlab-ci.yml'
-    
-  # Injects Maven Test
-  - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.job.mavenTest.gitlab-ci.yml'
-
-  # Injects Maven Build
-  - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.job.mavenBuild.gitlab-ci.yml'
-
-  # Injects Maven Publish
-  - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml'
-
-  # Injects Fortify Publish
-  - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.job.fortify.gitlab-ci.yml'
-
-  # Injects SonarScan capability
-  - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.job.sonar.gitlab-ci.yml'
-    
-  # Injects PCF Deploy function
-  - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.function.pcf.gitlab-ci.yml'
-
-  # Injects badging function
-  - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.function.badge.gitlab-ci.yml'
-
-  # Inject Artifactory functions
-  - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.job.jfrog-artifact.gitlab-ci.yml'
-    
-  # Injects CTP
-  - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml'
-
-  # Shell Check  
-  - project: 'tmobile/templates'
-    ref: tmo/master
-    file: '/gitlab-ci/.tmo.job.shellcheck.gitlab-ci.yml'
-
+    file:
+      - '/gitlab-ci/.tmo.global.common.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.job.mavenTest.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.job.mavenBuild.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.job.fortify.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.job.sonar.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.function.pcf.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.function.badge.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.job.jfrog-artifact.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.job.shellcheck.gitlab-ci.yml'
     # PCF NPE, CDE and PRD Variable files
   - local : '/gitlab-ci/vars/.tmo.cdp-pcf-npe.vars.gitlab-ci.yml'
   - local : '/gitlab-ci/vars/.tmo.cdp-pcf-cde.vars.gitlab-ci.yml'
@@ -140,7 +99,6 @@ helloworld-downstream-bridge:
     project: tmobile/templates_projects/helloworld-downstream
     # make bridge job status mirror downstream pipeline status
     strategy: depend
-    branch: tmo/master
     
 # Create json for badges 
 pages:
