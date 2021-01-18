@@ -4,7 +4,7 @@
   stage: deploy-cde
   extends: .pcf-deploy
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "tmo/master"'
+    - if: '$CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"'
       when: on_success
 
 ##################################### Deploy px-cde02 ################################################
