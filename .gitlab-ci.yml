@@ -53,6 +53,9 @@ variables:
     UPSTREAM_BRANCH_NAME: ${CI_COMMIT_REF_NAME}
     ENVIRONMENT: "dev"
     
+    # Sonar Parameters
+    CDP_SONAR_PRD: "true"
+    
     # PCF Parameters
     PCF_CLI_VERSION: "6.49.0"
     PCF_ORG: "Continuous-Delivery-Platform"
