@@ -9,7 +9,6 @@ include:
       - '/gitlab-ci/.tmo.job.sonar.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.function.pcf.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.function.badge.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.job.jfrog-artifact.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.job.shellcheck.gitlab-ci.yml'
     # PCF NPE, CDE and PRD Variable files
@@ -75,19 +74,6 @@ variables:
     TEST_FRAMEWORK: "CODELESS_BYOT"
     TEST_SUITE: "CDP-qTest-POC"
     TEST_ENVIRONMENT: "NA"
-
-    # Artifactory Paramaters
-    ARTIFACT_REPO: "cdp-maven-prd"
-    TARGET_PATH: "${ARTIFACT_REPO}/${CI_PROJECT_NAME}/${APP_VERSION}/${CI_PIPELINE_IID}/"
-    ARTIFACT_DIR: "./target/*.jar"
-    GROUP_ID: "cdp/helloworld-1"
-
-# Tag Artifactory Artifact
-artifactory-tag-artifact:
-  extends: .tag-artifact
-  variables:
-    ARTIFACT_NAME: "helloworld-1-${APP_VERSION}-${CI_COMMIT_SHORT_SHA}.jar"
-    ARTIFACT_PROPS: "TAG_TEST=SUCCESSFUL"
 
 # Trigger a multi project pipeline using a bridge job
 helloworld-downstream-bridge:
