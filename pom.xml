@@ -129,6 +129,19 @@
                     </includes>
                 </configuration>
             </plugin>
+            <plugin>
+                <!-- https://mvnrepository.com/artifact/com.sonatype.clm/clm-maven-plugin -->
+    			<groupId>com.sonatype.clm</groupId>
+    			<artifactId>clm-maven-plugin</artifactId>
+    			<version>2.17.0-02</version>
+                <configuration>
+                    <serverUrl>${SONATYPE_NEXUS_IQ_URL}</serverUrl>
+         			<username>${SONATYPE_NEXUS_IQ_USERNAME}</username>
+         			<password>${SONATYPE_NEXUS_IQ_PASSWORD}</password>
+        		 	<applicationId>${SONATYPE_PUBLIC_ID}</applicationId>
+                    <stage>build</stage>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
