@@ -61,7 +61,6 @@ variables:
       {
         "stack":"EDP_GITLAB",
         "event":"SCAN_REQUEST",
-        "akmid":"103875",
         "repo":"git@gitlab.com:$CI_PROJECT_PATH.git",
         "commitId":"$CI_COMMIT_SHA",
         "buildId":"$CI_BUILD_ID",
