@@ -6,8 +6,9 @@
   rules:
     - if: '$CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"'
       when: on_success
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"'
       when: on_success
+      
 ##################################### Deploy px-cde02 ################################################
 # Deploy to production environment    
 deploy-px-cde02a-prd:
