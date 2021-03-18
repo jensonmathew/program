@@ -75,8 +75,8 @@ variables:
     PCF_ORG: "Continuous-Delivery-Platform"
     BUILDPACK: "java_buildpack_offline"
     PCF_INSTANCES: "1" 
-    PCF_ROUTE_HOSTNAME: "cdp-${CI_PROJECT_NAME}-${PCF_SPACE}"
-    PCF_APP_NAME: "${PCF_ROUTE_HOSTNAME}"
+    PCF_ROUTE_HOSTNAME: "cdp-$CI_PROJECT_NAME-$PCF_SPACE"
+    PCF_BG_STRATEGY: "GREEN_AUTO_SWITCH"
   
    # e2e gating/qTest parameters
     CODE_LOCATION: "git@${CI_SERVER_HOST}:${CI_PROJECT_PATH}.git"
