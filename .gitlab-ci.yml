@@ -54,22 +54,7 @@ variables:
     
     # Sonar Parameters
     CDP_SONAR_PRD: "true"
-
-    # Sonatype Parameters
-    SONATYPE_ACTIVE: 'true'
-    SONATYPE_REQUEST_BODY: >-
-      {
-        "stack":"EDP_GITLAB",
-        "event":"SCAN_REQUEST",
-        "repo":"git@gitlab.com:$CI_PROJECT_PATH.git",
-        "commitId":"$CI_COMMIT_SHA",
-        "buildId":"$CI_BUILD_ID",
-        "branch":"$CI_COMMIT_BRANCH",
-        "moduleName":"NA",
-        "tags":"$CI_COMMIT_TAG",
-        "ci_project_id":"$CI_PROJECT_ID"
-      }
-
+    
     # PCF Parameters
     PCF_CLI_VERSION: "6.49.0"
     PCF_ORG: "Continuous-Delivery-Platform"
