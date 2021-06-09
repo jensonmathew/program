@@ -64,6 +64,20 @@ and pushing the app using the following command
 
     cf push
 
+Deploying to TKE(PKS):
+----------------------
+The Project has been deployed to TKE by using comm [template](https://gitlab.com/tmobile/templates_projects/helloworld-1/-/blob/tmo/main/.gitlab-ci.yml#L15) and helm [charts](https://gitlab.com/tmobile/templates_projects/helloworld-1/-/tree/tmo/main/k8s) .
+
+Job reference from gitlab-ci/tke/.tmo.deploy-tke-npe.gitlab-ci.yml file.
+```yaml
+deploy-tke-npe: 
+  stage: deploy-npe
+  extends: .helm_deploy
+  environment:
+    name: dev01/px-npe1103/cdp-dev
+```
+The template [doc](https://gitlab.com/tmobile/templates/-/blob/tmo/master/documentation/K8s-HELM.md) will be helpuful to know more about mandatory K8s variables & helm based deployment.
+
 qTest Integreation:
 -------------------
 

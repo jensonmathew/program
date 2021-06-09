@@ -1,0 +1,6 @@
+# Deploy on TKE/PKS K8s cluster
+deploy-tke-npe: 
+  stage: deploy-npe
+  extends: .helm_deploy
+  environment:
+    name: dev01/px-npe1103/cdp-dev
