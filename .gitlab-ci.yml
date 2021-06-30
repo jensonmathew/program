@@ -24,7 +24,7 @@ include:
   - local : '/gitlab-ci/vars/.tmo.deploy-pcf-prod.gitlab-ci.yml'
 
    #Deploy to TKE NPE
-  - local : '/gitlab-ci/tke/.tmo.deploy-tke-npe.gitlab-ci.yml' 
+  #- local : '/gitlab-ci/tke/.tmo.deploy-tke-npe.gitlab-ci.yml' 
 
 
 stages: 
