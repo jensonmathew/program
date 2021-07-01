@@ -19,9 +19,9 @@ include:
   - local : '/gitlab-ci/vars/.tmo.cdp-pcf-prod.vars.gitlab-ci.yml'
 
    #Deploy to PCF NPE, CDE and PRD foundations
-  - local : '/gitlab-ci/vars/.tmo.deploy-pcf-npe.gitlab-ci.yml' 
-  - local : '/gitlab-ci/vars/.tmo.deploy-pcf-cde.gitlab-ci.yml'
-  - local : '/gitlab-ci/vars/.tmo.deploy-pcf-prod.gitlab-ci.yml'
+  #- local : '/gitlab-ci/vars/.tmo.deploy-pcf-npe.gitlab-ci.yml' 
+  #- local : '/gitlab-ci/vars/.tmo.deploy-pcf-cde.gitlab-ci.yml'
+  #- local : '/gitlab-ci/vars/.tmo.deploy-pcf-prod.gitlab-ci.yml'
 
    #Deploy to TKE NPE
   - local : '/gitlab-ci/tke/.tmo.deploy-tke-npe.gitlab-ci.yml' 
