@@ -8,7 +8,7 @@ ARG COMMIT_SHA
 
 ## Install troubleshooting packages
 RUN apk update
-RUN apk add --no-cache openjdk8=8.292.10-r0 
+RUN apk add --no-cache openjdk8=8.282.08-r1 
 
 ## Commands to be executed during the image build
 COPY target/$PROJECT_NAME-$APP_VERSION-$COMMIT_SHA.jar /home/
