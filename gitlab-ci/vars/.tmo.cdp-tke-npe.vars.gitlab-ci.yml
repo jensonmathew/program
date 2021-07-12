@@ -1,0 +1,5 @@
+##################################### px-npe1103 ################################################
+.vars_px-npe1103_dev:
+    variables:
+      APP_URL: "https://cdp-helloworld-1-dev."
+      DOMAIN: "px-npe1103.pks.t-mobile.com"
