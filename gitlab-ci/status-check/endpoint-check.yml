@@ -1,0 +1,10 @@
+.job_endpoint_check: &job_check  # Hidden yaml configuration that defines an anchor named 'job_check'
+  image: golang
+
+.status-check:
+  <<: *job_check    # contents of the 'job_check' alias
+  script:
+    - tmoLog "[INFO] Installing dependencys." "info"
+    - tmoLog "[INFO] Endpoint status check is running for $DOMAIN." "info"
+    - tmoLog "Checking deployment status for Domain $APP_URL$DOMAIN !!!." "info"
+    - go run "${CI_PROJECT_DIR}/gitlab-ci/status-check/script/endpoint-validate.go"

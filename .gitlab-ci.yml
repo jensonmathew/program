@@ -23,9 +23,14 @@ include:
   - local : '/gitlab-ci/vars/.tmo.deploy-pcf-cde.gitlab-ci.yml'
   - local : '/gitlab-ci/vars/.tmo.deploy-pcf-prod.gitlab-ci.yml'
 
-   #Deploy to TKE NPE
-  - local : '/gitlab-ci/tke/.tmo.deploy-tke-npe.gitlab-ci.yml' 
+   # TKE NPE Variable files
+  - local : '/gitlab-ci/vars/.tmo.cdp-tke-npe.vars.gitlab-ci.yml'
 
+   #Deploy to TKE NPE
+  - local : '/gitlab-ci/tke/.tmo.deploy-tke-npe.gitlab-ci.yml'
+     
+   #Endpoint-status-check
+  - local : '/gitlab-ci/status-check/endpoint-validate-ci.yml' 
 
 stages: 
   - tmo 
@@ -36,6 +41,7 @@ stages:
   - publish
   - tag
   - deploy-npe
+  - health-check-npe
   - validate
   - deploy-prod
   - deploy-cde
