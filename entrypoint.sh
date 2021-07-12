@@ -1,8 +1,4 @@
-#!/bin/bash
-
-## Install Java
-#apt-get update -y
-#apt-get install openjdk-8-jdk -y 
+#!/bin/sh
 
 ## Run helloworld application
 java -jar /home/*.jar
