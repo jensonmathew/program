@@ -1,0 +1,13 @@
+registry:
+  global:
+    description: "helloworld smoke test"
+    assetgroup: APM0201849
+    asset_id: APM0201850
+    assetname: helloworld-1-smoke
+  meta:
+    - version:
+      label: helloworld-1
+      endpointType: rest
+      healthcheck : "/health"
+      contextpath: "/"
+  dependencies: []
