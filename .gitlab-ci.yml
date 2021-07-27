@@ -13,23 +13,23 @@ include:
       - '/gitlab-ci/.tmo.job.shellcheck.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.job.docker.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.function.helm-deploy.gitlab-ci.yml'
-    # PCF NPE, CDE and PRD Variable files
+  # PCF NPE, CDE and PRD Variable files
   - local : '/gitlab-ci/vars/.tmo.cdp-pcf-npe.vars.gitlab-ci.yml'
   - local : '/gitlab-ci/vars/.tmo.cdp-pcf-cde.vars.gitlab-ci.yml'
   - local : '/gitlab-ci/vars/.tmo.cdp-pcf-prod.vars.gitlab-ci.yml'
 
-   #Deploy to PCF NPE, CDE and PRD foundations
+  # Deploy to PCF NPE, CDE and PRD foundations
   - local : '/gitlab-ci/vars/.tmo.deploy-pcf-npe.gitlab-ci.yml' 
   - local : '/gitlab-ci/vars/.tmo.deploy-pcf-cde.gitlab-ci.yml'
   - local : '/gitlab-ci/vars/.tmo.deploy-pcf-prod.gitlab-ci.yml'
 
-   # TKE NPE Variable files
+  # TKE NPE Variable files
   - local : '/gitlab-ci/vars/.tmo.cdp-tke-npe.vars.gitlab-ci.yml'
 
-   #Deploy to TKE NPE
+  # Deploy to TKE NPE
   - local : '/gitlab-ci/tke/.tmo.deploy-tke-npe.gitlab-ci.yml'
      
-   #Endpoint-status-check
+  # Endpoint-status-check
   - local : '/gitlab-ci/status-check/endpoint-validate-ci.yml' 
 
 stages: 
