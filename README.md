@@ -46,12 +46,17 @@ OR
 
 Testing the Application:
 ------------------------
+**On Terminal**
+```console
+curl --user testuserX:passwordX http://localhost  
+Where the X is 1 - 10.
+```
 
-	curl --user testuser1:password1 http://localhost
-In Web Browser
-
-    http://testuser1:password1@localhost
-    
+**On Web Browser**
+```console
+Browse http://localhost and pass the credentials as testuserX with passwordX 
+Where the X is 1 - 10.
+```    
 Deploying to Pivotal Cloud Foundry:
 -----------------------------------
 The project can be deployed to PCF with relative ease, there is manifest.yml file is created
