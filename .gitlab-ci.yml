@@ -12,6 +12,7 @@ include:
       - '/gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.job.shellcheck.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.job.docker.gitlab-ci.yml'
+      - '/gitlab-ci/.tmo.job.container-scan.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.function.helm-deploy.gitlab-ci.yml'
   # PCF NPE, CDE and PRD Variable files
   - local : '/gitlab-ci/vars/.tmo.cdp-pcf-npe.vars.gitlab-ci.yml'
@@ -38,6 +39,7 @@ stages:
   - test
   - scan
   - package
+  - ci
   - publish
   - tag
   - deploy-npe
@@ -88,9 +90,9 @@ variables:
     TEST_SUITE: "CDP-qTest-POC"
     TEST_ENVIRONMENT: "NA"
 
-  # Docker parameters
-    EXTRA_DOCKER_TAG: "$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:${CI_PROJECT_NAME}-${APP_VERSION}-$CI_COMMIT_SHORT_SHA.$CI_PIPELINE_IID" 
-    DOCKER_BUILD_ARGS: "--build-arg APP_VERSION=$APP_VERSION --build-arg PROJECT_NAME=$CI_PROJECT_NAME --build-arg COMMIT_SHA=$CI_COMMIT_SHORT_SHA" 
+  # Docker parameters 
+    DOCKER_BUILD_ARGS: "--build-arg APP_VERSION=$APP_VERSION --build-arg PROJECT_NAME=$CI_PROJECT_NAME --build-arg COMMIT_SHA=$CI_COMMIT_SHORT_SHA"
+    AQUA_SCANNER_SCAN: "true" 
 
 # Trigger a multi project pipeline using a bridge job
 helloworld-downstream-bridge:
