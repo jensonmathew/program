@@ -6,14 +6,6 @@
       PCF_SPACE: "production"
       DOMAIN: "apps.px-prd02.cf.t-mobile.com"
 
-##################################### px-prd02c ################################################
-
-.vars_px-prd02c_prod:
-    variables:
-      PCF_API: "api.sys.px-prd02c.cf.t-mobile.com"
-      PCF_SPACE: "production"
-      DOMAIN: "apps.px-prd02c.cf.t-mobile.com"
-
 ##################################### px-prd04 ################################################
 
 .vars_px-prd04_prod:

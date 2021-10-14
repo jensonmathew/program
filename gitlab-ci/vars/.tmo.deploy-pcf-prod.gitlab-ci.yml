@@ -18,16 +18,6 @@ deploy-px-prd02-prd:
     name: prod/px-prd02/production/smoke
     url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
 
-##################################### Deploy px-prd02c ################################################
-# Deploy to production environment    
-deploy-px-prd02c-prd:
-  extends: 
-     - .deploy-px-prd_prod
-     - .vars_px-prd02c_prod
-  environment:
-    name: prod/px-prd02c/production/smoke
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-
 ##################################### Deploy px-prd04 ################################################
 # Deploy to production environment    
 deploy-px-prd04-prd:
