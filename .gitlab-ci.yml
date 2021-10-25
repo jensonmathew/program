@@ -78,18 +78,6 @@ variables:
     PCF_ROUTE_HOSTNAME: "cdp-$CI_PROJECT_NAME-$PCF_SPACE"
     PCF_BG_STRATEGY: "GREEN_AUTO_SWITCH"
   
-   # e2e gating/qTest parameters
-    CODE_LOCATION: "git@${CI_SERVER_HOST}:${CI_PROJECT_PATH}.git"
-    BIT_BUCKET_BRANCH: ${CI_COMMIT_REF_NAME}
-    BUILD_FILE_LOCATION: pom.xml
-    BUILD_TYPE: MAVEN
-    BUILD_COMMAND: "helloworld-cdp-qtest-tc.xlsx"
-    TEST_APPLICATION: ${CI_PROJECT_NAME}
-    WAIT: "2040"
-    TEST_FRAMEWORK: "CODELESS_BYOT"
-    TEST_SUITE: "CDP-qTest-POC"
-    TEST_ENVIRONMENT: "NA"
-
   # Docker parameters 
     DOCKER_BUILD_ARGS: "--build-arg APP_VERSION=$APP_VERSION --build-arg PROJECT_NAME=$CI_PROJECT_NAME --build-arg COMMIT_SHA=$CI_COMMIT_SHORT_SHA"
     AQUA_SCANNER_SCAN: "true" 
@@ -116,14 +104,3 @@ pages:
       when: never
     - if: $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"
       when: on_success
-
-e2egating:
-    extends: .ctp
-    stage: validate
-    allow_failure: true
-    rules:
-      - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-        when: never
-      - if: $CI_PIPELINE_SOURCE == "schedule"
-        when: never
-      - when: on_success
