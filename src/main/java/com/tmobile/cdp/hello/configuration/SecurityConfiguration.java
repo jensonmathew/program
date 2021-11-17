@@ -1,5 +1,6 @@
-package com.tmobile.edp.hello.configuration;
+package com.tmobile.cdp.hello.configuration;
 
+import com.tmobile.cdp.hello.service.SecurityUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -7,8 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.tmobile.edp.hello.service.SecurityUserDetailsService;
 
 
 /**
