@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tmobile.edp.hello.domain;
+package com.tmobile.cdp.hello.domain;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.tmobile.edp.hello.repository.model.Featureflags;
+import com.tmobile.cdp.hello.repository.model.Featureflags;
 
 /**
  * @author Sony K Sunny
@@ -27,16 +27,22 @@ public class SecurityUserDetails implements UserDetails {
 	private static final long serialVersionUID = 1L;
 	private String userName;
 	private String password;
+	private int userId;
 	private boolean isActive;
 	private List<GrantedAuthority> authorities;
 	
-	public SecurityUserDetails(Featureflags user) {
-		this.userName = user.getUser();
-		this.password = new BCryptPasswordEncoder().encode(user.getPassword());
-		this.isActive = user.getIsActive();
-		this.authorities = Arrays.stream(user.getRoles().split(","))
+	public SecurityUserDetails(Featureflags featureflags) {
+		this.userName = featureflags.getUser();
+		this.password = new BCryptPasswordEncoder().encode(featureflags.getPassword());
+		this.isActive = featureflags.getIsActive();
+		this.userId = featureflags.getId();
+		this.authorities = Arrays.stream(featureflags.getRoles().split(","))
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
+	}
+
+	public int getUserId() {
+		return this.userId;
 	}
 
 	@Override

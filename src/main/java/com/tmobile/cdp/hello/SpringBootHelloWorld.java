@@ -1,8 +1,10 @@
-package com.tmobile.edp.hello;
+package com.tmobile.cdp.hello;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import javax.annotation.PostConstruct;
 
 @EnableAutoConfiguration
 @SpringBootApplication

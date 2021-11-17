@@ -1,4 +1,4 @@
-package com.tmobile.edp.hello.exception;
+package com.tmobile.cdp.hello.exception;
 
 public class HelloworldException extends Exception {
 
