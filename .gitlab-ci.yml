@@ -12,7 +12,6 @@ include:
       - '/gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.job.shellcheck.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.job.docker.gitlab-ci.yml'
-      - 'gitlab-ci/.tmo.function.docker.gitlab-ci.yml' #This is purposefully for build docker with Zulu JDK image
       - '/gitlab-ci/.tmo.job.container-scan.gitlab-ci.yml'
       - '/gitlab-ci/.tmo.function.helm-deploy.gitlab-ci.yml'
   # PCF NPE, CDE and PRD Variable files
@@ -30,21 +29,15 @@ include:
 
   # Deploy to TKE NPE
   - local : '/gitlab-ci/tke/.tmo.deploy-tke-npe.gitlab-ci.yml'
-     
-  # Endpoint-status-check
-  - local : '/gitlab-ci/status-check/endpoint-validate-ci.yml' 
 
 stages: 
   - tmo 
   - build
   - test
-  - scan
   - package
-  - ci
   - publish
-  - tag
+  - ci
   - deploy-npe
-  - health-check-npe
   - validate
   - deploy-prod
   - deploy-cde
@@ -105,12 +98,3 @@ pages:
       when: never
     - if: $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"
       when: on_success
-
-# Build docker with the Zulu JDK base image
-zuluJDK_docker:
-  stage: package
-  extends: .docker-package
-  variables:
-    DOCKER_TAG: "$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:zulujdk"
-    DOCKER_TAG_LATEST: "$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:zulujdk_latest"
-    DOCKER_CUSTOM_BUILD_CONTEXT: "-f zuluJDK_Dockerfile ."
