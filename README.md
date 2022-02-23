@@ -6,6 +6,11 @@ This project is automatically committed/merged to by our cycle time collector ev
 
 You can find the pipelines generating this here: https://gitlab.com/tmobile/cdp/IaC/gitlab-cycle-time/pipelines
 
+Deployment Flags:
+-----------
+
+`DEPLOY_ALL` - this means "deploy to all environments" and is set currently until ephemeral environoments for merge requests are setup.
+
 Requirement:
 -----------
 Set the following environment variables:
@@ -22,10 +27,13 @@ Note: These env vars are placeholders for local build. Gitlab CI will use its ow
 Compile:
 -------
 To compile the app please run the following command:
-
+    wget https://raw.githubusercontent.com/takari/maven-wrapper/master/mvnw && chmod +x mvnw
 	./mvnw clean package
 	
 Note: `mvnw` [Maven wrapper](https://github.com/takari/maven-wrapper) auto-downloads Maven on a dev's machine who doesn't yet have it installed. 
+
+Windows:
+    wget https://raw.githubusercontent.com/takari/maven-wrapper/master/mvnw.cmd
 
 Test Coverage Report Using Jacoco
 ==================================

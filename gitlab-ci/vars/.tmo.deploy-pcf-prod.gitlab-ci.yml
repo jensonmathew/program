@@ -1,12 +1,13 @@
 #################################### Anchor Deploy PX-PRD #########################################  
 .deploy-px-prd_prod:
-  stage: deploy-prod
+  stage: deploy
   extends: .pcf-deploy
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"'
+    - if: $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"
       when: on_success
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"'
+    - if: $CI_COMMIT_REF_NAME != "$CI_DEFAULT_BRANCH" && $DEPLOY_ALL == "true"
       when: on_success
+    - when: never
   resource_group: $CI_JOB_NAME
       
 ##################################### Deploy px-prd02 ###############################################
@@ -59,6 +60,7 @@ deploy-px-prd03c-prd:
   extends: 
      - .deploy-px-prd_prod
      - .vars_px-prd03c_prod
+  resource_group: $CI_JOB_NAME
   environment:
     name: prod/px-prd03c/production/smoke
     url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
