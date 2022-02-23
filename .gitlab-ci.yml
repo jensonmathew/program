@@ -24,12 +24,6 @@ include:
   - local : '/gitlab-ci/vars/.tmo.deploy-pcf-cde.gitlab-ci.yml'
   - local : '/gitlab-ci/vars/.tmo.deploy-pcf-prod.gitlab-ci.yml'
 
-  # TKE NPE Variable files
-  - local : '/gitlab-ci/vars/.tmo.cdp-tke-npe.vars.gitlab-ci.yml'
-
-  # Deploy to TKE NPE
-  - local : '/gitlab-ci/tke/.tmo.deploy-tke-npe.gitlab-ci.yml'
-
 stages: 
   - tmo 
   - build
@@ -39,8 +33,7 @@ stages:
   - ci
   - deploy-npe
   - validate
-  - deploy-prod
-  - deploy-cde
+  - deploy
   - trigger-downstream
 
 testjob:
@@ -59,7 +52,7 @@ variables:
     MAVEN_VERSION: "3.6.1-jdk-8"
     JACOCO_COVERAGE_REPORT: "yes"
     UPSTREAM_BRANCH_NAME: ${CI_COMMIT_REF_NAME}
-    ENVIRONMENT: "dev"
+    DEPLOY_ALL: "true" #turn off when ephemeral environments are setup
     
     # Sonar Parameters
     CDP_SONAR_PRD: "true"
@@ -69,7 +62,7 @@ variables:
     PCF_ORG: "Continuous-Delivery-Platform"
     BUILDPACK: "java_buildpack_offline"
     PCF_INSTANCES: "1" 
-    PCF_ROUTE_HOSTNAME: "cdp-$CI_PROJECT_NAME-$PCF_SPACE"
+    PCF_ROUTE_HOSTNAME: "helloworld"
     PCF_BG_STRATEGY: "GREEN_AUTO_SWITCH"
   
   # Docker parameters 
@@ -98,3 +91,13 @@ pages:
       when: never
     - if: $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"
       when: on_success
+
+# Deploy on TKE/PKS K8s cluster
+deploy-tke-npe:
+  stage: deploy
+  extends: .helm_deploy
+  variables:
+    APP_URL: "https://cdp-helloworld-1-dev."
+    DOMAIN: "px-npe1103.pks.t-mobile.com"
+  environment:
+    name: dlab01/px-npe1103/cdp-dev
