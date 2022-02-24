@@ -3,10 +3,10 @@ registry:
     description: "helloworld smoke test"
     assetgroup: APM0201849
     asset_id: APM0201850
-    assetname: helloworld-1-smoke
+    assetname: helloworld
   meta:
     - version:
-      label: helloworld-1
+      label: helloworld
       endpointType: rest
       healthcheck : "/health"
       contextpath: "/"

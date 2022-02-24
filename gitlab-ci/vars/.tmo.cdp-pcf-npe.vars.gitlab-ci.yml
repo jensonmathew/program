@@ -1,17 +1,3 @@
-##################################### px-npe02a ################################################
-
-.vars_px-npe02a_dev:
-    variables:
-      PCF_API: "api.sys.px-npe02a.cf.t-mobile.com"
-      PCF_SPACE: "development"
-      DOMAIN: "dev.px-npe02a.cf.t-mobile.com"
-
-.vars_px-npe02a_stg:
-    variables:
-      PCF_API: "api.sys.px-npe02a.cf.t-mobile.com"
-      PCF_SPACE: "staging"
-      DOMAIN: "test.px-npe02a.cf.t-mobile.com"
-
 ##################################### px-npe02b ################################################
 
 .vars_px-npe02b_dev:
