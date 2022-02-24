@@ -16,7 +16,7 @@ Requirement:
 Set the following environment variables:
 
 ```bash
-export CI_PROJECT_NAME=helloworld-1
+export CI_PROJECT_NAME=helloworld
 export APP_VERSION=1.2.3
 export BUILD_NUMBER=999
 ```
