@@ -4,7 +4,7 @@
   stage: deploy
   extends: .pcf-deploy
   rules:
-    - if: "$CI_COMMIT_REF_NAME" == "$CI_DEFAULT_BRANCH" || "$DEPLOY_ALL" == "true"
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
       when: on_success
     - when: never
   resource_group: $CI_JOB_NAME
@@ -17,11 +17,11 @@
     PCF_ROUTE_HOSTNAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     PCF_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
   rules:
-    - if: "$CI_COMMIT_REF_NAME" == "$CI_DEFAULT_BRANCH" #only topic branches
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH #only topic branches
       when: never
-    - if: "$CI_PIPELINE_SOURCE" != "push"               #pushes only
+    - if: $CI_PIPELINE_SOURCE != "push"             #pushes only
       when: never
-    - if: $CI_OPEN_MERGE_REQUESTS                       #only pushes w/ open m/rs
+    - if: $CI_OPEN_MERGE_REQUESTS                   #only pushes w/ open m/rs
       when: on_success
     - when: never
   resource_group: $CI_JOB_NAME
@@ -63,11 +63,11 @@ stop_review:
       done < "./hosts"
     - echo "Deleted pcf apps review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG in CI_ENVIRONMENT_NAME - $CI_ENVIRONMENT_NAME"
   rules:
-    - if: "$CI_COMMIT_REF_NAME" == "$CI_DEFAULT_BRANCH" #only topic branches
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH #only topic branches
       when: never
-    - if: "$CI_PIPELINE_SOURCE" != "push"               #pushes only
+    - if: $CI_PIPELINE_SOURCE != "push"             #pushes only
       when: never
-    - if: $CI_OPEN_MERGE_REQUESTS                       #only pushes w/ open m/rs
+    - if: $CI_OPEN_MERGE_REQUESTS                   #only pushes w/ open m/rs
       when: manual
       allow_failure: true
   needs:
