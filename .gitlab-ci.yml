@@ -31,10 +31,8 @@ stages:
   - package
   - publish
   - ci
-  - deploy-npe
   - validate
   - deploy
-  - trigger-downstream
 
 testjob:
   stage: tmo
@@ -52,7 +50,6 @@ variables:
     MAVEN_VERSION: "3.6.1-jdk-8"
     JACOCO_COVERAGE_REPORT: "yes"
     UPSTREAM_BRANCH_NAME: ${CI_COMMIT_REF_NAME}
-    DEPLOY_ALL: "true" #turn off when ephemeral environments are setup
     
     # Sonar Parameters
     CDP_SONAR_PRD: "true"
@@ -69,20 +66,6 @@ variables:
     DOCKER_BUILD_ARGS: "--build-arg APP_VERSION=$APP_VERSION --build-arg PROJECT_NAME=$CI_PROJECT_NAME --build-arg COMMIT_SHA=$CI_COMMIT_SHORT_SHA"
     AQUA_SCANNER_SCAN: "true" 
 
-# Trigger a multi project pipeline using a bridge job
-helloworld-downstream-bridge:
-# Downstream jobs can access all upstream variables
-# Save upstream gitlab predefined variables to pass downstream
-  variables:
-    UPSTREAM_PROJECT_ID: ${CI_PROJECT_ID}
-    UPSTREAM_JOB_NAME: ${CI_JOB_NAME}
-    UPSTREAM_JOB_STAGE: ${CI_JOB_STAGE}
-  stage: trigger-downstream
-  trigger: 
-    project: tmobile/templates_projects/helloworld-downstream
-    # make bridge job status mirror downstream pipeline status
-    strategy: depend
-    
 # Create json for badges 
 pages:
   extends: .badge_pages
@@ -101,3 +84,13 @@ deploy-tke-npe:
     DOMAIN: "px-npe1103.pks.t-mobile.com"
   environment:
     name: dlab01/px-npe1103/cdp-dev
+    url: $APP_URL$DOMAIN
+  resource_group: $CI_JOB_NAME
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    - if: $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"
+      when: on_success
+    - if: $CI_COMMIT_REF_NAME != "$CI_DEFAULT_BRANCH" && $DEPLOY_ALL == "true"
+      when: on_success
+    - when: never

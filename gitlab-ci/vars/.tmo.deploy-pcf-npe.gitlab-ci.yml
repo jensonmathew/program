@@ -13,34 +13,74 @@
     - when: never
   resource_group: $CI_JOB_NAME
 
+# Review apps
 .deploy-review:
   stage: deploy
   extends: .pcf-deploy
   variables:
-    PCF_ROUTE_HOSTNAME: review-$CI_PROJET_NAME-$CI_COMMIT_SHORT_SHA
-    PCF_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA
+    PCF_ROUTE_HOSTNAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    PCF_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
   rules:
-    - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH  #only topic branches
       when: never
-    - if: $CI_COMMIT_REF_NAME != "$CI_DEFAULT_BRANCH"
+    - if: $CI_PIPELINE_SOURCE != "push"              #pushes only
+      when: never
+    - if: $CI_OPEN_MERGE_REQUESTS                    #only pushes w/ open m/rs
       when: on_success
     - when: never
   resource_group: $CI_JOB_NAME
     
 ##################################### Deploy px-npe02a ################################################
-# Deploy to Development environment
-deploy-npe02a-dev:
+# Deploy to review environment
+deploy-review:
   extends:
-     - .deploy-px-npe
-  variables:
-        PCF_API: "api.sys.px-npe02a.cf.t-mobile.com"
-        PCF_SPACE: $CI_ENVIRONMENT_TIER
-        DOMAIN: "dev.px-npe02a.cf.t-mobile.com"
+     - .deploy-review
   environment:
-    name: dlab01/px-npe02a/development/smoke
+    name: review/px-npe02a/$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
     url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
     deployment_tier: development
-  
+    on_stop: stop_review
+    auto_stop_in: 14 days
+
+# Stop review environment
+stop_review:
+  image: alpine
+  stage: deploy
+  script:
+    - if ! exists "curl" ; then installPackage "curl"; fi;
+    - if ! exists "jq" ; then installPackage "jq"; fi;
+    - curl -Os --noproxy '*' $CDP_SERVICE_URL/static/pcf-install.sh && sh pcf-install.sh
+    - cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a "$PCF_API" -o "$PCF_ORG" -s "$PCF_SPACE"
+    - cf curl /v3/apps | jq -r '.resources[]|select(.name | startswith("review-'$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG'")).name' > apps
+    - |
+      while IFS= read -r line
+      do
+        tmoLog "Deleting $line"
+        cf delete -f $line
+      done < "./apps"
+    - cf curl /v3/routes | jq -r '.resources[]|select(.host | startswith("review-'$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG'")).host' > hosts
+    - |
+      while IFS= read -r line
+      do
+        tmoLog "Deleting $line"
+        cf delete-route -f $DOMAIN -n $line
+      done < "./hosts"
+    - echo "Deleted pcf apps review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG in CI_ENVIRONMENT_NAME - $CI_ENVIRONMENT_NAME"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: never
+    - when: manual
+      allow_failure: true
+  needs:
+    - deploy-review
+  environment:
+    name: review/px-npe02a/$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
+    action: stop
+    deployment_tier: development
+  artifacts:
+    paths:
+      - apps
+    
 # Deploy to Staging environment   
 deploy-npe02a-stg:
   extends: 
@@ -50,7 +90,7 @@ deploy-npe02a-stg:
     PCF_SPACE: $CI_ENVIRONMENT_TIER
     DOMAIN: "test.px-npe02a.cf.t-mobile.com"
   environment:
-    name: stg01/px-npe02a/staging/smoke 
+    name: stg01/px-npe02a/staging/smoke
     url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
     deployment_tier: staging
 
