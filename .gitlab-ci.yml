@@ -39,6 +39,8 @@ testjob:
   image: alpine
   script:
     - echo $CI_REPOSITORY_URL
+    - echo $CI_COMMIT_REF_NAME
+    - echo $CI_DEFAULT_BRANCH
 
 variables:
     # Common Parameters (used by build and deploy)
