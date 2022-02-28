@@ -4,7 +4,7 @@
   stage: deploy
   extends: .pcf-deploy
   rules:
-    - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"
       when: on_success
