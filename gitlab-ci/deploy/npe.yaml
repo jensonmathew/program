@@ -4,7 +4,7 @@ include:
 # Deploy to Staging environment   
 deploy-npe02a-stg:
   extends: 
-     - .deploy
+     - .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe02a.cf.t-mobile.com"
     PCF_SPACE: $CI_ENVIRONMENT_TIER
