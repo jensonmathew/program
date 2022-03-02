@@ -1,20 +1,14 @@
-#################################### Anchor Deploy PX-CDE #########################################
+include:
+    - local: /gitlab-ci/common.yaml
 
-.deploy-px-cde_prod:
-  stage: deploy
-  extends: .pcf-deploy
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
-      when: on_success
-    - when: never
-  resource_group: $CI_JOB_NAME
-      
 ##################################### Deploy px-cde02 ################################################
 # Deploy to production environment    
 deploy-px-cde02a-prd:
-  extends: 
-     - .deploy-px-cde_prod
-     - .vars_px-cde02_prod
+  extends: .deploy-pcf
+  variables:
+        PCF_API: "api.sys.px-cde02.cf.t-mobile.com"
+        PCF_SPACE: "production"
+        DOMAIN: "apps.px-cde02.cf.t-mobile.com"
   environment:
     name: prod/px-cde02/production/smoke
     url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
@@ -23,9 +17,11 @@ deploy-px-cde02a-prd:
 ##################################### Deploy px-cde03a ################################################
 # Deploy to production environment    
 deploy-px-cde03a-prd:
-  extends: 
-     - .deploy-px-cde_prod
-     - .vars_px-cde03a_prod
+  extends: .deploy-pcf
+  variables:
+    PCF_API: "api.sys.px-cde03a.cf.t-mobile.com"
+    PCF_SPACE: "production"
+    DOMAIN: "apps.px-cde03a.cf.t-mobile.com"
   environment:
     name: prod/px-cde03a/production/smoke
     url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
@@ -34,20 +30,25 @@ deploy-px-cde03a-prd:
 ##################################### Deploy px-cde11a ################################################
 # Deploy to production environment    
 deploy-px-cde11a-prd:
-  extends: 
-     - .deploy-px-cde_prod
-     - .vars_px-cde11a_prod
+  extends: .deploy-pcf
+  variables:
+      PCF_API: "api.sys.px-cde11a.cf.t-mobile.com"
+      PCF_SPACE: "production"
+      DOMAIN: "apps.px-cde11a.cf.t-mobile.com"
   environment:
     name: prod/px-cde11a/production/smoke
     url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
     deployment_tier: production
 
+
 ##################################### Deploy tt-cde02a ################################################
 # Deploy to production environment    
 deploy-tt-cde02a-prd:
-  extends: 
-     - .deploy-px-cde_prod
-     - .vars_tt-cde02a_prod
+  extends: .deploy-pcf
+  variables:
+    PCF_API: "api.sys.tt-cde02a.cf.t-mobile.com"
+    PCF_SPACE: "production"
+    DOMAIN: "apps.tt-cde02a.cf.t-mobile.com"
   environment:
     name: prod/tt-cde02a/production/smoke
     url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}

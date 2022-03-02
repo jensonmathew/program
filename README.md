@@ -1,17 +1,20 @@
 Introduction:
 -------------
-This repository contains a sample spring boot application. 
+helloworld is intended to be an working example standard pipeline that practice continuous delivery and continuous deployments.
 
-This project is automatically committed/merged to by our cycle time collector every hour to generate smoke updates to ensure our systems work end to end.
 
-You can find the pipelines generating this here: https://gitlab.com/tmobile/cdp/IaC/gitlab-cycle-time/pipelines
+Workflow:
+-----------
+- All environments deploy upon trunk (including production).
+- Epehemeral Enviroments tracks the life cycle of merge request from push pipelines to it's source branch. If merge request's source branch goes idle for 14 days or merge request changes status to merges or closed, the environment is deleted.
+
 
 Deployment Flags:
 -----------
 
 `DEPLOY_ALL` - this means "deploy to all environments" and is set currently until ephemeral environoments for merge requests are setup.
 
-Requirement:
+Local Builds:
 -----------
 Set the following environment variables:
 
@@ -64,32 +67,7 @@ Where the X is 1 - 10.
 ```console
 Browse http://localhost and pass the credentials as testuserX with passwordX 
 Where the X is 1 - 10.
-```    
-Deploying to Pivotal Cloud Foundry:
------------------------------------
-The project can be deployed to PCF with relative ease, there is manifest.yml file is created
-for deployment purpose.
-
-Simply login into PCF using
-    
-    cf login
-and pushing the app using the following command
-
-    cf push
-
-Deploying to TKE(PKS):
-----------------------
-The Project has been deployed to TKE by using comm [template](https://gitlab.com/tmobile/templates_projects/helloworld-1/-/blob/tmo/main/.gitlab-ci.yml#L15) and helm [charts](https://gitlab.com/tmobile/templates_projects/helloworld-1/-/tree/tmo/main/k8s) .
-
-Job reference from gitlab-ci/tke/.tmo.deploy-tke-npe.gitlab-ci.yml file.
-```yaml
-deploy-tke-npe: 
-  stage: deploy-npe
-  extends: .helm_deploy
-  environment:
-    name: dev01/px-npe1103/cdp-dev
 ```
-The template [doc](https://gitlab.com/tmobile/templates/-/blob/tmo/master/documentation/K8s-HELM.md) will be helpuful to know more about mandatory K8s variables & helm based deployment.
 
 qTest Integreation:
 -------------------
