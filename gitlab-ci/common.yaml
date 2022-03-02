@@ -1,0 +1,37 @@
+include:
+  - project: 'tmobile/templates'
+    file:
+      - /gitlab-ci/.tmo.global.common.gitlab-ci.yml
+      - /gitlab-ci/.tmo.function.pcf.gitlab-ci.yml
+      - /gitlab-ci/.tmo.function.helm-deploy.gitlab-ci.yml
+
+variables:
+    PCF_CLI_VERSION: "6.49.0"
+    PCF_ORG: "Continuous-Delivery-Platform"
+    BUILDPACK: "java_buildpack_offline"
+    PCF_INSTANCES: "1" 
+    PCF_ROUTE_HOSTNAME: "helloworld"
+    PCF_BG_STRATEGY: "GREEN_AUTO_SWITCH"
+
+stages:
+    - tmo
+    - test
+    - deploy
+    - verify
+
+.deploy-anchor: &deploy-anchor
+  extends: .pcf-deploy
+  stage: deploy
+  resource_group: $CI_JOB_NAME
+
+.deploy:
+  <<: *deploy-anchor
+  needs:
+    - pipeline: $PARENT_PIPELINE_ID
+      job: build
+
+.deploy-pcf-review:
+  <<: *deploy-anchor
+  needs:
+    - pipeline: $PARENT_PIPELINE_ID
+      job: build-non-trunk
