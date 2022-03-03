@@ -59,14 +59,19 @@ Testing the Application:
 ------------------------
 **On Terminal**
 ```console
+curl http://localhost/actuator/health/liveness
+curl http://localhost/actuator/health/readiness
+
 curl --user testuserX:passwordX http://localhost  
 Where the X is 1 - 10.
 ```
 
 **On Web Browser**
-```console
-Browse http://localhost and pass the credentials as testuserX with passwordX 
-Where the X is 1 - 10.
+
+Check app health at http://localhost/actuator/health/liveness and http://localhost/actuator/health/readiness
+
+Browse http://localhost and pass the credentials as `testuserX` with `passwordX` where the `X` is 1 - 10.
+
 ```
 
 qTest Integreation:
