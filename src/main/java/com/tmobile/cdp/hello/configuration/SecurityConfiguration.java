@@ -33,7 +33,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity webSecurity) {
 		webSecurity.ignoring()
-				.antMatchers(HttpMethod.GET, "/actuator/health/*");
+                        .antMatchers(HttpMethod.GET, "/actuator/health/liveness")
+                        .antMatchers(HttpMethod.GET, "/actuator/health/readiness")
+                        .antMatchers(HttpMethod.GET, "/actuator/health");
 	}
 
 	@Bean
