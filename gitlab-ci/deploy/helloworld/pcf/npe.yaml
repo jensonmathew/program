@@ -11,7 +11,7 @@ deploy-npe02a-stg:
   environment:
     name: stg01/px-npe02a/staging/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: npe
+    deployment_tier: staging
 
 ##################################### Deploy px-npe02b ################################################
 # Deploy to Development environment
@@ -24,7 +24,7 @@ deploy-npe02b-dev:
   environment:
     name: dlab01/px-npe02b/development/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: npe
+    deployment_tier: staging
   
 # Deploy to Staging environment   
 deploy-npe02b-stg:
@@ -36,7 +36,7 @@ deploy-npe02b-stg:
   environment:
     name: stg01/px-npe02b/staging/smoke 
     url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: npe
+    deployment_tier: staging
 
 ##################################### Deploy px-npe02c ################################################
 # Deploy to Development environment
@@ -49,7 +49,7 @@ deploy-npe02c-dev:
   environment:
     name: dlab01/px-npe02c/development/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: npe
+    deployment_tier: staging
   
 # Deploy to Staging environment   
 deploy-npe02c-stg:
@@ -62,7 +62,7 @@ deploy-npe02c-stg:
   environment:
     name: stg01/px-npe02c/staging/smoke 
     url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: npe
+    deployment_tier: staging
   
 ##################################### Deploy px-npe03a ################################################
 # Deploy to Development environment
@@ -75,7 +75,7 @@ deploy-npe03a-dev:
   environment:
     name: dlab01/px-npe03a/development/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: npe
+    deployment_tier: staging
   
   
 # Deploy to Staging environment   
@@ -88,7 +88,7 @@ deploy-npe03a-stg:
   environment:
     name: stg01/px-npe03a/staging/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: npe
+    deployment_tier: staging
 
 ##################################### Deploy px-npe03b ################################################
 # Deploy to Development environment
@@ -101,7 +101,7 @@ deploy-npe03b-dev:
   environment:
     name: dlab01/px-npe03b/development/smoke
     url: http://${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: npe
+    deployment_tier: staging
   
 # Deploy to Staging environment   
 deploy-npe03b-stg:
@@ -113,7 +113,7 @@ deploy-npe03b-stg:
   environment:
     name: stg01/px-npe03b/staging/smoke 
     url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: npe
+    deployment_tier: staging
 
 ##################################### Deploy px-npe03d ################################################
 # Deploy to Development environment
@@ -127,7 +127,7 @@ deploy-npe03d-dev:
   environment:
     name: dlab01/px-npe03d/development/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: npe
+    deployment_tier: staging
   
 # Deploy to Staging environment   
 deploy-npe03d-stg:
@@ -139,4 +139,4 @@ deploy-npe03d-stg:
   environment:
     name: stg01/px-npe03d/staging/smoke 
     url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: npe
+    deployment_tier: staging
