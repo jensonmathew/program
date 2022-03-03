@@ -2,7 +2,7 @@ include:
     - local: /gitlab-ci/common.yaml
 
 # Deploy to Staging environment   
-deploy-npe02a-stg:
+npe02a-stg:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe02a.cf.t-mobile.com"
@@ -15,7 +15,7 @@ deploy-npe02a-stg:
 
 ##################################### Deploy px-npe02b ################################################
 # Deploy to Development environment
-deploy-npe02b-dev:
+npe02b-dev:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe02b.cf.t-mobile.com"
@@ -27,7 +27,7 @@ deploy-npe02b-dev:
     deployment_tier: staging
   
 # Deploy to Staging environment   
-deploy-npe02b-stg:
+npe02b-stg:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe02b.cf.t-mobile.com"
@@ -40,7 +40,7 @@ deploy-npe02b-stg:
 
 ##################################### Deploy px-npe02c ################################################
 # Deploy to Development environment
-deploy-npe02c-dev:
+npe02c-dev:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe02c.cf.t-mobile.com"
@@ -52,7 +52,7 @@ deploy-npe02c-dev:
     deployment_tier: staging
   
 # Deploy to Staging environment   
-deploy-npe02c-stg:
+npe02c-stg:
   extends: 
      - .deploy-pcf
   variables:
@@ -66,7 +66,7 @@ deploy-npe02c-stg:
   
 ##################################### Deploy px-npe03a ################################################
 # Deploy to Development environment
-deploy-npe03a-dev:
+npe03a-dev:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe03a.cf.t-mobile.com"
@@ -79,7 +79,7 @@ deploy-npe03a-dev:
   
   
 # Deploy to Staging environment   
-deploy-npe03a-stg:
+npe03a-stg:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe03a.cf.t-mobile.com"
@@ -92,7 +92,7 @@ deploy-npe03a-stg:
 
 ##################################### Deploy px-npe03b ################################################
 # Deploy to Development environment
-deploy-npe03b-dev:
+npe03b-dev:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe03b.cf.t-mobile.com"
@@ -104,7 +104,7 @@ deploy-npe03b-dev:
     deployment_tier: staging
   
 # Deploy to Staging environment   
-deploy-npe03b-stg:
+npe03b-stg:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe03b.cf.t-mobile.com"
@@ -117,7 +117,7 @@ deploy-npe03b-stg:
 
 ##################################### Deploy px-npe03d ################################################
 # Deploy to Development environment
-deploy-npe03d-dev:
+npe03d-dev:
   extends: 
      - .deploy-pcf
   variables:
@@ -130,7 +130,7 @@ deploy-npe03d-dev:
     deployment_tier: staging
   
 # Deploy to Staging environment   
-deploy-npe03d-stg:
+npe03d-stg:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe03d.cf.t-mobile.com"

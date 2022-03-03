@@ -9,7 +9,7 @@ testjob:
 
 ##################################### Deploy px-prd02 ###############################################
    # Deploy to production environment    
-deploy-px-prd02-prd:
+px-prd02:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-prd02.cf.t-mobile.com"
@@ -22,7 +22,7 @@ deploy-px-prd02-prd:
 
 ##################################### Deploy px-prd04 ################################################
 # Deploy to production environment    
-deploy-px-prd04-prd:
+px-prd04:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-prd04.cf.t-mobile.com"
@@ -35,7 +35,7 @@ deploy-px-prd04-prd:
 
 ##################################### Deploy px-prd03a ################################################
 # Deploy to production environment    
-deploy-px-prd03a-prd:
+px-prd03a:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-prd03a.cf.t-mobile.com"
@@ -48,7 +48,7 @@ deploy-px-prd03a-prd:
 
 ##################################### Deploy px-prd03b ################################################
 # Deploy to production environment    
-deploy-px-prd03b-prd:
+px-prd03b:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-prd03b.cf.t-mobile.com"
@@ -61,7 +61,7 @@ deploy-px-prd03b-prd:
 
 ##################################### Deploy px-prd03c ################################################
 # Deploy to production environment    
-deploy-px-prd03c-prd:
+px-prd03c:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-prd03c.cf.t-mobile.com"
@@ -75,7 +75,7 @@ deploy-px-prd03c-prd:
 
     ##################################### Deploy px-cde02 ################################################
 # Deploy to production environment    
-deploy-px-cde02a-prd:
+px-cde02a:
   extends: .deploy-pcf
   variables:
         PCF_API: "api.sys.px-cde02.cf.t-mobile.com"
@@ -88,7 +88,7 @@ deploy-px-cde02a-prd:
 
 ##################################### Deploy px-cde03a ################################################
 # Deploy to production environment    
-deploy-px-cde03a-prd:
+px-cde03a:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-cde03a.cf.t-mobile.com"
@@ -101,7 +101,7 @@ deploy-px-cde03a-prd:
 
 ##################################### Deploy px-cde11a ################################################
 # Deploy to production environment    
-deploy-px-cde11a-prd:
+px-cde11a:
   extends: .deploy-pcf
   variables:
       PCF_API: "api.sys.px-cde11a.cf.t-mobile.com"
@@ -115,7 +115,7 @@ deploy-px-cde11a-prd:
 
 ##################################### Deploy tt-cde02a ################################################
 # Deploy to production environment    
-deploy-tt-cde02a-prd:
+tt-cde02a:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.tt-cde02a.cf.t-mobile.com"
