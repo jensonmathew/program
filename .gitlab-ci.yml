@@ -1,17 +1,17 @@
 include:
   - project: 'tmobile/templates'
     file:
-      - '/gitlab-ci/.tmo.global.common.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.job.mavenTest.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.job.mavenBuild.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.job.fortify.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.job.sonar.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.function.badge.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.job.shellcheck.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.job.docker.gitlab-ci.yml'
-      - '/gitlab-ci/.tmo.job.container-scan.gitlab-ci.yml'
+      - /gitlab-ci/.tmo.global.common.gitlab-ci.yml
+      - /gitlab-ci/.tmo.job.mavenTest.gitlab-ci.yml
+      - /gitlab-ci/.tmo.job.mavenBuild.gitlab-ci.yml
+      - /gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml
+      - /gitlab-ci/.tmo.job.fortify.gitlab-ci.yml
+      - /gitlab-ci/.tmo.job.sonar.gitlab-ci.yml
+      - /gitlab-ci/.tmo.function.badge.gitlab-ci.yml
+      - /gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml
+      - /gitlab-ci/.tmo.job.shellcheck.gitlab-ci.yml
+      - /gitlab-ci/.tmo.job.docker.gitlab-ci.yml
+     # - /gitlab-ci/.tmo.job.container-scan.gitlab-ci.yml
 
 stages: 
   - tmo 
@@ -55,48 +55,48 @@ pages:
     - if: $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"
       when: on_success
 
-deploy-cde:
+npe-k8s:
   stage: deploy
   variables:
     PARENT_PIPELINE_ID: $CI_PIPELINE_ID
   trigger:
-    include: gitlab-ci/deploy/cde.yaml
+    include: gitlab-ci/deploy/helloworld/k8s/npe.yaml
     strategy: depend
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
       when: on_success
     - when: never
 
-deploy-npe:
+npe-pcf:
   stage: deploy
   variables:
     PARENT_PIPELINE_ID: $CI_PIPELINE_ID
   trigger:
-    include: gitlab-ci/deploy/npe.yaml
+    include: gitlab-ci/deploy/helloworld/pcf/npe.yaml
     strategy: depend
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
       when: on_success
     - when: never
 
-deploy-prod:
+prod:
   stage: deploy
   variables:
     PARENT_PIPELINE_ID: $CI_PIPELINE_ID
   trigger:
-    include: gitlab-ci/deploy/prod.yaml
+    include: gitlab-ci/deploy/helloworld/pcf/prod.yaml
     strategy: depend
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
       when: on_success
     - when: never
 
-deploy-review:
+review:
   stage: deploy
   variables:
     PARENT_PIPELINE_ID: $CI_PIPELINE_ID
   trigger:
-    include: gitlab-ci/deploy/review.yaml
+    include: gitlab-ci/deploy/helloworld/pcf/review.yaml
     strategy: depend
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH #only topic branches

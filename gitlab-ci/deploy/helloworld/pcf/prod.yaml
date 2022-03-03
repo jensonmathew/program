@@ -1,0 +1,128 @@
+include:
+    - local: /gitlab-ci/common.yaml
+
+testjob:
+  image: alpine
+  stage: test
+  script:
+    - echo http://$PCF_ROUTE_HOSTNAME.$DOMAIN
+
+##################################### Deploy px-prd02 ###############################################
+   # Deploy to production environment    
+deploy-px-prd02-prd:
+  extends: .deploy-pcf
+  variables:
+    PCF_API: "api.sys.px-prd02.cf.t-mobile.com"
+    PCF_SPACE: "production"
+    DOMAIN: "apps.px-prd02.cf.t-mobile.com"
+  environment:
+    name: prod/px-prd02/production/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: prod
+
+##################################### Deploy px-prd04 ################################################
+# Deploy to production environment    
+deploy-px-prd04-prd:
+  extends: .deploy-pcf
+  variables:
+    PCF_API: "api.sys.px-prd04.cf.t-mobile.com"
+    PCF_SPACE: "production"
+    DOMAIN: "apps.px-prd04.cf.t-mobile.com"
+  environment:
+    name: prod/px-prd04/production/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: prod
+
+##################################### Deploy px-prd03a ################################################
+# Deploy to production environment    
+deploy-px-prd03a-prd:
+  extends: .deploy-pcf
+  variables:
+    PCF_API: "api.sys.px-prd03a.cf.t-mobile.com"
+    PCF_SPACE: "production"
+    DOMAIN: "apps.px-prd03a.cf.t-mobile.com"
+  environment:
+    name: prod/px-prd03a/production/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: prod
+
+##################################### Deploy px-prd03b ################################################
+# Deploy to production environment    
+deploy-px-prd03b-prd:
+  extends: .deploy-pcf
+  variables:
+    PCF_API: "api.sys.px-prd03b.cf.t-mobile.com"
+    PCF_SPACE: "production"
+    DOMAIN: "apps.px-prd03b.cf.t-mobile.com"
+  environment:
+    name: prod/px-prd03b/production/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: prod
+
+##################################### Deploy px-prd03c ################################################
+# Deploy to production environment    
+deploy-px-prd03c-prd:
+  extends: .deploy-pcf
+  variables:
+    PCF_API: "api.sys.px-prd03c.cf.t-mobile.com"
+    PCF_SPACE: "production"
+    DOMAIN: "apps.px-prd03c.cf.t-mobile.com"
+  resource_group: $CI_JOB_NAME
+  environment:
+    name: prod/px-prd03c/production/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: prod
+
+    ##################################### Deploy px-cde02 ################################################
+# Deploy to production environment    
+deploy-px-cde02a-prd:
+  extends: .deploy-pcf
+  variables:
+        PCF_API: "api.sys.px-cde02.cf.t-mobile.com"
+        PCF_SPACE: "production"
+        DOMAIN: "apps.px-cde02.cf.t-mobile.com"
+  environment:
+    name: prod/px-cde02/production/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: prod
+
+##################################### Deploy px-cde03a ################################################
+# Deploy to production environment    
+deploy-px-cde03a-prd:
+  extends: .deploy-pcf
+  variables:
+    PCF_API: "api.sys.px-cde03a.cf.t-mobile.com"
+    PCF_SPACE: "production"
+    DOMAIN: "apps.px-cde03a.cf.t-mobile.com"
+  environment:
+    name: prod/px-cde03a/production/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: prod
+
+##################################### Deploy px-cde11a ################################################
+# Deploy to production environment    
+deploy-px-cde11a-prd:
+  extends: .deploy-pcf
+  variables:
+      PCF_API: "api.sys.px-cde11a.cf.t-mobile.com"
+      PCF_SPACE: "production"
+      DOMAIN: "apps.px-cde11a.cf.t-mobile.com"
+  environment:
+    name: prod/px-cde11a/production/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: prod
+
+
+##################################### Deploy tt-cde02a ################################################
+# Deploy to production environment    
+deploy-tt-cde02a-prd:
+  extends: .deploy-pcf
+  variables:
+    PCF_API: "api.sys.tt-cde02a.cf.t-mobile.com"
+    PCF_SPACE: "production"
+    DOMAIN: "apps.tt-cde02a.cf.t-mobile.com"
+  environment:
+    name: prod/tt-cde02a/production/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: prod
+

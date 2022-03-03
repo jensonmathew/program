@@ -3,16 +3,15 @@ include:
 
 # Deploy to Staging environment   
 deploy-npe02a-stg:
-  extends: 
-     - .deploy-pcf
+  extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe02a.cf.t-mobile.com"
     PCF_SPACE: $CI_ENVIRONMENT_TIER
     DOMAIN: "test.px-npe02a.cf.t-mobile.com"
   environment:
     name: stg01/px-npe02a/staging/smoke
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: staging
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: npe
 
 ##################################### Deploy px-npe02b ################################################
 # Deploy to Development environment
@@ -24,8 +23,8 @@ deploy-npe02b-dev:
     DOMAIN: "dev.px-npe02b.cf.t-mobile.com"
   environment:
     name: dlab01/px-npe02b/development/smoke
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: development
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: npe
   
 # Deploy to Staging environment   
 deploy-npe02b-stg:
@@ -36,8 +35,8 @@ deploy-npe02b-stg:
     DOMAIN: "test.px-npe02b.cf.t-mobile.com"
   environment:
     name: stg01/px-npe02b/staging/smoke 
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: staging
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: npe
 
 ##################################### Deploy px-npe02c ################################################
 # Deploy to Development environment
@@ -49,8 +48,8 @@ deploy-npe02c-dev:
     DOMAIN: "dev.px-npe02c.cf.t-mobile.com"
   environment:
     name: dlab01/px-npe02c/development/smoke
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: development
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: npe
   
 # Deploy to Staging environment   
 deploy-npe02c-stg:
@@ -62,8 +61,8 @@ deploy-npe02c-stg:
     DOMAIN: "test.px-npe02c.cf.t-mobile.com"
   environment:
     name: stg01/px-npe02c/staging/smoke 
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: staging
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: npe
   
 ##################################### Deploy px-npe03a ################################################
 # Deploy to Development environment
@@ -75,8 +74,8 @@ deploy-npe03a-dev:
     DOMAIN: "dev.px-npe03a.cf.t-mobile.com"
   environment:
     name: dlab01/px-npe03a/development/smoke
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: development
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: npe
   
   
 # Deploy to Staging environment   
@@ -88,8 +87,8 @@ deploy-npe03a-stg:
     DOMAIN: "test.px-npe03a.cf.t-mobile.com"
   environment:
     name: stg01/px-npe03a/staging/smoke
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: staging
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: npe
 
 ##################################### Deploy px-npe03b ################################################
 # Deploy to Development environment
@@ -101,8 +100,8 @@ deploy-npe03b-dev:
     DOMAIN: "dev.px-npe03b.cf.t-mobile.com"
   environment:
     name: dlab01/px-npe03b/development/smoke
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: development
+    url: http://${PCF_ROUTE_HOSTNAME}.${DOMAIN}
+    deployment_tier: npe
   
 # Deploy to Staging environment   
 deploy-npe03b-stg:
@@ -113,8 +112,8 @@ deploy-npe03b-stg:
     DOMAIN: "test.px-npe03b.cf.t-mobile.com"
   environment:
     name: stg01/px-npe03b/staging/smoke 
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: staging
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: npe
 
 ##################################### Deploy px-npe03d ################################################
 # Deploy to Development environment
@@ -127,8 +126,8 @@ deploy-npe03d-dev:
     DOMAIN: "dev.px-npe03d.cf.t-mobile.com"
   environment:
     name: dlab01/px-npe03d/development/smoke
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: development
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: npe
   
 # Deploy to Staging environment   
 deploy-npe03d-stg:
@@ -139,22 +138,5 @@ deploy-npe03d-stg:
     DOMAIN: "test.px-npe03d.cf.t-mobile.com"
   environment:
     name: stg01/px-npe03d/staging/smoke 
-    url: ${PCF_ROUTE_HOSTNAME}.${DOMAIN}
-    deployment_tier: staging
-
-# Deploy on TKE/PKS K8s cluster
-deploy-tke-npe:
-  stage: deploy
-  extends: .helm_deploy
-  variables:
-    APP_URL: "https://cdp-helloworld-1-dev."
-    DOMAIN: "px-npe1103.pks.t-mobile.com"
-  environment:
-    name: dlab01/px-npe1103/cdp-dev
-    url: $APP_URL$DOMAIN
-  resource_group: $CI_JOB_NAME
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
-      when: on_success
-    - when: never
-
+    url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: npe
