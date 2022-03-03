@@ -8,7 +8,7 @@ variables:
   PCF_FOUNDATION: "px-npe02a"
   DOMAIN: "apps.$PCF_FOUNDATION.cf.t-mobile.com"
 
-testjob:
+testpredeploy:
   extends: .testjob
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
@@ -25,6 +25,15 @@ deploy-review-pcf:
     on_stop: stop-review-pcf
     auto_stop_in: 14 days
 
+testpostdeploy:
+  image: alpine
+  stage: verify
+  script:
+    - echo $DYNAMIC_ENVIRONMENT_URL
+  environment:
+    name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    action: prepare
+
 # Stop review environment
 stop-review-pcf:
   extends: .pcf-teardown
@@ -38,3 +47,5 @@ stop-review-pcf:
   rules:
     - when: manual
       allow_failure: true
+
+
