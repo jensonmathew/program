@@ -15,7 +15,7 @@ testpredeploy:
     action: prepare
 
 # Deploy to review environment
-deploy-review-pcf:
+review-pcf:
   extends: .deploy-pcf-review
   resource_group: review-deploy-$CI_COMMIT_REF_SLUG
   environment:
@@ -29,7 +29,11 @@ testpostdeploy:
   image: alpine
   stage: verify
   script:
-    - echo $DYNAMIC_ENVIRONMENT_URL
+    - echo "${DYNAMIC_ENVIRONMENT_URL}"
+  needs:
+    - review-pcf
+  dependencies:
+    - review-pcf
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: prepare
@@ -38,7 +42,7 @@ testpostdeploy:
 stop-review-pcf:
   extends: .pcf-teardown
   needs:
-    - deploy-review-pcf
+    - review-pcf
   resource_group: review-deploy-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
