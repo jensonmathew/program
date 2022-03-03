@@ -27,28 +27,7 @@ deploy-review-pcf:
 
 # Stop review environment
 stop-review-pcf:
-  image: alpine
-  stage: deploy
-  script:
-    - if ! exists "curl" ; then installPackage "curl"; fi;
-    - if ! exists "jq" ; then installPackage "jq"; fi;
-    - fetchFromCDP "pcf-install.sh" "pcf-install.sh" && sh pcf-install.sh
-    - cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a "$PCF_API" -o "$PCF_ORG" -s "$PCF_SPACE"
-    - cf curl /v3/apps | jq -r '.resources[]|select(.name | contains("'$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG'")).name' > apps
-    - |
-      while IFS= read -r line
-      do
-        tmoLog "Deleting $line"
-        cf delete -f $line
-      done < "./apps"
-    - cf curl /v3/routes | jq -r '.resources[]|select(.host | contains("'$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG'")).host' > hosts
-    - |
-      while IFS= read -r line
-      do
-        tmoLog "Deleting $line"
-        cf delete-route -f $DOMAIN -n $line
-      done < "./hosts"
-    - echo "Deleted pcf apps $PCF_STOP_APP_NAME in CI_ENVIRONMENT_NAME - $CI_ENVIRONMENT_NAME"
+  extends: .pcf-teardown
   needs:
     - deploy-review-pcf
   resource_group: review-deploy-$CI_COMMIT_REF_SLUG
@@ -59,7 +38,3 @@ stop-review-pcf:
   rules:
     - when: manual
       allow_failure: true
-  artifacts:
-    paths:
-      - apps
-      - hosts
