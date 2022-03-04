@@ -27,6 +27,26 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+          readinessProbe:
+            failureThreshold: {{ .Values.service.healthCheck.readinessProbe.failureThreshold }}
+            httpGet:
+              path: {{ .Values.service.healthCheck.readinessProbe.path }}
+              port: {{ .Values.service.port }}
+              scheme: {{ .Values.service.healthCheck.scheme }}
+            initialDelaySeconds: {{ .Values.service.healthCheck.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.service.healthCheck.readinessProbe.periodSeconds }}
+            successThreshold: 1
+            timeoutSeconds: {{ .Values.service.healthCheck.timeoutSeconds }}
+          livenessProbe:
+            failureThreshold: {{ .Values.service.healthCheck.livenessProbe.failureThreshold }}
+            httpGet:
+              path: {{ .Values.service.healthCheck.livenessProbe.path }}
+              port: {{ .Values.service.port }}
+              scheme: {{ .Values.service.healthCheck.scheme }}
+            initialDelaySeconds: {{ .Values.service.healthCheck.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.service.healthCheck.livenessProbe.periodSeconds }}
+            successThreshold: 1
+            timeoutSeconds: {{ .Values.service.healthCheck.timeoutSeconds }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:

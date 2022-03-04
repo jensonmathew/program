@@ -16,6 +16,19 @@ service:
   name: {{HELM_APP_NAME}}-service
   type: ClusterIP
   port: 80
+  healthCheck:
+    scheme: HTTP
+    timeoutSeconds: 3
+    livenessProbe:
+      path: /actuator/health/liveness
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      failureThreshold: 5
+    readinessProbe:
+      path: /actuator/health/readiness
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      failureThreshold: 5
 
 serverName: {{SERVER_NAME}}
 
