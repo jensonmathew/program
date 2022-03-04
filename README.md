@@ -59,6 +59,7 @@ Testing the Application:
 ------------------------
 **On Terminal**
 ```console
+curl http://localhost/actuator/health
 curl http://localhost/actuator/health/liveness
 curl http://localhost/actuator/health/readiness
 
@@ -72,9 +73,11 @@ Check app health at http://localhost/actuator/health/liveness and http://localho
 
 Browse http://localhost and pass the credentials as `testuserX` with `passwordX` where the `X` is 1 - 10.
 
-```
+The `/actuator/health` endpoint will give you a per-component view into the health of your service (e.g.: DB health vs app health vs free space, etc).
 
-qTest Integreation:
+Refer to the "Understanding Kubernetes Deployment" section for more context on the `liveness` and `readiness` endpoints. 
+
+qTest Integration:
 -------------------
 
 The e2egating stage running the test cases in the Codeless test framework and uploading the test results to [qTest](https://qtest-training.t-mobile.com/p/39/portal/project#tab=testexecution&object=2&id=316)
@@ -100,3 +103,14 @@ For this example project, pom.xml and Controller files were modified to incorpor
 **Examples**
 
 Click [here](./docs/examples.md) to see all samples.
+
+Understanding Kubernetes Deployment
+===================================
+
+This app is deployed to Kubernetes using Helm. While covering Helm at any meaningful depth is outside the scope of this project, you can [get a good overview of Helm here](https://www.baeldung.com/ops/kubernetes-helm).
+
+Some key configuration callouts have to do with `readiness` and `liveness` probes, which are used to tell Kubernetes when your application is ready to accept traffic and actively able to process requests, respectively.
+
+Documented comments in [application.properties](src/main/resources/application.properties) help explain how these endpoints are configured.
+
+If you have other endpoints you would rather use instead of these built-in Springboot ones, you can change the paths of `livenessProbe.path` and `readinessProbe.path` in [values.yaml.j2](k8s/values.yaml.j2). However, it is recommended to stick with the [Springboot ones](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints), as they are comprehensive [and extensible](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints.health.writing-custom-health-indicators). 
