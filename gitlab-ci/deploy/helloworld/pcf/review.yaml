@@ -24,7 +24,7 @@ px-npe02a:
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: development
     on_stop: stop-px-npe02a
-    auto_stop_in: 14 days
+    auto_stop_in: 2 days
 
 testpostdeploy:
   image: alpine
