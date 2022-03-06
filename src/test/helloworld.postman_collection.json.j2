@@ -1,0 +1,31 @@
+{
+  "info": {
+    "_postman_id": "16833b4f-1abb-462c-b1ae-9bf42875a0eb",
+    "name": "helloworld",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET request",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "url": "{{ DYNAMIC_ENVIRONMENT_URL }}/{{ HEALTH_CHK_URI }}",
+        "method": "GET",
+        "description": "A get Request to {{ DYNAMIC_ENVIRONMENT_URL }}/{{ HEALTH_CHK_URI }}"
+      },
+      "response": []
+    }
+  ]
+}

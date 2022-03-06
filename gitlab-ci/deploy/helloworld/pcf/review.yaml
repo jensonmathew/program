@@ -13,16 +13,17 @@ testpredeploy:
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: prepare
+    deployment_tier: development
 
 # Deploy to review environment
-review-pcf:
+px-npe02a:
   extends: .deploy-pcf-review
   resource_group: review-deploy-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: development
-    on_stop: stop-review-pcf
+    on_stop: stop-px-npe02a
     auto_stop_in: 14 days
 
 testpostdeploy:
@@ -30,19 +31,26 @@ testpostdeploy:
   stage: verify
   script:
     - echo "${DYNAMIC_ENVIRONMENT_URL}"
-  needs:
-    - review-pcf
-  dependencies:
-    - review-pcf
+  needs: 
+  dependencies: ["px-npe02a"]
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: prepare
+    deployment_tier: development
 
-# Stop review environment
-stop-review-pcf:
+px-npe02a-sanity:
+  extends: .sanity
+  needs: ["px-npe02a"]
+  dependencies: ["px-npe02a"]
+  environment:
+    name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: development
+
+stop-px-npe02a:
   extends: .pcf-teardown
   needs:
-    - review-pcf
+    - px-npe02a
   resource_group: review-deploy-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
