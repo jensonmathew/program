@@ -24,7 +24,8 @@ variables:
   image: alpine
   stage: test
   script:
-    - echo $CI_PROJECT_NAME
+    - echo "CI_PROJECT_DIR - $CI_PROJECT_NAME"
+    - echo "DOMAIN - $DOMAIN"
 
 .deploy: &deploy
   extends: .pcf-deploy

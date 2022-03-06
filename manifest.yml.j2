@@ -3,7 +3,7 @@ applications:
 - name: {{ PCF_ROUTE_HOSTNAME }}
   routes: 
     - route: {{ PCF_ROUTE_HOSTNAME }}.{{ DOMAIN }}
-  instances: {{ INSTANCE_COUNT | default(3,true) }}
+  instances: {{ PCF_INSTANCES | default(3,true) }}
   path: ./target/{{ CI_PROJECT_NAME }}-{{ APP_VERSION }}-{{ BUILD_NUMBER }}.jar
   buildpacks: 
     - {{ BUILDPACK }}

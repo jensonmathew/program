@@ -1,9 +1,6 @@
 include:
     - local: /gitlab-ci/common.yaml
 
-variables:
-    PCF_INSTANCES: "1"
-
 predeploysample:
   image: alpine
   stage: test
