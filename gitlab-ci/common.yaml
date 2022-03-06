@@ -16,7 +16,7 @@ variables:
     PCF_CLI_VERSION: "6.49.0"
     PCF_ORG: "Continuous-Delivery-Platform"
     BUILDPACK: "java_buildpack_offline"
-    PCF_INSTANCES: "1" 
+    PCF_INSTANCES: "1"
     PCF_ROUTE_HOSTNAME: "helloworld"
     PCF_BG_STRATEGY: "GREEN_AUTO_SWITCH"
 

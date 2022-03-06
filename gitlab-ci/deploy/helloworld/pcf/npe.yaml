@@ -1,6 +1,9 @@
 include:
     - local: /gitlab-ci/common.yaml
 
+variables:
+    PCF_INSTANCES: "1"
+
 # px-npe02a
 npe02a-stg:
   extends: .deploy-pcf
