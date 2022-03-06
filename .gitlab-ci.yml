@@ -101,8 +101,6 @@ review:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH #only topic branches
       when: never
-    - if: $CI_PIPELINE_SOURCE != "push"             #pushes only
-      when: never
-    - if: $CI_OPEN_MERGE_REQUESTS                   #only pushes w/ open m/rs
+    - if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "trigger" #pushes only
       when: on_success
     - when: never
