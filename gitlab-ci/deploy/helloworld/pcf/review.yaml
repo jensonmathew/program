@@ -4,11 +4,10 @@ include:
 variables:
   PCF_ROUTE_HOSTNAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
   PCF_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-  INSTANCE_COUNT: 1
   PCF_FOUNDATION: "px-npe02a"
-  DOMAIN: "review.$PCF_FOUNDATION.cf.t-mobile.com"
+  DOMAIN: "dev.$PCF_FOUNDATION.cf.t-mobile.com"
 
-testpredeploy:
+sample-pre-review-deploy:
   extends: .testjob
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
@@ -26,7 +25,7 @@ px-npe02a:
     on_stop: stop-px-npe02a
     auto_stop_in: 2 days
 
-testpostdeploy:
+sample-post-review-deploy:
   image: alpine
   stage: verify
   script:
