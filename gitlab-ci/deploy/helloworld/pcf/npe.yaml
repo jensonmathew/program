@@ -1,7 +1,7 @@
 include:
     - local: /gitlab-ci/common.yaml
 
-# Deploy to Staging environment   
+# px-npe02a
 npe02a-stg:
   extends: .deploy-pcf
   variables:
@@ -9,12 +9,20 @@ npe02a-stg:
     PCF_SPACE: $CI_ENVIRONMENT_TIER
     DOMAIN: "test.px-npe02a.cf.t-mobile.com"
   environment:
-    name: stg01/px-npe02a/staging/smoke
+    name: qlab01/px-npe02a/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: staging
 
-##################################### Deploy px-npe02b ################################################
-# Deploy to Development environment
+npe02a-stg-sanity:
+  extends: .sanity
+  needs: ["npe02a-stg"]
+  dependencies: ["npe02a-stg"]
+  environment:
+    name: qlab01/px-npe02a/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: staging
+
+# px-npe02b-development
 npe02b-dev:
   extends: .deploy-pcf
   variables:
@@ -22,11 +30,20 @@ npe02b-dev:
     PCF_SPACE: "development"
     DOMAIN: "dev.px-npe02b.cf.t-mobile.com"
   environment:
-    name: dlab01/px-npe02b/development/smoke
+    name: qlab01/px-npe02b/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: staging
-  
-# Deploy to Staging environment   
+
+npe02b-dev-sanity:
+  extends: .sanity
+  needs: ["npe02b-dev"]
+  dependencies: ["npe02b-dev"]
+  environment:
+    name: qlab01/px-npe02b/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: staging
+
+# px-npe02b-staging  
 npe02b-stg:
   extends: .deploy-pcf
   variables:
@@ -34,12 +51,20 @@ npe02b-stg:
     PCF_SPACE: "staging"
     DOMAIN: "test.px-npe02b.cf.t-mobile.com"
   environment:
-    name: stg01/px-npe02b/staging/smoke 
+    name: qlab01/px-npe02b/smoke 
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: staging
 
-##################################### Deploy px-npe02c ################################################
-# Deploy to Development environment
+npe02b-stg-sanity:
+  extends: .sanity
+  needs: ["npe02b-stg"]
+  dependencies: ["npe02b-stg"]
+  environment:
+    name: qlab01/px-npe02b/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: staging
+
+# px-npe02c development
 npe02c-dev:
   extends: .deploy-pcf
   variables:
@@ -47,11 +72,20 @@ npe02c-dev:
     PCF_SPACE: "development"
     DOMAIN: "dev.px-npe02c.cf.t-mobile.com"
   environment:
-    name: dlab01/px-npe02c/development/smoke
+    name: qlab01/px-npe02c/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: staging
-  
-# Deploy to Staging environment   
+
+npe02c-dev-sanity:
+  extends: .sanity
+  needs: ["npe02c-dev"]
+  dependencies: ["npe02c-dev"]
+  environment:
+    name: qlab01/px-npe02c/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: staging
+    
+# px-npe02c staging 
 npe02c-stg:
   extends: 
      - .deploy-pcf
@@ -60,12 +94,20 @@ npe02c-stg:
     PCF_SPACE: "staging"
     DOMAIN: "test.px-npe02c.cf.t-mobile.com"
   environment:
-    name: stg01/px-npe02c/staging/smoke 
+    name: qlab01/px-npe02c/smoke 
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: staging
+
+npe02c-stg-sanity:
+  extends: .sanity
+  needs: ["npe02c-stg"]
+  dependencies: ["npe02c-stg"]
+  environment:
+    name: qlab01/px-npe02c/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: staging
   
-##################################### Deploy px-npe03a ################################################
-# Deploy to Development environment
+# px-npe03a development
 npe03a-dev:
   extends: .deploy-pcf
   variables:
@@ -73,12 +115,19 @@ npe03a-dev:
     PCF_SPACE: "development"
     DOMAIN: "dev.px-npe03a.cf.t-mobile.com"
   environment:
-    name: dlab01/px-npe03a/development/smoke
+    name: qlab01/px-npe03a/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: staging
   
-  
-# Deploy to Staging environment   
+npe03a-dev-sanity:
+  extends: .sanity
+  needs: ["npe03a-dev"]
+  dependencies: ["npe03a-dev"]
+  environment:
+    name: qlab01/px-npe03a/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+
+# px-npe03a staging
 npe03a-stg:
   extends: .deploy-pcf
   variables:
@@ -86,12 +135,20 @@ npe03a-stg:
     PCF_SPACE: "staging"
     DOMAIN: "test.px-npe03a.cf.t-mobile.com"
   environment:
-    name: stg01/px-npe03a/staging/smoke
+    name: qlab01/px-npe03a/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: staging
 
-##################################### Deploy px-npe03b ################################################
-# Deploy to Development environment
+npe03a-stg-sanity:
+  extends: .sanity
+  needs: ["npe03a-stg"]
+  dependencies: ["npe03a-stg"]
+  environment:
+    name: qlab01/px-npe03a/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: staging
+
+# px-npe03b development
 npe03b-dev:
   extends: .deploy-pcf
   variables:
@@ -99,11 +156,20 @@ npe03b-dev:
     PCF_SPACE: "development"
     DOMAIN: "dev.px-npe03b.cf.t-mobile.com"
   environment:
-    name: dlab01/px-npe03b/development/smoke
+    name: qlab01/px-npe03b/smoke
     url: http://${PCF_ROUTE_HOSTNAME}.${DOMAIN}
     deployment_tier: staging
+
+npe03b-dev-sanity:
+  extends: .sanity
+  needs: ["npe03b-dev"]
+  dependencies: ["npe03b-dev"]
+  environment:
+    name: qlab01/px-npe03b/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: staging
   
-# Deploy to Staging environment   
+# px-npe03b staging 
 npe03b-stg:
   extends: .deploy-pcf
   variables:
@@ -111,12 +177,20 @@ npe03b-stg:
     PCF_SPACE: "staging"
     DOMAIN: "test.px-npe03b.cf.t-mobile.com"
   environment:
-    name: stg01/px-npe03b/staging/smoke 
+    name: qlab01/px-npe03b/smoke 
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: staging
 
-##################################### Deploy px-npe03d ################################################
-# Deploy to Development environment
+npe03b-stg-sanity:
+  extends: .sanity
+  needs: ["npe03b-stg"]
+  dependencies: ["npe03b-stg"]
+  environment:
+    name: qlab01/px-npe03b/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: staging
+
+# px-npe03d development
 npe03d-dev:
   extends: 
      - .deploy-pcf
@@ -125,11 +199,20 @@ npe03d-dev:
     PCF_SPACE: "development"
     DOMAIN: "dev.px-npe03d.cf.t-mobile.com"
   environment:
-    name: dlab01/px-npe03d/development/smoke
+    name: qlab01/px-npe03d/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: staging
-  
-# Deploy to Staging environment   
+
+npe03d-dev-sanity:
+  extends: .sanity
+  needs: ["npe03d-dev"]
+  dependencies: ["npe03d-dev"]
+  environment:
+    name: qlab01/px-npe03d/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: staging
+
+# px-npe03d staging
 npe03d-stg:
   extends: .deploy-pcf
   variables:
@@ -137,6 +220,15 @@ npe03d-stg:
     PCF_SPACE: "staging"
     DOMAIN: "test.px-npe03d.cf.t-mobile.com"
   environment:
-    name: stg01/px-npe03d/staging/smoke 
+    name: qlab01/px-npe03d/smoke 
     url: $DYNAMIC_ENVIRONMENT_URL
+    deployment_tier: staging
+
+npe03d-stg-sanity:
+  extends: .sanity
+  needs: ["npe03d-stg"]
+  dependencies: ["npe03d-stg"]
+  environment:
+    name: qlab01/px-npe03d/smoke 
+    action: prepare #will be changed to "verify" hopefully in future
     deployment_tier: staging

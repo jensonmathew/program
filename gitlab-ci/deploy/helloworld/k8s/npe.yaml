@@ -2,14 +2,14 @@ include:
     - local: /gitlab-ci/common.yaml
 
 # Deploy on TKE/PKS K8s cluster
-deploy-tke-npe:
+px-npe1103:
   stage: deploy
   extends: .helm_deploy
   variables:
     APP_URL: "https://cdp-helloworld-1-dev"
     DOMAIN: "px-npe1103.pks.t-mobile.com"
   environment:
-    name: dlab01/px-npe1103/cdp-dev
+    name: qlab01/px-npe1103/cdp-dev
     url: http://$APP_URL.$DOMAIN
     deployment_tier: staging
   resource_group: $CI_JOB_NAME

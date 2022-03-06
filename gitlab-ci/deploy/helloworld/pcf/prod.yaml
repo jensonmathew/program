@@ -1,14 +1,13 @@
 include:
     - local: /gitlab-ci/common.yaml
 
-testjob:
+predeploysample:
   image: alpine
   stage: test
   script:
     - echo http://$PCF_ROUTE_HOSTNAME.$DOMAIN
 
-##################################### Deploy px-prd02 ###############################################
-   # Deploy to production environment    
+# px-prod02
 px-prd02:
   extends: .deploy-pcf
   variables:
@@ -16,12 +15,20 @@ px-prd02:
     PCF_SPACE: "production"
     DOMAIN: "apps.px-prd02.cf.t-mobile.com"
   environment:
-    name: production/px-prd02/production/smoke
+    name: prod/px-prd02/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: production
 
-##################################### Deploy px-prd04 ################################################
-# Deploy to production environment    
+px-prd02-sanity:
+  extends: .sanity
+  needs: ["px-prd02"]
+  dependencies: ["px-prd02"]
+  environment:
+    name: prod/px-prd02/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: "production"
+
+# px-prd04
 px-prd04:
   extends: .deploy-pcf
   variables:
@@ -29,12 +36,20 @@ px-prd04:
     PCF_SPACE: "production"
     DOMAIN: "apps.px-prd04.cf.t-mobile.com"
   environment:
-    name: production/px-prd04/production/smoke
+    name: prod/px-prd04/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: production
 
-##################################### Deploy px-prd03a ################################################
-# Deploy to production environment    
+px-prd04-sanity:
+  extends: .sanity
+  needs: ["px-prd04"]
+  dependencies: ["px-prd04"]
+  environment:
+    name: prod/px-prd04/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: "production"
+
+# px-prd03a
 px-prd03a:
   extends: .deploy-pcf
   variables:
@@ -42,12 +57,20 @@ px-prd03a:
     PCF_SPACE: "production"
     DOMAIN: "apps.px-prd03a.cf.t-mobile.com"
   environment:
-    name: production/px-prd03a/production/smoke
+    name: prod/px-prd03a/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: production
 
-##################################### Deploy px-prd03b ################################################
-# Deploy to production environment    
+px-prd03a-sanity:
+  extends: .sanity
+  needs: ["px-prd03a"]
+  dependencies: ["px-prd03a"]
+  environment:
+    name: prod/px-prd03a/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: "production"
+
+# px-prd03b
 px-prd03b:
   extends: .deploy-pcf
   variables:
@@ -55,12 +78,20 @@ px-prd03b:
     PCF_SPACE: "production"
     DOMAIN: "apps.px-prd03b.cf.t-mobile.com"
   environment:
-    name: production/px-prd03b/production/smoke
+    name: prod/px-prd03b/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: production
 
-##################################### Deploy px-prd03c ################################################
-# Deploy to production environment    
+px-prd03b-sanity:
+  extends: .sanity
+  needs: ["px-prd03b"]
+  dependencies: ["px-prd03b"]
+  environment:
+    name: prod/px-prd03b/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: "production"
+
+# px-prd03c
 px-prd03c:
   extends: .deploy-pcf
   variables:
@@ -69,12 +100,20 @@ px-prd03c:
     DOMAIN: "apps.px-prd03c.cf.t-mobile.com"
   resource_group: $CI_JOB_NAME
   environment:
-    name: production/px-prd03c/production/smoke
+    name: prod/px-prd03c/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: production
 
-    ##################################### Deploy px-cde02 ################################################
-# Deploy to production environment    
+px-prd03c-sanity:
+  extends: .sanity
+  needs: ["px-prd03c"]
+  dependencies: ["px-prd03c"]
+  environment:
+    name: prod/px-prd03c/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: "production"
+
+# px-cde02
 px-cde02a:
   extends: .deploy-pcf
   variables:
@@ -82,12 +121,20 @@ px-cde02a:
         PCF_SPACE: "production"
         DOMAIN: "apps.px-cde02.cf.t-mobile.com"
   environment:
-    name: production/px-cde02/production/smoke
+    name: prod/px-cde02/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: production
 
-##################################### Deploy px-cde03a ################################################
-# Deploy to production environment    
+px-cde02a-sanity:
+  extends: .sanity
+  needs: ["px-cde02a"]
+  dependencies: ["px-cde02a"]
+  environment:
+    name: prod/px-cde02/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: "production"
+
+# px-cde03a
 px-cde03a:
   extends: .deploy-pcf
   variables:
@@ -95,12 +142,20 @@ px-cde03a:
     PCF_SPACE: "production"
     DOMAIN: "apps.px-cde03a.cf.t-mobile.com"
   environment:
-    name: production/px-cde03a/production/smoke
+    name: prod/px-cde03a/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: production
 
-##################################### Deploy px-cde11a ################################################
-# Deploy to production environment    
+px-cde03a-sanity:
+  extends: .sanity
+  needs: ["px-cde03a"]
+  dependencies: ["px-cde03a"]
+  environment:
+    name: prod/px-cde03a/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: "production"
+
+# px-cde11a
 px-cde11a:
   extends: .deploy-pcf
   variables:
@@ -108,13 +163,20 @@ px-cde11a:
       PCF_SPACE: "production"
       DOMAIN: "apps.px-cde11a.cf.t-mobile.com"
   environment:
-    name: production/px-cde11a/production/smoke
+    name: prod/px-cde11a/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: production
 
+px-cde11a-sanity:
+  extends: .sanity
+  needs: ["px-cde11a"]
+  dependencies: ["px-cde11a"]
+  environment:
+    name: prod/px-cde11a/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: "production"
 
-##################################### Deploy tt-cde02a ################################################
-# Deploy to production environment    
+# tt-cde02a
 tt-cde02a:
   extends: .deploy-pcf
   variables:
@@ -122,7 +184,15 @@ tt-cde02a:
     PCF_SPACE: "production"
     DOMAIN: "apps.tt-cde02a.cf.t-mobile.com"
   environment:
-    name: production/tt-cde02a/production/smoke
+    name: prod/tt-cde02a/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: production
 
+tt-cde02a-sanity:
+  extends: .sanity
+  needs: ["tt-cde02a"]
+  dependencies: ["tt-cde02a"]
+  environment:
+    name: prod/tt-cde02a/smoke
+    action: prepare #will be changed to "verify" hopefully in future
+    deployment_tier: "production"
