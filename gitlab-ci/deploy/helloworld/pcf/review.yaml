@@ -6,7 +6,7 @@ variables:
   PCF_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
   INSTANCE_COUNT: 1
   PCF_FOUNDATION: "px-npe02a"
-  DOMAIN: "apps.$PCF_FOUNDATION.cf.t-mobile.com"
+  DOMAIN: "review.$PCF_FOUNDATION.cf.t-mobile.com"
 
 testpredeploy:
   extends: .testjob
