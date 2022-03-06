@@ -12,6 +12,14 @@ stages:
     - deploy
     - verify
 
+variables:
+    PCF_CLI_VERSION: "6.49.0"
+    PCF_ORG: "Continuous-Delivery-Platform"
+    BUILDPACK: "java_buildpack_offline"
+    PCF_INSTANCES: "1" 
+    PCF_ROUTE_HOSTNAME: "helloworld"
+    PCF_BG_STRATEGY: "GREEN_AUTO_SWITCH"
+
 .testjob:
   image: alpine
   stage: test
@@ -21,13 +29,6 @@ stages:
 .deploy: &deploy
   extends: .pcf-deploy
   stage: deploy
-  variables:
-      PCF_CLI_VERSION: "6.49.0"
-      PCF_ORG: "Continuous-Delivery-Platform"
-      BUILDPACK: "java_buildpack_offline"
-      PCF_INSTANCES: "1" 
-      PCF_ROUTE_HOSTNAME: "helloworld"
-      PCF_BG_STRATEGY: "GREEN_AUTO_SWITCH"
   resource_group: $CI_JOB_NAME
   rules:
     - when: always
