@@ -13,7 +13,6 @@ variables:
     PCF_INSTANCES: "1" 
     PCF_ROUTE_HOSTNAME: "helloworld"
     PCF_BG_STRATEGY: "GREEN_AUTO_SWITCH"
-    CDP_STATIC_OVERRIDE_BRANCH: chill104-tmo/master-patch-70276
 
 stages:
     - tmo
