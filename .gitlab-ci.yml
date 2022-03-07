@@ -46,9 +46,6 @@ variables:
 # Docker parameters 
   DOCKER_BUILD_ARGS: "--build-arg APP_VERSION=$APP_VERSION --build-arg PROJECT_NAME=$CI_PROJECT_NAME --build-arg COMMIT_SHA=$CI_COMMIT_SHORT_SHA"
 
-# debug
-  DEPLOY_ALL: "true"
-
 # Create json for badges 
 pages:
   extends: .badge_pages
