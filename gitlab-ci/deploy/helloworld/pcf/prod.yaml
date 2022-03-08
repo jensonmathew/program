@@ -78,7 +78,7 @@ px-prd03a-sanity:
   dependencies: ["px-prd03a"]
   environment:
     name: prod/px-prd03a/smoke
-    action: start
+    action: prepare
 
 delete-all-routes-apps-px-prd03a:
   extends: .pcf-teardown
