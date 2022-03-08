@@ -5,6 +5,8 @@ applications:
     - route: {{ PCF_ROUTE_HOSTNAME }}.{{ DOMAIN }}
   instances: {{ PCF_INSTANCES | default(3,true) }}
   path: ./target/{{ CI_PROJECT_NAME }}-{{ APP_VERSION }}-{{ BUILD_NUMBER }}.jar
+  health-check-type: http
+  health-check-http-endpoint: /actuator/health
   buildpacks: 
     - {{ BUILDPACK }}
   env:

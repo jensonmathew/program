@@ -42,8 +42,6 @@ variables:
   # Child
   PARENT_PIPELINE_ID: $CI_PIPELINE_ID
 
-  DEPLOY_ALL: "true"
-
 build:
   extends: .maven-build
   stage: build
