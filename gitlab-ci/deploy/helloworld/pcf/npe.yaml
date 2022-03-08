@@ -1,51 +1,22 @@
 include:
     - local: /gitlab-ci/common.yaml
 
-# px-npe02a
-npe02a-stg:
-  extends: .deploy-pcf
-  variables:
-    PCF_API: "api.sys.px-npe02a.cf.t-mobile.com"
-    DOMAIN: "test.px-npe02a.cf.t-mobile.com"
-  environment:
-    name: qlab01/px-npe02a/staging/smoke
-    url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: staging
-
-npe02a-stg-sanity:
-  extends: .sanity
-  needs: ["npe02a-stg"]
-  dependencies: ["npe02a-stg"]
-  environment:
-    name: qlab01/px-npe02a/staging/smoke
-    action: prepare
-
-delete-all-routes-apps-px-npe02a:
-  extends: .allteardown
-  resource_group: stop_all_px-npe02a
-  variables:
-    PCF_API: "api.sys.px-npe02a.cf.t-mobile.com"
-    DOMAIN: "test.px-npe02a.cf.t-mobile.com"
-  environment:
-    name: qlab01/px-npe02a/staging/smoke
-    action: stop
 
 # px-npe02b-development
-npe02b-dev:
+npe02b:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe02b.cf.t-mobile.com"
-    PCF_SPACE: "development"
     DOMAIN: "dev.px-npe02b.cf.t-mobile.com"
   environment:
     name: qlab01/px-npe02b/development/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: development
 
-npe02b-dev-sanity:
+npe02b-sanity:
   extends: .sanity
-  needs: ["npe02b-dev"]
-  dependencies: ["npe02b-dev"]
+  needs: ["npe02b"]
+  dependencies: ["npe02b"]
   environment:
     name: qlab01/px-npe02b/development/smoke
     action: prepare
@@ -55,34 +26,14 @@ delete-all-routes-apps-px-npe02b:
   resource_group: stop_all_px-npe02b
   variables:
     PCF_API: "api.sys.px-npe02b.cf.t-mobile.com"
-    PCF_SPACE: "development"
     DOMAIN: "dev.px-npe02b.cf.t-mobile.com"
   environment:
     name: qlab01/px-npe02b/development/smoke
     action: stop
-
-# px-npe02b-staging  
-npe02b-stg:
-  extends: .deploy-pcf
-  variables:
-    PCF_API: "api.sys.px-npe02b.cf.t-mobile.com"
-    PCF_SPACE: "staging"
-    DOMAIN: "test.px-npe02b.cf.t-mobile.com"
-  environment:
-    name: qlab01/px-npe02b/staging/smoke 
-    url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: staging
-
-npe02b-stg-sanity:
-  extends: .sanity
-  needs: ["npe02b-stg"]
-  dependencies: ["npe02b-stg"]
-  environment:
-    name: qlab01/px-npe02b/staging/smoke
-    action: prepare
+    deployment_tier: development
 
 # px-npe02c development
-npe02c-dev:
+npe02c:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe02c.cf.t-mobile.com"
@@ -92,10 +43,10 @@ npe02c-dev:
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: development
 
-npe02c-dev-sanity:
+npe02c-sanity:
   extends: .sanity
-  needs: ["npe02c-dev"]
-  dependencies: ["npe02c-dev"]
+  needs: ["npe02c"]
+  dependencies: ["npe02c"]
   environment:
     name: qlab01/px-npe02c/development/smoke
     action: prepare
@@ -109,29 +60,9 @@ delete-all-routes-apps-px-npe02c:
   environment:
     name: qlab01/px-npe02c/development/smoke
     action: stop
-    
-# px-npe02c staging 
-npe02c-stg:
-  extends: .deploy-pcf
-  variables:
-    PCF_API: "api.sys.px-npe02c.cf.t-mobile.com"
-    PCF_SPACE: "staging"
-    DOMAIN: "test.px-npe02c.cf.t-mobile.com"
-  environment:
-    name: qlab01/px-npe02c/staging/smoke 
-    url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: staging
-
-npe02c-stg-sanity:
-  extends: .sanity
-  needs: ["npe02c-stg"]
-  dependencies: ["npe02c-stg"]
-  environment:
-    name: qlab01/px-npe02c/staging/smoke
-    action: prepare
   
 # px-npe03a development
-npe03a-dev:
+npe03a:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe03a.cf.t-mobile.com"
@@ -141,10 +72,10 @@ npe03a-dev:
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: development
   
-npe03a-dev-sanity:
+npe03a-sanity:
   extends: .sanity
-  needs: ["npe03a-dev"]
-  dependencies: ["npe03a-dev"]
+  needs: ["npe03a"]
+  dependencies: ["npe03a"]
   environment:
     name: qlab01/px-npe03a/development/smoke
     action: prepare
@@ -159,28 +90,8 @@ delete-all-routes-apps-px-npe03a:
     name: qlab01/px-npe03a/development/smoke
     action: stop 
 
-# px-npe03a staging
-npe03a-stg:
-  extends: .deploy-pcf
-  variables:
-    PCF_API: "api.sys.px-npe03a.cf.t-mobile.com"
-    PCF_SPACE: "staging"
-    DOMAIN: "test.px-npe03a.cf.t-mobile.com"
-  environment:
-    name: qlab01/px-npe03a/staging/smoke
-    url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: staging
-
-npe03a-stg-sanity:
-  extends: .sanity
-  needs: ["npe03a-stg"]
-  dependencies: ["npe03a-stg"]
-  environment:
-    name: qlab01/px-npe03a/staging/smoke
-    action: prepare
-
 # px-npe03b development
-npe03b-dev:
+npe03b:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-npe03b.cf.t-mobile.com"
@@ -192,8 +103,8 @@ npe03b-dev:
 
 npe03b-dev-sanity:
   extends: .sanity
-  needs: ["npe03b-dev"]
-  dependencies: ["npe03b-dev"]
+  needs: ["npe03b"]
+  dependencies: ["npe03b"]
   environment:
     name: qlab01/px-npe03b/development/smoke
     action: prepare
@@ -207,29 +118,9 @@ delete-all-routes-apps-px-npe03b:
   environment:
     name: qlab01/px-npe03b/development/smoke
     action: stop
-  
-# px-npe03b staging 
-npe03b-stg:
-  extends: .deploy-pcf
-  variables:
-    PCF_API: "api.sys.px-npe03b.cf.t-mobile.com"
-    PCF_SPACE: "staging"
-    DOMAIN: "test.px-npe03b.cf.t-mobile.com"
-  environment:
-    name: qlab01/px-npe03b/staging/smoke 
-    url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: staging
-
-npe03b-stg-sanity:
-  extends: .sanity
-  needs: ["npe03b-stg"]
-  dependencies: ["npe03b-stg"]
-  environment:
-    name: qlab01/px-npe03b/staging/smoke
-    action: prepare
 
 # px-npe03d development
-npe03d-dev:
+npe03d:
   extends: 
      - .deploy-pcf
   variables:
@@ -240,10 +131,10 @@ npe03d-dev:
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: development
 
-npe03d-dev-sanity:
+npe03d-sanity:
   extends: .sanity
-  needs: ["npe03d-dev"]
-  dependencies: ["npe03d-dev"]
+  needs: ["npe03d"]
+  dependencies: ["npe03d"]
   environment:
     name: qlab01/px-npe03d/development/smoke
     action: prepare
@@ -259,22 +150,3 @@ delete-all-routes-apps-px-npe03d:
     name: qlab01/px-npe03d/development/smoke
     action: stop
 
-# px-npe03d staging
-npe03d-stg:
-  extends: .deploy-pcf
-  variables:
-    PCF_API: "api.sys.px-npe03d.cf.t-mobile.com"
-    PCF_SPACE: "staging"
-    DOMAIN: "test.px-npe03d.cf.t-mobile.com"
-  environment:
-    name: qlab01/px-npe03d/staging/smoke 
-    url: $DYNAMIC_ENVIRONMENT_URL
-    deployment_tier: staging
-
-npe03d-stg-sanity:
-  extends: .sanity
-  needs: ["npe03d-stg"]
-  dependencies: ["npe03d-stg"]
-  environment:
-    name: qlab01/px-npe03d/staging/smoke
-    action: prepare

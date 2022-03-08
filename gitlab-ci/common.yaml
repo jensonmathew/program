@@ -11,6 +11,7 @@ stages:
     - test
     - deploy
     - verify
+    - destroy
 
 variables:
   # PCF_CLI_VERSION: "6.49.0"
@@ -50,10 +51,11 @@ variables:
 
 .allteardown:
   extends: .pcf-teardown
+  stage: destroy
   variables:
     PCF_DELETE_ALL_ROUTES_APPS: "true"
   rules:
     - if: $DELETE_ALL == "true" #only topic branches
       when: manual
+      allow_failure: true
     - when: never
-    

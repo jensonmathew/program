@@ -1,9 +1,8 @@
 Introduction:
 -------------
-helloworld is intended to be an working example standard pipeline that practice continuous delivery and continuous deployments.
+helloworld is intended to be an aggregate of the best known patterns within T-Mobile working end to end through the entire delivery life cycle. All new transformations start here.
 
-
-Workflow:
+Workflow: Continuous Delivery and Continuous Deployments
 -----------
 - All environments deploy upon trunk (including production).
 - Epehemeral Enviroments tracks the life cycle of merge request from push pipelines to it's source branch. If merge request's source branch goes idle for 14 days or merge request changes status to merges or closed, the environment is deleted.

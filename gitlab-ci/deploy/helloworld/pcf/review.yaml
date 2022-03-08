@@ -28,6 +28,7 @@ px-npe02a-sanity:
 
 stop-px-npe02a:
   extends: .pcf-teardown
+  stage: destroy
   needs: ["px-npe02a"]
   resource_group: review-deploy-$CI_COMMIT_REF_SLUG
   environment:
