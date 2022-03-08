@@ -3,7 +3,7 @@ include:
     file:
       - /gitlab-ci/.tmo.global.common.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.mavenTest.gitlab-ci.yml
-      - /gitlab-ci/.tmo.function.mavenBuild.gitlab-ci.yml
+      - /gitlab-ci/.tmo.job.mavenBuild.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.fortify.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.sonar.gitlab-ci.yml
@@ -42,22 +42,7 @@ variables:
   # Child
   PARENT_PIPELINE_ID: $CI_PIPELINE_ID
 
-build:
-  extends: .maven-build
-  stage: build
-  cache:
-    key: maven
-    paths:
-      - .m2/repository
-  rules:
-    - if: $CI_COMMIT_TAG != null
-      when: never
-    - when: on_success
-  artifacts:
-    name: '$CI_COMMIT_REF_SLUG-$CI_PIPELINE_IID'
-    paths:
-      - '$BUILD_ARTIFACTS'
-    expire_in: 2 years
+  MAVEN_BUILD_SINGLE_JOB: "true"
 
 # Create json for badges 
 pages:
