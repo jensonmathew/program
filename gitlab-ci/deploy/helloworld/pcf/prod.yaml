@@ -1,18 +1,11 @@
 include:
     - local: /gitlab-ci/common.yaml
 
-predeploysample:
-  image: alpine
-  stage: test
-  script:
-    - echo http://$PCF_ROUTE_HOSTNAME.$DOMAIN
-
 # px-prod02
 px-prd02:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-prd02.cf.t-mobile.com"
-    PCF_SPACE: "production"
     DOMAIN: "apps.px-prd02.cf.t-mobile.com"
   environment:
     name: prod/px-prd02/smoke
@@ -25,15 +18,24 @@ px-prd02-sanity:
   dependencies: ["px-prd02"]
   environment:
     name: prod/px-prd02/smoke
-    action: prepare #will be changed to "verify" hopefully in future
-    deployment_tier: "production"
+    action: prepare
+
+delete-all-routes-apps-px-prd02:
+  extends: .pcf-teardown
+  resource_group: stop_all_px-prd02
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+    PCF_API: "api.sys.px-prd02.cf.t-mobile.com"
+    DOMAIN: "apps.px-prd02.cf.t-mobile.com"
+  environment:
+    name: prod/px-prd02/smoke
+    action: stop
 
 # px-prd04
 px-prd04:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-prd04.cf.t-mobile.com"
-    PCF_SPACE: "production"
     DOMAIN: "apps.px-prd04.cf.t-mobile.com"
   environment:
     name: prod/px-prd04/smoke
@@ -46,15 +48,24 @@ px-prd04-sanity:
   dependencies: ["px-prd04"]
   environment:
     name: prod/px-prd04/smoke
-    action: prepare #will be changed to "verify" hopefully in future
-    deployment_tier: "production"
+    action: prepare
+
+delete-all-routes-apps-px-prd04:
+  extends: .pcf-teardown
+  resource_group: stop_all_px-prd04
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+    PCF_API: "api.sys.px-prd04.cf.t-mobile.com"
+    DOMAIN: "apps.px-prd04.cf.t-mobile.com"
+  environment:
+    name: prod/px-prd04/smoke
+    action: stop
 
 # px-prd03a
 px-prd03a:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-prd03a.cf.t-mobile.com"
-    PCF_SPACE: "production"
     DOMAIN: "apps.px-prd03a.cf.t-mobile.com"
   environment:
     name: prod/px-prd03a/smoke
@@ -67,15 +78,24 @@ px-prd03a-sanity:
   dependencies: ["px-prd03a"]
   environment:
     name: prod/px-prd03a/smoke
-    action: prepare #will be changed to "verify" hopefully in future
-    deployment_tier: "production"
+    action: start
+
+delete-all-routes-apps-px-prd03a:
+  extends: .pcf-teardown
+  resource_group: stop_all_px-prd03a
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+    PCF_API: "api.sys.px-prd03a.cf.t-mobile.com"
+    DOMAIN: "apps.px-prd03a.cf.t-mobile.com"
+  environment:
+    name: prod/px-prd03a/smoke
+    action: stop
 
 # px-prd03b
 px-prd03b:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-prd03b.cf.t-mobile.com"
-    PCF_SPACE: "production"
     DOMAIN: "apps.px-prd03b.cf.t-mobile.com"
   environment:
     name: prod/px-prd03b/smoke
@@ -88,15 +108,24 @@ px-prd03b-sanity:
   dependencies: ["px-prd03b"]
   environment:
     name: prod/px-prd03b/smoke
-    action: prepare #will be changed to "verify" hopefully in future
-    deployment_tier: "production"
+    action: prepare
+
+delete-all-routes-apps-px-prd03b:
+  extends: .pcf-teardown
+  resource_group: stop_all_px-prd03b
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+    PCF_API: "api.sys.px-prd03b.cf.t-mobile.com"
+    DOMAIN: "apps.px-prd03b.cf.t-mobile.com"
+  environment:
+    name: prod/px-prd03b/smoke
+    action: stop
 
 # px-prd03c
 px-prd03c:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-prd03c.cf.t-mobile.com"
-    PCF_SPACE: "production"
     DOMAIN: "apps.px-prd03c.cf.t-mobile.com"
   resource_group: $CI_JOB_NAME
   environment:
@@ -110,16 +139,25 @@ px-prd03c-sanity:
   dependencies: ["px-prd03c"]
   environment:
     name: prod/px-prd03c/smoke
-    action: prepare #will be changed to "verify" hopefully in future
-    deployment_tier: "production"
+    action: prepare
+
+delete-all-routes-apps-px-prd03c:
+  extends: .pcf-teardown
+  resource_group: stop_all_px-prd03c
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+    PCF_API: "api.sys.px-prd03c.cf.t-mobile.com"
+    DOMAIN: "apps.px-prd03c.cf.t-mobile.com"
+  environment:
+    name: prod/px-prd03c/smoke
+    action: stop
 
 # px-cde02
 px-cde02a:
   extends: .deploy-pcf
   variables:
-        PCF_API: "api.sys.px-cde02.cf.t-mobile.com"
-        PCF_SPACE: "production"
-        DOMAIN: "apps.px-cde02.cf.t-mobile.com"
+    PCF_API: "api.sys.px-cde02.cf.t-mobile.com"
+    DOMAIN: "apps.px-cde02.cf.t-mobile.com"
   environment:
     name: prod/px-cde02/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
@@ -131,15 +169,24 @@ px-cde02a-sanity:
   dependencies: ["px-cde02a"]
   environment:
     name: prod/px-cde02/smoke
-    action: prepare #will be changed to "verify" hopefully in future
-    deployment_tier: "production"
+    action: prepare
+
+delete-all-routes-apps-px-cde02:
+  extends: .pcf-teardown
+  resource_group: stop_all_px-cde02
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+    PCF_API: "api.sys.px-cde02.cf.t-mobile.com"
+    DOMAIN: "apps.px-cde02.cf.t-mobile.com"
+  environment:
+    name: prod/px-cde02/smoke
+    action: stop
 
 # px-cde03a
 px-cde03a:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.px-cde03a.cf.t-mobile.com"
-    PCF_SPACE: "production"
     DOMAIN: "apps.px-cde03a.cf.t-mobile.com"
   environment:
     name: prod/px-cde03a/smoke
@@ -152,16 +199,25 @@ px-cde03a-sanity:
   dependencies: ["px-cde03a"]
   environment:
     name: prod/px-cde03a/smoke
-    action: prepare #will be changed to "verify" hopefully in future
-    deployment_tier: "production"
+    action: prepare
+
+delete-all-routes-apps-px-cde03a:
+  extends: .pcf-teardown
+  resource_group: stop_all_px-cde03a
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+    PCF_API: "api.sys.px-cde03a.cf.t-mobile.com"
+    DOMAIN: "apps.px-cde03a.cf.t-mobile.com"
+  environment:
+    name: prod/px-cde03a/smoke
+    action: stop
 
 # px-cde11a
 px-cde11a:
   extends: .deploy-pcf
   variables:
-      PCF_API: "api.sys.px-cde11a.cf.t-mobile.com"
-      PCF_SPACE: "production"
-      DOMAIN: "apps.px-cde11a.cf.t-mobile.com"
+    PCF_API: "api.sys.px-cde11a.cf.t-mobile.com"
+    DOMAIN: "apps.px-cde11a.cf.t-mobile.com"
   environment:
     name: prod/px-cde11a/smoke
     url: $DYNAMIC_ENVIRONMENT_URL
@@ -173,15 +229,24 @@ px-cde11a-sanity:
   dependencies: ["px-cde11a"]
   environment:
     name: prod/px-cde11a/smoke
-    action: prepare #will be changed to "verify" hopefully in future
-    deployment_tier: "production"
+    action: prepare
+
+delete-all-routes-apps-px-cde11a:
+  extends: .pcf-teardown
+  resource_group: stop_all_px-cde11a
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+    PCF_API: "api.sys.px-cde11a.cf.t-mobile.com"
+    DOMAIN: "apps.px-cde11a.cf.t-mobile.com"
+  environment:
+    name: prod/px-cde11a/smoke
+    action: stop
 
 # tt-cde02a
 tt-cde02a:
   extends: .deploy-pcf
   variables:
     PCF_API: "api.sys.tt-cde02a.cf.t-mobile.com"
-    PCF_SPACE: "production"
     DOMAIN: "apps.tt-cde02a.cf.t-mobile.com"
   environment:
     name: prod/tt-cde02a/smoke
@@ -194,5 +259,15 @@ tt-cde02a-sanity:
   dependencies: ["tt-cde02a"]
   environment:
     name: prod/tt-cde02a/smoke
-    action: prepare #will be changed to "verify" hopefully in future
-    deployment_tier: "production"
+    action: prepare
+
+delete-all-routes-apps-tt-cde02a:
+  extends: .pcf-teardown
+  resource_group: stop_all_tt-cde02a
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+    PCF_API: "api.sys.tt-cde02a.cf.t-mobile.com"
+    DOMAIN: "apps.tt-cde02a.cf.t-mobile.com"
+  environment:
+    name: prod/tt-cde02a/smoke
+    action: stop
