@@ -7,6 +7,8 @@ ARG PROJECT_NAME
 ARG COMMIT_SHA
 
 ## Commands to be executed during the image build
-COPY target/$PROJECT_NAME-$APP_VERSION-$COMMIT_SHA.jar /home/
+COPY target/$PROJECT_NAME-$APP_VERSION-$COMMIT_SHA.jar /tmo/
 
-ENTRYPOINT ["java", "-jar", "/home/$PROJECT_NAME-$APP_VERSION-$COMMIT_SHA.jar"]
+RUN ln -s /tmo/$PROJECT_NAME-$APP_VERSION-$COMMIT_SHA.jar /tmo/helloworld.jar
+
+ENTRYPOINT ["java", "-jar", "/tmo/helloworld.jar"]
