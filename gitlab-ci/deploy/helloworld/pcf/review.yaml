@@ -6,17 +6,10 @@ variables:
   PCF_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
   PCF_FOUNDATION: "px-npe02a"
   DOMAIN: "dev.$PCF_FOUNDATION.cf.t-mobile.com"
+  PCF_API: "api.sys.px-npe02a.cf.t-mobile.com"
 
-sample-pre-review-deploy:
-  extends: .testjob
-  environment:
-    name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    action: prepare
-    deployment_tier: development
-
-# Deploy to review environment
 px-npe02a:
-  extends: .deploy-pcf-review
+  extends: .deploy-pcf
   resource_group: review-deploy-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
@@ -25,31 +18,17 @@ px-npe02a:
     on_stop: stop-px-npe02a
     auto_stop_in: 2 days
 
-sample-post-review-deploy:
-  image: alpine
-  stage: verify
-  script:
-    - echo "${DYNAMIC_ENVIRONMENT_URL}"
-  needs: 
-  dependencies: ["px-npe02a"]
-  environment:
-    name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    action: prepare
-    deployment_tier: development
-
 px-npe02a-sanity:
   extends: .sanity
   needs: ["px-npe02a"]
   dependencies: ["px-npe02a"]
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    action: prepare #will be changed to "verify" hopefully in future
-    deployment_tier: development
+    action: prepare
 
 stop-px-npe02a:
   extends: .pcf-teardown
-  needs:
-    - px-npe02a
+  needs: ["px-npe02a"]
   resource_group: review-deploy-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
@@ -59,4 +38,11 @@ stop-px-npe02a:
     - when: manual
       allow_failure: true
 
-
+delete-all-routes-apps-px-npe02a:
+  extends: .pcf-teardown
+  resource_group: stop_all_px-npe02a
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+  environment:
+    name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    action: stop

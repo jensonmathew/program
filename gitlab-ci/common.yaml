@@ -13,19 +13,14 @@ stages:
     - verify
 
 variables:
-    PCF_CLI_VERSION: "6.49.0"
+  # PCF_CLI_VERSION: "6.49.0"
     PCF_ORG: "Continuous-Delivery-Platform"
     BUILDPACK: "java_buildpack_offline"
     PCF_INSTANCES: "1"
     PCF_ROUTE_HOSTNAME: "helloworld"
     PCF_BG_STRATEGY: "GREEN_AUTO_SWITCH"
-
-.testjob:
-  image: alpine
-  stage: test
-  script:
-    - echo "CI_PROJECT_DIR - $CI_PROJECT_NAME"
-    - echo "DOMAIN - $DOMAIN"
+    PCF_SPACE: $CI_ENVIRONMENT_TIER
+    PCF_TLOGGER: "true"
 
 .deploy: &deploy
   extends: .pcf-deploy
@@ -40,17 +35,11 @@ variables:
     - pipeline: $PARENT_PIPELINE_ID
       job: build
 
-.deploy-pcf-review:
-  <<: *deploy
-  needs:
-    - pipeline: $PARENT_PIPELINE_ID
-      job: build-non-trunk
-
 .sanity:
   extends: .newman_test
   stage: verify
   variables:
-    HEALTH_CHK_URI: "actuator/health/liveness" 
+    HEALTH_CHK_URI: "actuator/health" 
     POSTMAN_ARGS: "--insecure"
     test_report_path: "newman/"
     qtest_info_path: "src/test/qtest_info.json"

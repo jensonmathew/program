@@ -1,12 +1,23 @@
 include:
     - local: /gitlab-ci/common.yaml
 
+variables:
+  SERVER_NAME: "helloworld.px-npe1103.pks.t-mobile.com"
+  K8S_NS: "edponboarding-npe"
+  K8S_API_LOGIN_URL: "pksapi.px-npe1001.pks.t-mobile.com"
+  K8S_CLUSTER: "api-px-npe1103.pks.t-mobile.com"
+  HELM_VALUES: "./k8s/values.yaml"
+  HELM_APP_NAME: $CI_PROJECT_NAME
+  HELM_CHARTS_DIR: "./k8s/"
+  HELM_HISTORY_MAX: "3"
+  K8S_SERVER_URL: "https://api-px-npe1103.pks.t-mobile.com:8443"
+
 # Deploy on TKE/PKS K8s cluster
 px-npe1103:
   stage: deploy
   extends: .helm_deploy
   variables:
-    APP_URL: "https://cdp-helloworld-1-dev"
+    APP_URL: "https://helloworld"
     DOMAIN: "px-npe1103.pks.t-mobile.com"
   environment:
     name: qlab01/px-npe1103/cdp-dev
