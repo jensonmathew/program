@@ -167,7 +167,7 @@ px-cde02a-sanity:
     action: prepare
 
 delete-all-routes-apps-px-cde02:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-cde02
   variables:
     PCF_DELETE_ALL_ROUTES_APPS: "true"
