@@ -21,10 +21,9 @@ npe02a-stg-sanity:
     action: prepare
 
 delete-all-routes-apps-px-npe02a:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-npe02a
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-npe02a.cf.t-mobile.com"
     DOMAIN: "test.px-npe02a.cf.t-mobile.com"
   environment:
@@ -52,10 +51,9 @@ npe02b-dev-sanity:
     action: prepare
 
 delete-all-routes-apps-px-npe02b:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-npe02b
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-npe02b.cf.t-mobile.com"
     PCF_SPACE: "development"
     DOMAIN: "dev.px-npe02b.cf.t-mobile.com"
@@ -103,10 +101,9 @@ npe02c-dev-sanity:
     action: prepare
 
 delete-all-routes-apps-px-npe02c:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-npe02c
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-npe02c.cf.t-mobile.com"
     DOMAIN: "dev.px-npe02c.cf.t-mobile.com"
   environment:
@@ -153,10 +150,9 @@ npe03a-dev-sanity:
     action: prepare
 
 delete-all-routes-apps-px-npe03a:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-npe03a
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-npe03a.cf.t-mobile.com"
     DOMAIN: "dev.px-npe03a.cf.t-mobile.com"
   environment:
@@ -203,10 +199,9 @@ npe03b-dev-sanity:
     action: prepare
 
 delete-all-routes-apps-px-npe03b:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-npe03b
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-npe03b.cf.t-mobile.com"
     DOMAIN: "dev.px-npe03b.cf.t-mobile.com"
   environment:
@@ -255,10 +250,9 @@ npe03d-dev-sanity:
 
 
 delete-all-routes-apps-px-npe03d:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-npe03d
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-npe03d.cf.t-mobile.com"
     DOMAIN: "dev.px-npe03d.cf.t-mobile.com"
   environment:

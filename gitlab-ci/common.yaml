@@ -39,7 +39,7 @@ variables:
   extends: .newman_test
   stage: verify
   variables:
-    HEALTH_CHK_URI: "actuator/health" 
+    HEALTH_CHK_URI: "actuator/health/liveness" 
     POSTMAN_ARGS: "--insecure"
     test_report_path: "newman/"
     qtest_info_path: "src/test/qtest_info.json"
@@ -47,3 +47,13 @@ variables:
     POSTMAN_COLLECTION: "src/test"
     POSTMAN_COLLECTION_FILE: "src/test/helloworld.postman_collection.json"
     POSTMAN_ITERATIONS: "100"
+
+.allteardown:
+  extends: .pcf-teardown
+  variables:
+    PCF_DELETE_ALL_ROUTES_APPS: "true"
+  rules:
+    - if: $DELETE_ALL == "true" #only topic branches
+      when: manual
+    - when: never
+    

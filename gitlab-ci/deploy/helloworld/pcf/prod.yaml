@@ -21,10 +21,9 @@ px-prd02-sanity:
     action: prepare
 
 delete-all-routes-apps-px-prd02:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-prd02
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-prd02.cf.t-mobile.com"
     DOMAIN: "apps.px-prd02.cf.t-mobile.com"
   environment:
@@ -51,10 +50,9 @@ px-prd04-sanity:
     action: prepare
 
 delete-all-routes-apps-px-prd04:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-prd04
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-prd04.cf.t-mobile.com"
     DOMAIN: "apps.px-prd04.cf.t-mobile.com"
   environment:
@@ -81,10 +79,9 @@ px-prd03a-sanity:
     action: prepare
 
 delete-all-routes-apps-px-prd03a:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-prd03a
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-prd03a.cf.t-mobile.com"
     DOMAIN: "apps.px-prd03a.cf.t-mobile.com"
   environment:
@@ -111,10 +108,9 @@ px-prd03b-sanity:
     action: prepare
 
 delete-all-routes-apps-px-prd03b:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-prd03b
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-prd03b.cf.t-mobile.com"
     DOMAIN: "apps.px-prd03b.cf.t-mobile.com"
   environment:
@@ -142,10 +138,9 @@ px-prd03c-sanity:
     action: prepare
 
 delete-all-routes-apps-px-prd03c:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-prd03c
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-prd03c.cf.t-mobile.com"
     DOMAIN: "apps.px-prd03c.cf.t-mobile.com"
   environment:
@@ -202,10 +197,9 @@ px-cde03a-sanity:
     action: prepare
 
 delete-all-routes-apps-px-cde03a:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-cde03a
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-cde03a.cf.t-mobile.com"
     DOMAIN: "apps.px-cde03a.cf.t-mobile.com"
   environment:
@@ -232,10 +226,9 @@ px-cde11a-sanity:
     action: prepare
 
 delete-all-routes-apps-px-cde11a:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-cde11a
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.px-cde11a.cf.t-mobile.com"
     DOMAIN: "apps.px-cde11a.cf.t-mobile.com"
   environment:
@@ -262,10 +255,9 @@ tt-cde02a-sanity:
     action: prepare
 
 delete-all-routes-apps-tt-cde02a:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_tt-cde02a
   variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
     PCF_API: "api.sys.tt-cde02a.cf.t-mobile.com"
     DOMAIN: "apps.tt-cde02a.cf.t-mobile.com"
   environment:

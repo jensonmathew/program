@@ -39,10 +39,8 @@ stop-px-npe02a:
       allow_failure: true
 
 delete-all-routes-apps-px-npe02a:
-  extends: .pcf-teardown
+  extends: .allteardown
   resource_group: stop_all_px-npe02a
-  variables:
-    PCF_DELETE_ALL_ROUTES_APPS: "true"
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: stop

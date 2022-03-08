@@ -68,7 +68,7 @@ pages:
     - if: $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"
       when: on_success
 
-.child-rules: &child-rules
+.deploy-rules: &deploy-rules
   rules:
    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
      when: on_success
@@ -79,21 +79,21 @@ npe-k8s:
   trigger:
     include: gitlab-ci/deploy/helloworld/k8s/npe.yaml
     strategy: depend
-  <<: *child-rules
+  <<: *deploy-rules
 
 npe-pcf:
   stage: deploy
   trigger:
     include: gitlab-ci/deploy/helloworld/pcf/npe.yaml
     strategy: depend
-  <<: *child-rules
+  <<: *deploy-rules
 
 prod:
   stage: deploy
   trigger:
     include: gitlab-ci/deploy/helloworld/pcf/prod.yaml
     strategy: depend
-  <<: *child-rules
+  <<: *deploy-rules
 
 review:
   stage: deploy

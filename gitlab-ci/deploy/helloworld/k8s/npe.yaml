@@ -11,6 +11,7 @@ variables:
   HELM_CHARTS_DIR: "./k8s/"
   HELM_HISTORY_MAX: "3"
   K8S_SERVER_URL: "https://api-px-npe1103.pks.t-mobile.com:8443"
+  HELM_WAIT: "true"
 
 # Deploy on TKE/PKS K8s cluster
 px-npe1103:
@@ -24,7 +25,3 @@ px-npe1103:
     url: http://$APP_URL.$DOMAIN
     deployment_tier: staging
   resource_group: $CI_JOB_NAME
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
-      when: on_success
-    - when: never
