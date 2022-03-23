@@ -44,6 +44,8 @@ variables:
 
   MAVEN_BUILD_SINGLE_JOB: "true"
 
+  CDP_STATIC_OVERRIDE_BRANCH: "rfc-timer"
+
 # Create json for badges 
 pages:
   extends: .badge_pages
