@@ -46,7 +46,6 @@ variables:
     qtest_info_path: "src/test/qtest_info.json"
     NEWMAN_QTEST_PUBLISH: "true"
     POSTMAN_COLLECTION: "src/test"
-    POSTMAN_COLLECTION_FILE: "src/test/helloworld.postman_collection.json"
     POSTMAN_ITERATIONS: "100"
 
 .allteardown:

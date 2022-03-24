@@ -26,7 +26,7 @@ service:
       periodSeconds: 10
       failureThreshold: 5
 
-serverName: {{SERVER_NAME}}
+serverName: {{HELM_APP_NAME}}.{{K8S_DOMAIN}}
 
 ingress:
   name: {{HELM_APP_NAME}}-ingress
@@ -35,7 +35,7 @@ ingress:
       serviceName: {{HELM_APP_NAME}}-service
       servicePort: 80
   tls:
-    host: {{SERVER_NAME}}
+    host: {{HELM_APP_NAME}}.{{K8S_DOMAIN}}
   namespace: {{K8S_NS}}
   
 resources:
