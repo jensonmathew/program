@@ -34,7 +34,7 @@ public class SecurityUserDetails implements UserDetails {
 	public SecurityUserDetails(Featureflags featureflags) {
 		this.userName = featureflags.getUser();
 		this.password = new BCryptPasswordEncoder().encode(featureflags.getPassword());
-		this.isActive = featureflags.getIsActive();
+		this.isActive = featureflags.isActive();
 		this.userId = featureflags.getId();
 		this.authorities = Arrays.stream(featureflags.getRoles().split(","))
 				.map(SimpleGrantedAuthority::new)
