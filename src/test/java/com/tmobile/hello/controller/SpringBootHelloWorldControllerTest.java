@@ -1,7 +1,7 @@
-package com.tmobile.cdp.hello.controller;
+package com.tmobile.hello.controller;
 
-import com.tmobile.cdp.hello.domain.SecurityUserDetails;
-import com.tmobile.cdp.hello.repository.model.Featureflags;
+import com.tmobile.hello.domain.SecurityUserDetails;
+import com.tmobile.hello.repository.model.Featureflags;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.*;

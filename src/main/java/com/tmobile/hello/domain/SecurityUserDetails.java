@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tmobile.cdp.hello.domain;
+package com.tmobile.hello.domain;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.tmobile.cdp.hello.repository.model.Featureflags;
+import com.tmobile.hello.repository.model.Featureflags;
 
 /**
  * @author Sony K Sunny

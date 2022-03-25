@@ -1,8 +1,8 @@
-package com.tmobile.cdp.hello.controller;
+package com.tmobile.hello.controller;
 
 import java.security.Principal;
-import com.tmobile.cdp.hello.domain.SecurityUserDetails;
-import com.tmobile.cdp.hello.exception.HelloworldException;
+import com.tmobile.hello.domain.SecurityUserDetails;
+import com.tmobile.hello.exception.HelloworldException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

@@ -1,6 +1,6 @@
-package com.tmobile.cdp.hello.configuration;
+package com.tmobile.hello.configuration;
 
-import com.tmobile.cdp.hello.service.SecurityUserDetailsService;
+import com.tmobile.hello.service.SecurityUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
