@@ -1,4 +1,4 @@
-package com.tmobile.cdp.hello;
+package com.tmobile.hello;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

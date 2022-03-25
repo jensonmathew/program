@@ -1,8 +1,8 @@
-package com.tmobile.cdp.hello.repository;
+package com.tmobile.hello.repository;
 
 import java.util.Optional;
 
-import com.tmobile.cdp.hello.repository.model.Featureflags;
+import com.tmobile.hello.repository.model.Featureflags;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FeatureflagsRepository extends JpaRepository<Featureflags, Integer>{

@@ -1,10 +1,10 @@
-package com.tmobile.cdp.hello.service;
+package com.tmobile.hello.service;
 
 import java.util.Optional;
 
-import com.tmobile.cdp.hello.domain.SecurityUserDetails;
-import com.tmobile.cdp.hello.repository.FeatureflagsRepository;
-import com.tmobile.cdp.hello.repository.model.Featureflags;
+import com.tmobile.hello.domain.SecurityUserDetails;
+import com.tmobile.hello.repository.FeatureflagsRepository;
+import com.tmobile.hello.repository.model.Featureflags;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
