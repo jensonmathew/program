@@ -3,16 +3,21 @@
   "application": "Helloworld",
   "testsuite": [
     {
-      "qtestTestSuiteId": 357080,
+      "qtestTestSuiteId": 451866,
       "testClassName": "Helloworld",
       "category": "Sanity",
       "phase": "E2E",
       "testType": "AST",
       "testcase": [
         {
-          "name": "Status code is 200",
-          "description": "Sanity check for the {{ DYNAMIC_ENVIRONMENT_URL }}",
-		      "qtestTestCaseId": 2182309
+          "name": "health-endpoint-inspect",
+          "description": "/actuator/health inspect",
+		      "qtestTestCaseId": 2442619
+        },
+        {
+          "name": "info-endpoint-inspect",
+          "description": "/actuator/info inspect",
+		      "qtestTestCaseId": 2442622
         }
       ]
     }

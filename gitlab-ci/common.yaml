@@ -40,7 +40,6 @@ variables:
   extends: .newman_test
   stage: verify
   variables:
-    HEALTH_CHK_URI: "actuator/health/liveness" 
     POSTMAN_ARGS: "--insecure"
     test_report_path: "newman/"
     qtest_info_path: "src/test/qtest_info.json"

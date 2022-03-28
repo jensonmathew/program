@@ -14,7 +14,7 @@ include:
      # - /gitlab-ci/.tmo.job.container-scan.gitlab-ci.yml
 
 stages: 
-  - tmo 
+  - tmo
   - build
   - test
   - package
