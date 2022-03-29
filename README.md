@@ -5,8 +5,8 @@ helloworld is intended to be an aggregate of the best known patterns within T-Mo
 Workflow: Continuous Delivery and Continuous Deployments
 -----------
 - All environments deploy upon trunk (including production).
-- Epehemeral Enviroments tracks the life cycle of merge request from push pipelines to it's source branch. If merge request's source branch goes idle for 14 days or merge request changes status to merges or closed, the environment is deleted.
-
+- Epehemeral Enviroments tracks the life cycle of each non-trunk branch. If a branch goes idle for 14 days or merge request changes status to merged or closed, the environment is "stop" - which means purged.
+- A sanity test is run after each deployment to ensure the endpoint yields the expected results.
 
 Deployment Flags:
 -----------
