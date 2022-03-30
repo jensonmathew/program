@@ -82,7 +82,6 @@ Feature Flags:
 -------------------
 Feature Flags have been set up for different languages: french, german, and dutch. English is default language if all language flags are turned off or if no environment scope matches. First language is used if multiple feature flags are turned on for a specific environment.
 
-
 The environment scope and toggle can be changed for demonstrative purposes here - https://gitlab.com/tmobile/templates_projects/helloworld/-/feature_flags.
 
 **How it works**
