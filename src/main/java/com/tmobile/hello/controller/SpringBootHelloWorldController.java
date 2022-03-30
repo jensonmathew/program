@@ -96,30 +96,36 @@ public class SpringBootHelloWorldController {
         }
     }
 
-    // To return what the feature flag is set to
-    @RequestMapping("/ff/{key}")
-    public String getFF(@PathVariable("key") String key) {
-        int userId = 0;
+    private UnleashContext getCurrentContext(){
         UnleashContext uContext;
-        JSONObject jo = new JSONObject();
+        int userId=getCurrentUser();
+        if (userId != 0) {
+            uContext = UnleashContext.builder()
+                    .userId(String.valueOf(userId)).build();
+        } else {
+            uContext = UnleashContext.builder().build();
+        }
 
+        return uContext;
+    }
+
+    private int getCurrentUser() {
+        int userId = 0;
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        if (authentication == null)
-            return jo.toString();
 
         Object principle = authentication.getPrincipal();
         if (principle instanceof SecurityUserDetails){
             userId = ((SecurityUserDetails) principle).getUserId();
-            if (userId != 0){
-                uContext = UnleashContext.builder()
-                        .userId(String.valueOf(userId)).build();
-                jo.put(key,String.valueOf(getUnleash().isEnabled(key,uContext)));
-            }
-            else {
-                jo.put(key,String.valueOf(getUnleash().isEnabled(key)));
-            }
         }
+
+        return userId;
+    }
+    // To return what the feature flag is set to
+    @RequestMapping("/ff/{key}")
+    public String getFF(@PathVariable("key") String key) {
+        JSONObject jo = new JSONObject();
+        jo.put(key,String.valueOf(getUnleash().isEnabled("key",getCurrentContext())));
         return jo.toString();
     }
 
@@ -127,11 +133,11 @@ public class SpringBootHelloWorldController {
     @RequestMapping("/")
     String home(Principal principal) throws HelloworldException {
         JSONObject jo = new JSONObject();
-        if (getUnleash() != null && getUnleash().isEnabled("french", true)) {
+        if (getUnleash() != null && getUnleash().isEnabled("french", getCurrentContext())) {
             jo.put("Message","Bonjour le monde!");
-        } else if (getUnleash() != null && getUnleash().isEnabled("german", true)){
+        } else if (getUnleash() != null && getUnleash().isEnabled("german", getCurrentContext())){
             jo.put("Message","Hallo Welt!");
-        } else if (getUnleash() != null && getUnleash().isEnabled("dutch", true)){
+        } else if (getUnleash() != null && getUnleash().isEnabled("dutch", getCurrentContext())){
             jo.put("Message","Hallo Wereld!\n");
         }
         else{
