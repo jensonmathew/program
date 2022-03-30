@@ -12,6 +12,7 @@ service:
   name: {{HELM_APP_NAME}}-service
   type: ClusterIP
   port: 80
+  environment: {{CI_ENVIRONMENT_NAME}}
   healthCheck:
     scheme: HTTP
     timeoutSeconds: 3
