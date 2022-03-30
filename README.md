@@ -54,27 +54,22 @@ OR
 
     java -jar target/helloworld-1.2.3-999.jar 
 
-Testing the Application:
+Sanity verify:
 ------------------------
-**On Terminal**
+Each deployment tier (prod, npe, review) has it's own static child pipeline demonstrating trunk based development.
+
+Each individual deployment has a subsequent sanity job which verifies the results of the deployment just before it.
+
+The verifications found in `src/test/helloworld.postman_collection.json` are basic in nature but intended to be as configurable as necessary. The basic checks include inspecting the returned json to ensure it matches what we would expect.
+
+Below are equivalent curl examples for verifying one of the production endpoints. Replace the host with the environment you want to check.
+
 ```console
-curl http://localhost/actuator/health
-curl http://localhost/actuator/health/liveness
-curl http://localhost/actuator/health/readiness
+curl https://helloworld.apps.px-cde02.cf.t-mobile.com/actuator/info
+curl https://helloworld.apps.px-cde02.cf.t-mobile.com/actuator/health
 
-curl --user testuserX:passwordX http://localhost  
-Where the X is 1 - 10.
+curl --user testuser1:password1 curl https://helloworld.apps.px-cde02.cf.t-mobile.com
 ```
-
-**On Web Browser**
-
-Check app health at http://localhost/actuator/health/liveness and http://localhost/actuator/health/readiness
-
-Browse http://localhost and pass the credentials as `testuserX` with `passwordX` where the `X` is 1 - 10.
-
-The `/actuator/health` endpoint will give you a per-component view into the health of your service (e.g.: DB health vs app health vs free space, etc).
-
-Refer to the "Understanding Kubernetes Deployment" section for more context on the `liveness` and `readiness` endpoints. 
 
 qTest Integration:
 -------------------
@@ -85,23 +80,14 @@ How to run the tests on CTP and using Apigee API to upload the test results on t
 
 Feature Flags:
 -------------------
-Feature toggle(Flags) is used to enable or disable the features during runtime.
+Feature Flags have been set up for different languages: french, german, and dutch. English is default language if all language flags are turned off or if no environment scope matches. First language is used if multiple feature flags are turned on for a specific environment.
 
-The feature flag maybe turned ON or OFF using the toggle switch at *Operations* -> *Feature Flags* for a particular project.
+
+The environment scope and toggle can be changed for demonstrative purposes here - https://gitlab.com/tmobile/templates_projects/helloworld/-/feature_flags.
 
 **How it works**
 
-GitLab uses [Unleash](https://github.com/Unleash/unleash), a feature toggle service. It supports official client implementations for Java, Node.js, Go, Ruby, Python and .NET Core.
-
-[Create feature flags](https://docs.gitlab.com/ee/operations/feature_flags.html#create-a-feature-flag) in GitLab and use the API from the application to get the list of feature flags and their statuses.
-
-The application must be configured to communicate with GitLab, so it’s up to developers to use a compatible client library and integrate the feature flags in the app.
-
-For this example project, pom.xml and Controller files were modified to incorporate Unleash libraries for achieving Feature Flag capability.
-
-**Examples**
-
-Click [here](./docs/examples.md) to see all samples.
+GitLab recommends using the [Unleash](https://github.com/Unleash/unleash) client to consume their feature flag endpoints. Unleash supports Java, Node.js, Go, Ruby, Python and .NET Core.
 
 Understanding Kubernetes Deployment
 ===================================

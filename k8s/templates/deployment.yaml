@@ -54,7 +54,9 @@ spec:
               mountPath: /app/logs/
           env:
            - name: SERVER_NAME
-             value: {{ .Values.serverName | quote }}             
+             value: {{ .Values.serverName | quote }}
+           - name: ENVIRONMENT
+             value: {{ .Values.service.environment | quote }}
       imagePullSecrets:
           - name: {{ .Values.imagePullSecrets }}
       {{- with .Values.nodeSelector }}

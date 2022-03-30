@@ -1,9 +1,13 @@
 package com.tmobile.hello.controller;
 
 import java.security.Principal;
+
+import ch.qos.logback.classic.Logger;
+import com.tmobile.hello.SpringBootHelloWorld;
 import com.tmobile.hello.domain.SecurityUserDetails;
 import com.tmobile.hello.exception.HelloworldException;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -19,6 +23,9 @@ import org.springframework.core.env.Environment;
 
 @RestController
 public class SpringBootHelloWorldController {
+
+    // Logger
+    private org.slf4j.Logger LOGGER= LoggerFactory.getLogger(SpringBootHelloWorldController.class);
 
     // To pull from application.properties
     @Autowired
@@ -37,15 +44,21 @@ public class SpringBootHelloWorldController {
         String instanceId = env.getProperty("unleash.instance.id");
         String unleashAPI = env.getProperty("unleash.instance.api.url");
 
+        String environment = System.getenv("ENVIRONMENT");
+        if (environment == null || environment.isEmpty()) {
+            environment = "unset";
+        }
+        LOGGER.info("ENVIRONMENT set to:" + environment);
+
         if (instanceId != null && unleashAPI != null){
             UnleashConfig unleashConfig = UnleashConfig.builder()
-                    .appName("all environments")
+                    .appName(environment)
                     .instanceId(instanceId)
                     .unleashAPI(unleashAPI)
                     .build();
             unleash = new DefaultUnleash(unleashConfig);
         } else{
-            System.out.println("Forfeiting Unleash due to missing unleash.instance.id or unleash.instance.api.url");
+            LOGGER.error("Forfeiting Unleash due to missing unleash.instance.id or unleash.instance.api.url");
         }
     }
 
@@ -101,10 +114,10 @@ public class SpringBootHelloWorldController {
             if (userId != 0){
                 uContext = UnleashContext.builder()
                         .userId(String.valueOf(userId)).build();
-                jo.put(key,String.valueOf(getUnleash().isEnabled("key",uContext)));
+                jo.put(key,String.valueOf(getUnleash().isEnabled(key,uContext)));
             }
             else {
-                jo.put(key,String.valueOf(getUnleash().isEnabled("key")));
+                jo.put(key,String.valueOf(getUnleash().isEnabled(key)));
             }
         }
         return jo.toString();
@@ -114,7 +127,16 @@ public class SpringBootHelloWorldController {
     @RequestMapping("/")
     String home(Principal principal) throws HelloworldException {
         JSONObject jo = new JSONObject();
-        jo.put("Message","Hello World!");
+        if (getUnleash() != null && getUnleash().isEnabled("french", true)) {
+            jo.put("Message","Bonjour le monde!");
+        } else if (getUnleash() != null && getUnleash().isEnabled("german", true)){
+            jo.put("Message","Hallo Welt!");
+        } else if (getUnleash() != null && getUnleash().isEnabled("dutch", true)){
+            jo.put("Message","Hallo Wereld!\n");
+        }
+        else{
+            jo.put("Message","Hello World!");
+        }
         return jo.toString();
     }
 }
