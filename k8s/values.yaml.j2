@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: {{CI_REGISTRY_IMAGE}}/{{CI_COMMIT_REF_SLUG}}:{{CI_COMMIT_SHA}}
   pullPolicy: Always
-  
+
 imagePullSecrets: my-reg
 nameOverride: ""
 fullnameOverride: ""
@@ -38,7 +38,7 @@ ingress:
   tls:
     host: {{HELM_APP_NAME}}.{{K8S_DOMAIN}}
   namespace: {{K8S_NS}}
-  
+
 resources:
   limits:
     cpu: "1"

@@ -21,7 +21,7 @@ px-prd02-sanity:
     action: prepare
 
 delete-all-routes-apps-px-prd02:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-prd02
   variables:
     PCF_API: "api.sys.px-prd02.cf.t-mobile.com"
@@ -50,7 +50,7 @@ px-prd04-sanity:
     action: prepare
 
 delete-all-routes-apps-px-prd04:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-prd04
   variables:
     PCF_API: "api.sys.px-prd04.cf.t-mobile.com"
@@ -79,7 +79,7 @@ px-prd03a-sanity:
     action: prepare
 
 delete-all-routes-apps-px-prd03a:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-prd03a
   variables:
     PCF_API: "api.sys.px-prd03a.cf.t-mobile.com"
@@ -108,7 +108,7 @@ px-prd03b-sanity:
     action: prepare
 
 delete-all-routes-apps-px-prd03b:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-prd03b
   variables:
     PCF_API: "api.sys.px-prd03b.cf.t-mobile.com"
@@ -138,7 +138,7 @@ px-prd03c-sanity:
     action: prepare
 
 delete-all-routes-apps-px-prd03c:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-prd03c
   variables:
     PCF_API: "api.sys.px-prd03c.cf.t-mobile.com"
@@ -167,7 +167,7 @@ px-cde02a-sanity:
     action: prepare
 
 delete-all-routes-apps-px-cde02:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-cde02
   variables:
     PCF_DELETE_ALL_ROUTES_APPS: "true"
@@ -197,7 +197,7 @@ px-cde03a-sanity:
     action: prepare
 
 delete-all-routes-apps-px-cde03a:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-cde03a
   variables:
     PCF_API: "api.sys.px-cde03a.cf.t-mobile.com"
@@ -226,7 +226,7 @@ px-cde11a-sanity:
     action: prepare
 
 delete-all-routes-apps-px-cde11a:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-cde11a
   variables:
     PCF_API: "api.sys.px-cde11a.cf.t-mobile.com"
@@ -255,7 +255,7 @@ tt-cde02a-sanity:
     action: prepare
 
 delete-all-routes-apps-tt-cde02a:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_tt-cde02a
   variables:
     PCF_API: "api.sys.tt-cde02a.cf.t-mobile.com"

@@ -28,7 +28,7 @@ px-npe02a-sanity:
 
 stop-px-npe02a:
   extends: .pcf-teardown
-  stage: destroy
+  stage: stop
   needs: ["px-npe02a"]
   resource_group: review-deploy-$CI_COMMIT_REF_SLUG
   environment:
@@ -40,7 +40,7 @@ stop-px-npe02a:
       allow_failure: true
 
 delete-all-routes-apps-px-npe02a:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-npe02a
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG

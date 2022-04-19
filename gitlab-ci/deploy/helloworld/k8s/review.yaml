@@ -1,0 +1,47 @@
+include:
+    - local: /gitlab-ci/common.yaml
+
+variables:
+  K8S_FOUNDATION: "px-npe1103"
+  K8S_DOMAIN: "$K8S_FOUNDATION.pks.t-mobile.com"
+  K8S_NS: "edponboarding-npe"
+  K8S_API_LOGIN_URL: "pksapi.px-npe1001.pks.t-mobile.com"
+  K8S_CLUSTER: "api-$K8S_DOMAIN"
+  K8S_SERVER_URL: "https://api-$K8S_DOMAIN:8443"
+  HELM_VALUES: "./k8s/values.yaml"
+  HELM_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+  HELM_CHARTS_DIR: "./k8s/"
+  HELM_HISTORY_MAX: "3"
+  HELM_WAIT: "true"
+
+# Deploy on TKE/PKS K8s cluster
+rev-px-npe1103:
+  stage: deploy
+  extends: .helm_deploy
+  resource_group: review-deploy-$K8S_FOUNDATION-$CI_COMMIT_REF_SLUG
+  environment:
+    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    url: $DYNAMIC_ENVIRONMENT_URL/login
+    deployment_tier: development
+    on_stop: rev-stop-px-npe1103
+    auto_stop_in: 2 days
+
+rev-px-npe1103-sanity:
+  extends: .sanity
+  needs: ["rev-px-npe1103"]
+  dependencies: ["rev-px-npe1103"]
+  environment:
+    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    action: prepare
+
+rev-stop-px-npe1103:
+  needs: ["rev-px-npe1103"]
+  extends: .k8s_teardown
+  resource_group: review-deploy-$K8S_FOUNDATION-$CI_COMMIT_REF_SLUG
+  environment:
+    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    action: stop
+    deployment_tier: development
+  rules:
+    - when: manual
+      allow_failure: true
