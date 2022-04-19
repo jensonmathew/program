@@ -11,10 +11,9 @@ stages:
     - test
     - deploy
     - verify
-    - destroy
+    - stop
 
 variables:
-  # PCF_CLI_VERSION: "6.49.0"
     PCF_ORG: "Continuous-Delivery-Platform"
     BUILDPACK: "java_buildpack_offline"
     PCF_INSTANCES: "1"
@@ -22,6 +21,7 @@ variables:
     PCF_BG_STRATEGY: "GREEN_AUTO_SWITCH"
     PCF_SPACE: $CI_ENVIRONMENT_TIER
     PCF_TLOGGER: "true"
+    HELM_VERSION: "v3.8.1"
 
 .deploy: &deploy
   extends: .pcf-deploy
@@ -46,11 +46,20 @@ variables:
     POSTMAN_COLLECTION: "src/test"
     POSTMAN_ITERATIONS: "100"
 
-.allteardown:
+.pcf_all_teardown:
   extends: .pcf-teardown
-  stage: destroy
+  stage: stop
   variables:
     PCF_DELETE_ALL_ROUTES_APPS: "true"
+  rules:
+    - if: $DELETE_ALL == "true" #only topic branches
+      when: manual
+      allow_failure: true
+    - when: never
+
+.k8s_teardown:
+  extends: .helm_uninstall
+  stage: stop
   rules:
     - if: $DELETE_ALL == "true" #only topic branches
       when: manual

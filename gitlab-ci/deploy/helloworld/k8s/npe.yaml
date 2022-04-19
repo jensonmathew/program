@@ -20,15 +20,12 @@ px-npe1103:
   extends: .helm_deploy
   environment:
     name: qlab01/$K8S_FOUNDATION/development/smoke
-    url: https://$HELM_APP_NAME.$K8S_DOMAIN/
+    url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: staging
   resource_group: $CI_JOB_NAME
 
 px-npe1103-sanity:
   extends: .sanity
-  variables:
-    # DYNAMIC_ENVIRONMENT_URL set for utilization in helloworld.postman_collection.json.j2
-    DYNAMIC_ENVIRONMENT_URL: "https://$HELM_APP_NAME.$K8S_DOMAIN"
   needs: ["px-npe1103"]
   dependencies: ["px-npe1103"]
   environment:

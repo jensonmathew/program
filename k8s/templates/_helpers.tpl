@@ -47,7 +47,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "helloworld.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "helloworld.name" . }}
+app.kubernetes.io/name: {{ .Release.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 

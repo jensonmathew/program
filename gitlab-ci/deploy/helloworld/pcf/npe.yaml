@@ -22,7 +22,7 @@ npe02b-sanity:
     action: prepare
 
 delete-all-routes-apps-px-npe02b:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-npe02b
   variables:
     PCF_API: "api.sys.px-npe02b.cf.t-mobile.com"
@@ -52,7 +52,7 @@ npe02c-sanity:
     action: prepare
 
 delete-all-routes-apps-px-npe02c:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-npe02c
   variables:
     PCF_API: "api.sys.px-npe02c.cf.t-mobile.com"
@@ -81,7 +81,7 @@ npe03a-sanity:
     action: prepare
 
 delete-all-routes-apps-px-npe03a:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-npe03a
   variables:
     PCF_API: "api.sys.px-npe03a.cf.t-mobile.com"
@@ -110,7 +110,7 @@ npe03b-dev-sanity:
     action: prepare
 
 delete-all-routes-apps-px-npe03b:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-npe03b
   variables:
     PCF_API: "api.sys.px-npe03b.cf.t-mobile.com"
@@ -141,7 +141,7 @@ npe03d-sanity:
 
 
 delete-all-routes-apps-px-npe03d:
-  extends: .allteardown
+  extends: .pcf_all_teardown
   resource_group: stop_all_px-npe03d
   variables:
     PCF_API: "api.sys.px-npe03d.cf.t-mobile.com"
