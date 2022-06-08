@@ -1,6 +1,5 @@
 include:
   - project: 'tmobile/templates'
-    ref: chub
     file:
       - /gitlab-ci/.tmo.global.common.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.mavenTest.gitlab-ci.yml
