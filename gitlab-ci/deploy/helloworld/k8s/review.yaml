@@ -2,10 +2,10 @@ include:
     - local: /gitlab-ci/common.yaml
 
 variables:
-  K8S_FOUNDATION: "px-npe1103"
-  K8S_DOMAIN: "$K8S_FOUNDATION.pks.t-mobile.com"
-  K8S_NS: "edponboarding-npe"
-  K8S_API_LOGIN_URL: "pksapi.px-npe1001.pks.t-mobile.com"
+  K8S_FOUNDATION: "px-npe2203"
+  K8S_DOMAIN: "$K8S_FOUNDATION.tke.t-mobile.com"
+  K8S_NS: "cdp-helloworld-npe"
+  K8S_API_LOGIN_URL: "pksapi.px-npe2203.tke.t-mobile.com"
   K8S_CLUSTER: "api-$K8S_DOMAIN"
   K8S_SERVER_URL: "https://api-$K8S_DOMAIN:8443"
   HELM_VALUES: "./k8s/values.yaml"
@@ -14,8 +14,8 @@ variables:
   HELM_HISTORY_MAX: "3"
   HELM_WAIT: "true"
 
-# Deploy on TKE/PKS K8s cluster
-rev-px-npe1103:
+# Deploy on TKE/PKS(Gen4) K8s cluster
+rev-px-npe2203:
   stage: deploy
   extends: .helm_deploy
   resource_group: review-deploy-$K8S_FOUNDATION-$CI_COMMIT_REF_SLUG
@@ -23,19 +23,19 @@ rev-px-npe1103:
     name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: development
-    on_stop: rev-stop-px-npe1103
+    on_stop: rev-stop-px-npe2203
     auto_stop_in: 2 days
 
-rev-px-npe1103-sanity:
+rev-px-npe2203-sanity:
   extends: .sanity
-  needs: ["rev-px-npe1103"]
-  dependencies: ["rev-px-npe1103"]
+  needs: ["rev-px-npe2203"]
+  dependencies: ["rev-px-npe2203"]
   environment:
     name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: prepare
 
-rev-stop-px-npe1103:
-  needs: ["rev-px-npe1103"]
+rev-stop-px-npe2203:
+  needs: ["rev-px-npe2203"]
   extends: .k8s_teardown
   resource_group: review-deploy-$K8S_FOUNDATION-$CI_COMMIT_REF_SLUG
   environment:
