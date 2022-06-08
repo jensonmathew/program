@@ -1,0 +1,55 @@
+include:
+    - local: /gitlab-ci/common.yaml
+
+variables:
+  K8S_DOMAIN: "$K8S_FOUNDATION.tke.t-mobile.com"
+  K8S_NS: "cdp-helloworld-prd"
+  K8S_API_LOGIN_URL: "pksapi.$K8S_FOUNDATION.tke.t-mobile.com"
+  K8S_CLUSTER: "api-$K8S_DOMAIN"
+  K8S_SERVER_URL: "https://api-$K8S_DOMAIN:8443"
+  HELM_VALUES: "./k8s/values.yaml"
+  HELM_APP_NAME: $CI_PROJECT_NAME
+  HELM_CHARTS_DIR: "./k8s/"
+  HELM_HISTORY_MAX: "3"
+  HELM_WAIT: "true"
+
+# Deploy on TKE/PKS(Gen4) K8s cluster
+## K8s Cluster px-prd5103
+px-prd5103:
+  stage: deploy
+  variables:
+    K8S_FOUNDATION: "px-prd5103"
+  extends: .helm_deploy
+  environment:
+    name: prd5103
+    url: $DYNAMIC_ENVIRONMENT_URL/login
+    deployment_tier: production
+  resource_group: $CI_JOB_NAME
+
+px-prd5103-sanity:
+  extends: .sanity
+  needs: ["px-prd5103"]
+  dependencies: ["px-prd5103"]
+  environment:
+    name: prod/$K8S_FOUNDATION/development/smoke
+    action: access
+
+## K8s Cluster px-prd4203
+px-prd4203:
+  stage: deploy
+  variables:
+    K8S_FOUNDATION: "px-prd4203"
+  extends: .helm_deploy
+  environment:
+    name: prd4203
+    url: $DYNAMIC_ENVIRONMENT_URL/login
+    deployment_tier: production
+  resource_group: $CI_JOB_NAME
+
+px-prd4203-sanity:
+  extends: .sanity
+  needs: ["px-prd4203"]
+  dependencies: ["px-prd4203"]
+  environment:
+    name: prod/$K8S_FOUNDATION/development/smoke
+    action: access

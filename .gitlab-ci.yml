@@ -59,13 +59,22 @@ pages:
      when: on_success
    - when: never
 
+# K8s Deployments
 npe-k8s:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/k8s/npe.yaml
+    include: gitlab-ci/deploy/helloworld/k8s/npe-stg.yaml
     strategy: depend
   <<: *deploy-rules
 
+prod-k8s:
+  stage: deploy
+  trigger:
+    include: gitlab-ci/deploy/helloworld/k8s/prod.yaml
+    strategy: depend
+  <<: *deploy-rules
+
+# PCF Deployments
 npe-pcf:
   stage: deploy
   trigger:
@@ -73,13 +82,14 @@ npe-pcf:
     strategy: depend
   <<: *deploy-rules
 
-prod:
+prod-pcf:
   stage: deploy
   trigger:
     include: gitlab-ci/deploy/helloworld/pcf/prod.yaml
     strategy: depend
   <<: *deploy-rules
 
+# PCF Reviews
 review-pcf:
   stage: deploy
   trigger:
@@ -92,6 +102,7 @@ review-pcf:
       when: on_success
     - when: never
 
+# K8s Reviews
 review-k8s:
   stage: deploy
   trigger:
