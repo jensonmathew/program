@@ -32,7 +32,7 @@ px-prd5103-sanity:
   dependencies: ["px-prd5103"]
   environment:
     name: prod/$K8S_FOUNDATION/development/smoke
-    action: access
+    action: verify
 
 ## K8s Cluster px-prd4203
 px-prd4203:
@@ -52,4 +52,4 @@ px-prd4203-sanity:
   dependencies: ["px-prd4203"]
   environment:
     name: prod/$K8S_FOUNDATION/development/smoke
-    action: access
+    action: verify

@@ -19,7 +19,7 @@ npe02b-sanity:
   dependencies: ["npe02b"]
   environment:
     name: qlab01/px-npe02b/development/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-npe02b:
   extends: .pcf_all_teardown
@@ -49,7 +49,7 @@ npe02c-sanity:
   dependencies: ["npe02c"]
   environment:
     name: qlab01/px-npe02c/development/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-npe02c:
   extends: .pcf_all_teardown
@@ -78,7 +78,7 @@ npe03a-sanity:
   dependencies: ["npe03a"]
   environment:
     name: qlab01/px-npe03a/development/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-npe03a:
   extends: .pcf_all_teardown
@@ -107,7 +107,7 @@ npe03b-dev-sanity:
   dependencies: ["npe03b"]
   environment:
     name: qlab01/px-npe03b/development/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-npe03b:
   extends: .pcf_all_teardown
@@ -137,7 +137,7 @@ npe03d-sanity:
   dependencies: ["npe03d"]
   environment:
     name: qlab01/px-npe03d/development/smoke
-    action: prepare
+    action: verify
 
 
 delete-all-routes-apps-px-npe03d:

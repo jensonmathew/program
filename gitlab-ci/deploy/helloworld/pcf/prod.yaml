@@ -18,7 +18,7 @@ px-prd02-sanity:
   dependencies: ["px-prd02"]
   environment:
     name: prod/px-prd02/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-prd02:
   extends: .pcf_all_teardown
@@ -47,7 +47,7 @@ px-prd04-sanity:
   dependencies: ["px-prd04"]
   environment:
     name: prod/px-prd04/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-prd04:
   extends: .pcf_all_teardown
@@ -76,7 +76,7 @@ px-prd03a-sanity:
   dependencies: ["px-prd03a"]
   environment:
     name: prod/px-prd03a/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-prd03a:
   extends: .pcf_all_teardown
@@ -105,7 +105,7 @@ px-prd03b-sanity:
   dependencies: ["px-prd03b"]
   environment:
     name: prod/px-prd03b/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-prd03b:
   extends: .pcf_all_teardown
@@ -135,7 +135,7 @@ px-prd03c-sanity:
   dependencies: ["px-prd03c"]
   environment:
     name: prod/px-prd03c/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-prd03c:
   extends: .pcf_all_teardown
@@ -164,7 +164,7 @@ px-cde02a-sanity:
   dependencies: ["px-cde02a"]
   environment:
     name: prod/px-cde02/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-cde02:
   extends: .pcf_all_teardown
@@ -194,7 +194,7 @@ px-cde03a-sanity:
   dependencies: ["px-cde03a"]
   environment:
     name: prod/px-cde03a/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-cde03a:
   extends: .pcf_all_teardown
@@ -223,7 +223,7 @@ px-cde11a-sanity:
   dependencies: ["px-cde11a"]
   environment:
     name: prod/px-cde11a/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-px-cde11a:
   extends: .pcf_all_teardown
@@ -252,7 +252,7 @@ tt-cde02a-sanity:
   dependencies: ["tt-cde02a"]
   environment:
     name: prod/tt-cde02a/smoke
-    action: prepare
+    action: verify
 
 delete-all-routes-apps-tt-cde02a:
   extends: .pcf_all_teardown
