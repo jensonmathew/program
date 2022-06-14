@@ -32,7 +32,7 @@ rev-px-npe2203-sanity:
   dependencies: ["rev-px-npe2203"]
   environment:
     name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    action: prepare
+    action: verify
 
 rev-stop-px-npe2203:
   needs: ["rev-px-npe2203"]

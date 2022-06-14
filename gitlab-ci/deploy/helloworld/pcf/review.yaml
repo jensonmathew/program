@@ -24,7 +24,7 @@ px-npe02a-sanity:
   dependencies: ["px-npe02a"]
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    action: prepare
+    action: verify
 
 stop-px-npe02a:
   extends: .pcf-teardown
