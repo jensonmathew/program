@@ -42,6 +42,8 @@ variables:
   # Child
   PARENT_PIPELINE_ID: $CI_PIPELINE_ID
 
+  CDP_STATIC_OVERRIDE_BRANCH: "chill104-tmo/master-patch-26426"
+
   MAVEN_BUILD_SINGLE_JOB: "true"
 
 # Create json for badges 
