@@ -68,7 +68,7 @@ Below are equivalent curl examples for verifying one of the production endpoints
 curl https://helloworld.apps.px-cde02.cf.t-mobile.com/actuator/info
 curl https://helloworld.apps.px-cde02.cf.t-mobile.com/actuator/health
 
-curl --user testuser1:password1 curl https://helloworld.apps.px-cde02.cf.t-mobile.com
+curl --user testuser1:password1 https://helloworld.apps.px-cde02.cf.t-mobile.com
 ```
 
 qTest Integration:
