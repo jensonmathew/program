@@ -1,0 +1,342 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Helloworld Demo - Kubernetes Deployments</title>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+  background: linear-gradient(to left, rgba(255,234,233,1) 0%, rgba(255,255,255,1) 100%);
+}
+
+.sidebar {
+  height: 100%;
+  width: 175px;
+  position: fixed;
+  z-index: 1;
+  top: 10;
+  left: 0;
+  background-image: linear-gradient(to top, rgba(50, 1, 33, 0.8), rgba(50, 1, 33, 1));
+  overflow-x: hidden;
+}
+
+.sidebar a {
+  padding: 15px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #f1f1f1;
+  display: block;
+  border-bottom: 1px solid #ccc;
+  background-color: #59063f;
+  letter-spacing: 1px;
+}
+
+.sidebar .focus {
+  color: #59063f;
+  background-color: #E6E6FA;
+  border: 1px solid #59063f;
+}
+
+.sidebar a:hover {
+  color: #59063f;
+  background-color: #E6E6FA;
+  transition: all 0.5s ease-in-out;
+  font-size: 15px;
+  padding: 18px;
+}
+
+.main {
+  margin-left: 200px; /* Same as the width of the sidenav */
+  padding: 0 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+}
+#appInfo {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 80%;
+  align: center;
+  color: #f1f1f1;
+  margin-top:150px;
+  letter-spacing: 1.75px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  background-image: linear-gradient(to left, rgba(49, 5, 34, 0.6), rgba(49, 5, 34, 0.8));
+}
+
+#appInfo td {
+  padding: 9px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+#appInfo tr:hover {
+  color: #9a629c;
+  background-color: #59063f;
+  transition: all 0.2s ease-in-out;
+  color: #f1f1f1;
+}
+
+#appInfo th {
+  padding: 9px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background-color: #59063f;
+  color: white;
+  font-size: 16px;
+}
+
+.header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 75px;
+  color: white;
+  text-align: center;
+}
+.header p {
+  float: right;
+  padding: 15px;
+  margin: 15px;
+  font-size: 20px;
+  color: #59063f;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  opacity: 0.8;
+  word-spacing: 5px;
+}
+
+.header img {
+    float: left;
+    margin-left: 25px;
+    margin-top: 10px;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  float: right;
+  width: 100%;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(216, 234, 251, 0));
+}
+
+.msg {
+  background-color: #E6E6FA;
+}
+
+.msg span {
+    color: #59063f;
+    word-spacing: 2px;
+    float: right;
+    margin: 6px;
+}
+
+.msg span a {
+    background-color: #59063f;
+    color: #f1f1f1;
+    padding: 6px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: 1px solid #59063f;
+}
+
+.msg span a:hover {
+    color: #f4fc5d;
+    background-color: #2D4D53;
+    transition: all 0.6s ease-in-out;
+}
+
+.footer p {
+  float: right;
+  padding: 5px;
+  font-size: 11px;
+  color: #59063f;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  opacity: 0.5;
+  word-spacing: 20px;
+}
+
+span.hlt-1 {
+    color: #f4fc5d;
+    font-weight: bolder;
+}
+
+span.hlt-2 {
+    color: #0F20F3;
+    font-weight: bold;
+}
+
+</style>
+<script>
+function getCookie(name) {
+    var cookieArr = document.cookie.split(";");
+    console.log("getCookie, List: " + cookieArr);
+    for(var i = 0; i < cookieArr.length; i++) {
+        var cookiePair = cookieArr[i].split("=");
+        if(name == cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
+}
+
+function setCookie() {
+    var c_name="canary"
+    var value="always"
+    var exdays="1"
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+    console.log("setCookie: " + c_name + "=" +c_value);
+    document.cookie = c_name + "=" + c_value;
+    location.reload();
+}
+
+function removeCookie() {
+    var name="canary"
+    console.log("removeCookie: " + name);
+    document.cookie = name+'=; Max-Age=-99999999;';
+    location.reload();
+}
+
+window.onload = function() {
+  var canaryCookieVal = getCookie("canary");
+  console.log("On Load, [canary] Cookie: " + canaryCookieVal);
+  if (canaryCookieVal) {
+      if (canaryCookieVal == "always") {
+        spanHtml="Cookie, [canary] is currently set to [always]. <a href='javascript:removeCookie()'>Remove Cookie</a>";
+      }else{
+        spanHtml="Cookie, [canary] is currently set to [" + canaryCookieVal + "]. <a href='javascript:setCookie()'>Update Cookie</a>";
+      }
+  }else {
+      spanHtml="Cookie, [canary] is not set for this site. <a href='javascript:setCookie()'>Add Cookie</a>";
+  }
+  console.log("spanHtml:- " + spanHtml);
+  var element =  document.getElementById('cookie-hld');
+  if (typeof(element) != 'undefined' && element != null){
+      document.getElementById('cookie-hld').innerHTML = spanHtml;
+  }
+};
+
+</script>
+</head>
+
+<div class="header">
+  <img src="/favicon.ico" alt="CSP" />
+  <p> <b>CDP Helloworld </b><br> <small>Kubernetes [ <span class="hlt-2" th:text="${deployStrategy}"></span> ] Deployment</small></p>
+</div>
+
+<div class="sidebar">
+  <a th:href="@{~/deploy/info}" class="focus"> Deployment Info</a>
+  <a th:href="@{~/api/deploy/info}" th:target="_blank"> Deployment API </a>
+  <a th:href="@{~/actuator/health}" th:target="_blank"> Health Check </a>
+  <a th:href="@{~/actuator/info}" th:target="_blank"> Build Info </a>
+  <a th:href="@{~/actuator/health/liveness}" th:target="_blank"> Liveness Check</a>
+  <a th:href="@{~/actuator/health/readiness}" th:target="_blank"> Readiness Check</a>
+  <a th:href="@{~/}" th:target="_blank"> HLD API </a>
+</div>
+
+<div id="Home" class="main">
+  <main role="main" class="container">
+  <table id="appInfo">
+    <tbody>
+    <tr>
+      <th colspan="2">Deployment Info: Helloworld</td>
+    </tr>
+    <tr>
+      <td>App Name</td>
+      <td><span th:text="${appName}"></span></td>
+    </tr>
+    <tr>
+    <tr>
+      <td>App Status</td>
+      <td><span th:text="${status}"></span></a></td>
+    </tr>
+    <tr>
+      <td>Deployed Version</td>
+      <td><span class="hlt-1" th:text="${deployedVersion}"></span></td>
+    </tr>
+    <tr>
+      <td>Deployed SHA</td>
+      <td><span class="hlt-1" th:text="${commitSha}"></span></td>
+    </tr>
+    <tr>
+      <td>Deployed By</td>
+      <td><span th:text="${deployedBy}"></span></td>
+    </tr>
+    <tr>
+      <td>Deploy Env</td>
+      <td><span th:text="${deployEnv}"></span></td>
+    </tr>
+    <tr>
+      <td>Deploy Strategy</td>
+      <td><span class="hlt-1" th:text="${deployStrategy}"></span></td>
+    </tr>
+    <tr>
+      <td>Commit User</td>
+      <td><span th:text="${commitUser}"></span></td>
+    </tr>
+    <tr>
+      <td>Commit Branch</td>
+      <td><span th:text="${commitBranch}"></span></td>
+    </tr>
+    <tr>
+      <td>Commit Timestamp</td>
+      <td><span th:text="${commitTimeStamp}"></span></td>
+    </tr>
+      <td>App Endpoint</td>
+      <td><span th:text="${targetHosturl}"></span></td>
+    </tr>
+    <tr>
+      <th colspan="2"><small>Environment Info: Pod</small></td>
+    </tr>
+    </tr>
+      <td>POD Name</td>
+      <td><span th:text="${podName}"></span></td>
+    </tr>
+    </tr>
+      <td>POD IP</td>
+      <td><span th:text="${podIp}"></span></td>
+    </tr>
+    </tr>
+      <td>POD Namespace</td>
+      <td><span th:text="${podNamespace}"></span></td>
+    </tr>
+    </tr>
+      <td>NODE Name</td>
+      <td><span th:text="${nodeName}"></span></td>
+    </tr>
+    </tr>
+      <td>POD Host IP</td>
+      <td><span th:text="${podHostIp}"></span></td>
+    </tr>
+    </tr>
+      <td>POD SVC Account</td>
+      <td><span th:text="${podSvcAccount}"></span></td>
+    </tr>
+    <tr th:if="${deployStrategy == 'BLUE_GREEN'}">
+      <td class="msg" colspan="2">
+            <span id="cookie-hld">Checking if Cookie [canary] is set...</span>
+      </td>
+    </tr>
+  </tbody></table>
+  </main>
+  <!-- /.container -->
+</div>
+<div class="footer">
+  <p> GitLab  Kubernetes Conducktor TKE  Flagger</p>
+</div>
+</body>
+</html>

@@ -13,6 +13,15 @@ service:
   type: ClusterIP
   port: 80
   environment: {{CI_ENVIRONMENT_NAME}}
+  commitBranch: {{CI_COMMIT_REF_NAME}}
+  commitSha: {{CI_COMMIT_SHA}}
+  commitUser: {{GITLAB_USER_NAME}}
+  commitTs: {{CI_COMMIT_TIMESTAMP}}
+  appName: {{HELM_APP_NAME}}
+  deployedVersion: {{APP_VERSION}}-{{BUILD_NUMBER}}
+  deployedBy: {{GITLAB_USER_NAME}}
+  targetUrl: http://{{HELM_APP_NAME}}.{{K8S_DOMAIN}}
+  deployStrategy: {{K8S_DEPLOY_STRATEGY}}
   healthCheck:
     scheme: HTTP
     timeoutSeconds: 3

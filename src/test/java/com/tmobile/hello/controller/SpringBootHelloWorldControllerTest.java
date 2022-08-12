@@ -82,4 +82,12 @@ public class SpringBootHelloWorldControllerTest {
 		jo.put("awesomefeature","false");
 		assertEquals(jo.toString(), hc.getFF("awesomefeature"));
 	}
+	@Test
+    public void testShowStatus() throws Exception {
+		MockEnvironment env = new MockEnvironment();
+		SpringBootHelloWorldController hc = new SpringBootHelloWorldController(env);
+		String result = hc.showStatus(() -> null);
+
+		assertNotNull(result);
+    }
 }

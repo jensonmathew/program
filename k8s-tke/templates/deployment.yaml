@@ -53,10 +53,50 @@ spec:
             - name: app-logs
               mountPath: /app/logs/
           env:
-           - name: SERVER_NAME
-             value: {{ .Values.serverName | quote }}
+           - name: TARGET_SERVER_URL
+             value: {{ .Values.service.targetUrl | quote }}
            - name: ENVIRONMENT
              value: {{ .Values.service.environment | quote }}
+           - name: COMMIT_SHA
+             value: {{ .Values.service.commitSha | quote }}
+           - name: APP_NAME
+             value: {{ .Values.service.appName | quote }}
+           - name: DEPLOYED_BY
+             value: {{ .Values.service.deployedBy | quote }}
+           - name: DEPLOYED_VERSION
+             value: {{ .Values.service.deployedVersion | quote }}
+           - name: COMMIT_USER
+             value: {{ .Values.service.commitUser | quote }}
+           - name: COMMIT_TS
+             value: {{ .Values.service.commitTs | quote }}
+           - name: COMMIT_BRANCH
+             value: {{ .Values.service.commitBranch | quote }}
+           - name: DEPLOY_STRATEGY
+             value: {{ .Values.service.deployStrategy | quote }}
+           - name: NODE_NAME
+             valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+           - name: POD_NAME
+             valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+           - name: POD_NAMESPACE
+             valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+           - name: POD_IP
+             valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+           - name: POD_SERVICE_ACCOUNT
+             valueFrom:
+              fieldRef:
+                fieldPath: spec.serviceAccountName
+           - name: POD_HOST_IP
+             valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
       imagePullSecrets:
           - name: {{ .Values.imagePullSecrets }}
       {{- with .Values.nodeSelector }}
