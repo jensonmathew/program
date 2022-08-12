@@ -21,6 +21,7 @@ import no.finn.unleash.UnleashContext;
 import no.finn.unleash.util.UnleashConfig;
 import org.springframework.core.env.Environment;
 
+
 @RestController
 public class SpringBootHelloWorldController {
 
@@ -145,4 +146,37 @@ public class SpringBootHelloWorldController {
         }
         return jo.toString();
     }
+
+    @RequestMapping("/api/deploy/info")
+    String showStatus(Principal principal) throws HelloworldException {
+        JSONObject jo = new JSONObject();
+        jo.put("status","active");
+        jo.put("deployEnv",parseEnvVariable("ENVIRONMENT"));
+        jo.put("commitSha",parseEnvVariable("COMMIT_SHA"));
+        jo.put("appName",parseEnvVariable("APP_NAME"));
+        jo.put("deployedBy",parseEnvVariable("DEPLOYED_BY"));
+        jo.put("deployedVersion",parseEnvVariable("DEPLOYED_VERSION"));
+        jo.put("commitBranch",parseEnvVariable("COMMIT_BRANCH"));
+        jo.put("commitUser",parseEnvVariable("COMMIT_USER"));
+        jo.put("commitTimeStamp",parseEnvVariable("COMMIT_TS"));
+        jo.put("targetHosturl",parseEnvVariable("TARGET_SERVER_URL"));
+        jo.put("deployStrategy",parseEnvVariable("DEPLOY_STRATEGY"));
+        jo.put("podName",parseEnvVariable("POD_NAME"));
+        jo.put("podIp",parseEnvVariable("POD_IP"));
+        jo.put("podNamespace",parseEnvVariable("POD_NAMESPACE"));
+        jo.put("nodeName",parseEnvVariable("NODE_NAME"));
+        jo.put("podHostIp",parseEnvVariable("POD_HOST_IP"));
+        jo.put("podSvcAccount",parseEnvVariable("POD_SERVICE_ACCOUNT"));
+        return jo.toString();
+    }
+
+    private String parseEnvVariable(String key){
+        String keyVal = null;
+        keyVal=System.getenv(key);
+        if (keyVal == null || keyVal.isEmpty()) {
+            keyVal = "unset";
+        } 
+        return keyVal.trim();
+    }
+
 }
