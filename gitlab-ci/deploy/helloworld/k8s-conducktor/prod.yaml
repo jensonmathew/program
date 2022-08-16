@@ -1,0 +1,36 @@
+include:
+    - local: /gitlab-ci/common.yaml
+
+variables:
+  K8S_FOUNDATION: "duck-plb-w2"
+  K8S_DOMAIN: "$K8S_FOUNDATION.kube.t-mobile.com"
+  K8S_NS: "hld-plb-duck-plb-w2"
+  K8S_API_LOGIN_URL: "https://api.conducktor.t-mobile.com/api/v3/login?provider=conducktor"
+  K8S_CLUSTER: "duck-plb-w2"
+  K8S_SERVER_URL: "https://west.plb.duck.master.kube.t-mobile.com:6443"
+  HELM_VALUES: "./k8s-conducktor/values.yaml"
+  HELM_APP_NAME: $CI_PROJECT_NAME
+  HELM_CHARTS_DIR: "./k8s-conducktor/"
+  HELM_HISTORY_MAX: "3"
+  HELM_WAIT: "true"
+  EXTERNAL_DNS_TARGET: "internal-plb-k8s-duck-ing-int-w2-517343465.us-west-2.elb.amazonaws.com"
+
+# Deploy on conducktor namespace (hld-plb-duck-plb-w2)
+duck-plb-w2:
+  stage: deploy 
+  extends: .helm_deploy
+  environment:
+    name: duck-plb-w2
+    url: $DYNAMIC_ENVIRONMENT_URL/login
+    deployment_tier: production
+  resource_group: $CI_JOB_NAME
+
+duck-plb-w2-sanity:
+  extends: .sanity
+  needs: ["duck-plb-w2"]
+  dependencies: ["duck-plb-w2"]
+  environment:
+    name: prod/$K8S_FOUNDATION/development/smoke
+    action: verify
+
+

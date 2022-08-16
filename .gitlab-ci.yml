@@ -59,20 +59,43 @@ pages:
      when: on_success
    - when: never
 
-# K8s Deployments
-npe-k8s:
+.deploy-review-rules: &deploy-review-rules
+  rules:
+   - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH #only topic branches
+     when: never
+   - if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "trigger" #pushes only
+     when: on_success
+   - when: never
+
+# K8s-tke Deployments
+npe-k8s-tke:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/k8s/npe-stg.yaml
+    include: gitlab-ci/deploy/helloworld/k8s-tke/npe-stg.yaml
     strategy: depend
   <<: *deploy-rules
 
-prod-k8s:
+prod-k8s-tke:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/k8s/prod.yaml
+    include: gitlab-ci/deploy/helloworld/k8s-tke/prod.yaml
     strategy: depend
   <<: *deploy-rules
+
+# K8s-conducktor Deployments
+npe-k8s-conducktor:
+  stage: deploy
+  trigger:
+    include: gitlab-ci/deploy/helloworld/k8s-conducktor/npe-stg.yaml
+    strategy: depend
+  <<: *deploy-rules  
+
+prod-k8s-conducktor:
+  stage: deploy
+  trigger:
+    include: gitlab-ci/deploy/helloworld/k8s-conducktor/prod.yaml
+    strategy: depend
+  <<: *deploy-rules  
 
 # PCF Deployments
 npe-pcf:
@@ -95,22 +118,20 @@ review-pcf:
   trigger:
     include: gitlab-ci/deploy/helloworld/pcf/review.yaml
     strategy: depend
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH #only topic branches
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "trigger" #pushes only
-      when: on_success
-    - when: never
+  <<: *deploy-review-rules
 
-# K8s Reviews
-review-k8s:
+# K8s-tke Reviews
+review-k8s-tke:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/k8s/review.yaml
+    include: gitlab-ci/deploy/helloworld/k8s-tke/review.yaml
     strategy: depend
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH # only topic branches
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "trigger" # pushes only
-      when: on_success
-    - when: never
+  <<: *deploy-review-rules
+
+# K8s-conducktor Reviews
+review-k8s-conducktor:
+  stage: deploy
+  trigger:
+    include: gitlab-ci/deploy/helloworld/k8s-conducktor/review.yaml
+    strategy: depend
+  <<: *deploy-review-rules
