@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helloworld.fullname" . }}
+  labels:
+    {{- include "helloworld.labels" . | nindent 4 }}
+spec:
+  progressDeadlineSeconds: 120
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+  # replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "helloworld.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "helloworld.selectorLabels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: 60
+      imagePullSecrets: 
+        - name: {{ .Values.imagePullSecrets }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - sleep
+                - "10"
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: {{ .Values.service.healthCheck.readinessProbe.failureThreshold }}
+            httpGet:
+              path: {{ .Values.service.healthCheck.readinessProbe.path }}
+              port: {{ .Values.service.port }}
+              scheme: {{ .Values.service.healthCheck.scheme }}
+            initialDelaySeconds: {{ .Values.service.healthCheck.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.service.healthCheck.readinessProbe.periodSeconds }}
+            successThreshold: 1
+            timeoutSeconds: {{ .Values.service.healthCheck.timeoutSeconds }}
+          livenessProbe:
+            failureThreshold: {{ .Values.service.healthCheck.livenessProbe.failureThreshold }}
+            httpGet:
+              path: {{ .Values.service.healthCheck.livenessProbe.path }}
+              port: {{ .Values.service.port }}
+              scheme: {{ .Values.service.healthCheck.scheme }}
+            initialDelaySeconds: {{ .Values.service.healthCheck.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.service.healthCheck.livenessProbe.periodSeconds }}
+            successThreshold: 1
+            timeoutSeconds: {{ .Values.service.healthCheck.timeoutSeconds }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+           - name: ENVIRONMENT
+             value: {{ .Values.service.environment | quote }}
+           - name: NODE_NAME
+             valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+           
