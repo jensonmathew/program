@@ -29,6 +29,8 @@ testjob:
     - echo $CI_REPOSITORY_URL
     - echo $CI_COMMIT_REF_NAME
     - echo $CI_DEFAULT_BRANCH
+    - echo $PARENT_PIPELINE_ID
+    - echo $PARENT_PIPELINE_SOURCE
 
 variables:
   # Common
@@ -41,6 +43,7 @@ variables:
   DOCKER_BUILD_ARGS: "--build-arg APP_VERSION=$APP_VERSION --build-arg PROJECT_NAME=$CI_PROJECT_NAME --build-arg COMMIT_SHA=$CI_COMMIT_SHORT_SHA"
   # Child
   PARENT_PIPELINE_ID: $CI_PIPELINE_ID
+  PARENT_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
 
   MAVEN_BUILD_SINGLE_JOB: "true"
 

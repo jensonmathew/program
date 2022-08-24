@@ -42,7 +42,7 @@ duck-plb-w2-promote:
     deployment_tier: production
   resource_group: $CI_JOB_NAME
   rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
+    - if: $PARENT_PIPELINE_SOURCE != "schedule"
       when: manual
       allow_failure: true
     - when: on_success
