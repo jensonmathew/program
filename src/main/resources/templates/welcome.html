@@ -74,6 +74,18 @@ body {
   border: 1px solid #ccc;
 }
 
+#appInfo td a {
+  color: #f4fc5d;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+#appInfo td a:hover {
+  color: #f1f1f1;
+  letter-spacing: 3px;
+  transition: all 0.6s ease-in-out;
+}
+
 #appInfo tr:hover {
   color: #9a629c;
   background-color: #59063f;
@@ -260,7 +272,6 @@ window.onload = function() {
       <td><span th:text="${appName}"></span></td>
     </tr>
     <tr>
-    <tr>
       <td>App Status</td>
       <td><span th:text="${status}"></span></a></td>
     </tr>
@@ -296,33 +307,38 @@ window.onload = function() {
       <td>Commit Timestamp</td>
       <td><span th:text="${commitTimeStamp}"></span></td>
     </tr>
+    <tr>
+      <td>GitLab CD Pipeline</td>
+      <td><a th:href="@{${pipelineUrl}}" th:target="_blank"><span th:text="${pipelineId}"></span></a></td>
+    </tr>
+    <tr>
       <td>App Endpoint</td>
       <td><span th:text="${targetHosturl}"></span></td>
     </tr>
     <tr>
       <th colspan="2"><small>Environment Info: Pod</small></td>
     </tr>
-    </tr>
+    <tr>
       <td>POD Name</td>
       <td><span th:text="${podName}"></span></td>
     </tr>
-    </tr>
+    <tr>
       <td>POD IP</td>
       <td><span th:text="${podIp}"></span></td>
     </tr>
-    </tr>
+    <tr>
       <td>POD Namespace</td>
       <td><span th:text="${podNamespace}"></span></td>
     </tr>
-    </tr>
+    <tr>
       <td>NODE Name</td>
       <td><span th:text="${nodeName}"></span></td>
     </tr>
-    </tr>
+    <tr>
       <td>POD Host IP</td>
       <td><span th:text="${podHostIp}"></span></td>
     </tr>
-    </tr>
+    <tr>
       <td>POD SVC Account</td>
       <td><span th:text="${podSvcAccount}"></span></td>
     </tr>

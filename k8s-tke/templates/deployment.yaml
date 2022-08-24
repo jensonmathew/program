@@ -57,6 +57,10 @@ spec:
              value: {{ .Values.service.targetUrl | quote }}
            - name: ENVIRONMENT
              value: {{ .Values.service.environment | quote }}
+           - name: PIPELINE_ID
+             value: {{ int64 .Values.service.pipelineId | quote }}
+           - name: PIPELINE_URL
+             value: {{ .Values.service.pipelineUrl | quote }}
            - name: COMMIT_SHA
              value: {{ .Values.service.commitSha | quote }}
            - name: APP_NAME

@@ -13,6 +13,8 @@ service:
   type: ClusterIP
   port: 80
   environment: {{CI_ENVIRONMENT_NAME}}
+  pipelineId: {{CI_PIPELINE_ID}}
+  pipelineUrl: {{CI_PIPELINE_URL}}
   commitBranch: {{CI_COMMIT_REF_NAME}}
   commitSha: {{CI_COMMIT_SHA}}
   commitUser: {{GITLAB_USER_NAME}}
