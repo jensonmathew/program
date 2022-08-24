@@ -10,6 +10,8 @@ stages:
     - tmo
     - test
     - deploy
+    - post-deploy
+    - promote
     - verify
     - stop
 
@@ -65,3 +67,15 @@ variables:
       when: manual
       allow_failure: true
     - when: never
+
+.validate_app:
+  image: bash
+  variables:
+    TEST_ITERATION: "50"
+  script:
+    - bash src/test/sanity/validate-app.sh
+  retry: 1
+  when: delayed
+  start_in: 30 seconds
+  tags:
+    - tiny

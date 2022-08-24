@@ -2,11 +2,10 @@ include:
     - local: /gitlab-ci/common.yaml
 
 variables:
-  K8S_FOUNDATION: "duck-plb-w2"
-  K8S_DOMAIN: "$K8S_FOUNDATION.kube.t-mobile.com"
+  K8S_CLUSTER: "duck-plb-w2"
+  K8S_DOMAIN: "$K8S_CLUSTER.kube.t-mobile.com"
   K8S_NS: "hld-plb-duck-plb-w2"
   K8S_API_LOGIN_URL: "https://api.conducktor.t-mobile.com/api/v3/login?provider=conducktor"
-  K8S_CLUSTER: "duck-plb-w2"
   K8S_SERVER_URL: "https://west.plb.duck.master.kube.t-mobile.com:6443"
   HELM_VALUES: "./k8s-conducktor/values.yaml"
   HELM_APP_NAME: $CI_PROJECT_NAME
@@ -14,23 +13,53 @@ variables:
   HELM_HISTORY_MAX: "3"
   HELM_WAIT: "true"
   EXTERNAL_DNS_TARGET: "internal-plb-k8s-duck-ing-int-w2-517343465.us-west-2.elb.amazonaws.com"
+  K8S_DEPLOY_STRATEGY: "BLUE_GREEN"
 
 # Deploy on conducktor namespace (hld-plb-duck-plb-w2)
-duck-plb-w2:
+duck-plb-w2-deploy:
   stage: deploy 
   extends: .helm_deploy
   environment:
-    name: duck-plb-w2
+    name: prod/$K8S_CLUSTER/smoke
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: production
   resource_group: $CI_JOB_NAME
 
+validate_duck-plb-w2-deploy:
+  stage: post-deploy
+  extends: .validate_app
+  needs: ["duck-plb-w2-deploy"]
+  dependencies: ["duck-plb-w2-deploy"]
+
+duck-plb-w2-promote:
+  stage: promote
+  extends: .k8s_promote_app
+  needs: ["duck-plb-w2-deploy","validate_duck-plb-w2-deploy"]
+  dependencies: ["duck-plb-w2-deploy","validate_duck-plb-w2-deploy"]
+  environment:
+    name: prod/$K8S_CLUSTER/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL/login
+    deployment_tier: production
+  resource_group: $CI_JOB_NAME
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
+      when: manual
+      allow_failure: true
+    - when: on_success
+
 duck-plb-w2-sanity:
   extends: .sanity
-  needs: ["duck-plb-w2"]
-  dependencies: ["duck-plb-w2"]
+  needs: ["duck-plb-w2-deploy","duck-plb-w2-promote"]
+  dependencies: ["duck-plb-w2-deploy","duck-plb-w2-promote"]
   environment:
-    name: prod/$K8S_FOUNDATION/development/smoke
+    name: prod/$K8S_CLUSTER/smoke
     action: verify
+  retry: 1
+  when: delayed
+  start_in: 60 seconds
 
-
+validate_duck-plb-w2-promote:
+  stage: verify
+  extends: .validate_app
+  needs: ["duck-plb-w2-deploy","duck-plb-w2-promote"]
+  dependencies: ["duck-plb-w2-deploy","duck-plb-w2-promote"]

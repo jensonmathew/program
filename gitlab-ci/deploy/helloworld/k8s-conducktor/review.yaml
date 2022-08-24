@@ -2,11 +2,10 @@ include:
     - local: /gitlab-ci/common.yaml
 
 variables:
-  K8S_FOUNDATION: "duck-dev-w2"
   K8S_API_LOGIN_URL: "https://api.conducktor.t-mobile.com/api/v3/login?provider=conducktor"
   K8S_SERVER_URL: "https://west.dev.duck.master.kube.t-mobile.com:6443"
   K8S_CLUSTER: "duck-dev-w2"
-  K8S_DOMAIN: "$K8S_FOUNDATION.kube.t-mobile.com"
+  K8S_DOMAIN: "$K8S_CLUSTER.kube.t-mobile.com"
   K8S_NS: "hld-dev-duck-dev-w2"
   HELM_VALUES: "./k8s-conducktor/values.yaml"
   HELM_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
@@ -16,12 +15,12 @@ variables:
   EXTERNAL_DNS_TARGET: "internal-dev-k8s-duck-ing-int-w2-1678771246.us-west-2.elb.amazonaws.com"
 
 # Deploy on Conducktor namespace ( hld-dev-duck-dev-w2 )
-rev-duck-dev-w2:  
+rev-duck-dev-w2:
   stage: deploy
   extends: .helm_deploy
-  resource_group: review-deploy-$K8S_FOUNDATION-$CI_COMMIT_REF_SLUG
+  resource_group: review-deploy-$K8S_CLUSTER-$CI_COMMIT_REF_SLUG
   environment:
-    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: development
     on_stop: rev-stop-duck-dev-w2
@@ -35,19 +34,17 @@ rev-duck-dev-w2-sanity:
   when: delayed
   start_in: 3 minutes
   environment:
-    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: verify
 
 rev-stop-duck-dev-w2:
   needs: ["rev-duck-dev-w2"]
   extends: .k8s_teardown
-  resource_group: review-deploy-$K8S_FOUNDATION-$CI_COMMIT_REF_SLUG
+  resource_group: review-deploy-$K8S_CLUSTER-$CI_COMMIT_REF_SLUG
   environment:
-    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: stop
     deployment_tier: development
   rules:
     - when: manual
       allow_failure: true
-      
-

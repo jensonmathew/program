@@ -10,10 +10,12 @@ public class SpringBootHelloWorldWebController {
     @GetMapping("/deploy/info")
     public ModelAndView getDeployStats() {
         ModelAndView mav = new ModelAndView();
-        mav.addObject("status",("active"));
+        mav.addObject("status","active");
         mav.addObject("deployEnv",parseEnvVariable("ENVIRONMENT"));
         mav.addObject("commitSha",parseEnvVariable("COMMIT_SHA"));
         mav.addObject("appName",parseEnvVariable("APP_NAME"));
+        mav.addObject("pipelineId","#"+parseEnvVariable("PIPELINE_ID"));
+        mav.addObject("pipelineUrl",parseEnvVariable("PIPELINE_URL"));
         mav.addObject("deployedBy",parseEnvVariable("DEPLOYED_BY"));
         mav.addObject("deployedVersion",parseEnvVariable("DEPLOYED_VERSION"));
         mav.addObject("commitBranch",parseEnvVariable("COMMIT_BRANCH"));

@@ -34,7 +34,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity webSecurity) {
 		webSecurity.ignoring()
 						.antMatchers(HttpMethod.GET, "/actuator/health/**")
-						.antMatchers(HttpMethod.GET, "/actuator/info");
+						.antMatchers(HttpMethod.GET, "/actuator/info")
+						.antMatchers(HttpMethod.GET, "/api/deploy/info")
+						.antMatchers(HttpMethod.GET, "/favicon.ico")
+						.antMatchers(HttpMethod.GET, "/deploy/info");
 	}
 
 	@Bean

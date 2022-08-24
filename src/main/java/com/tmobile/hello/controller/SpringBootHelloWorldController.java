@@ -154,6 +154,8 @@ public class SpringBootHelloWorldController {
         jo.put("deployEnv",parseEnvVariable("ENVIRONMENT"));
         jo.put("commitSha",parseEnvVariable("COMMIT_SHA"));
         jo.put("appName",parseEnvVariable("APP_NAME"));
+        jo.put("pipelineId","#"+parseEnvVariable("PIPELINE_ID"));
+        jo.put("pipelineUrl",parseEnvVariable("PIPELINE_URL"));
         jo.put("deployedBy",parseEnvVariable("DEPLOYED_BY"));
         jo.put("deployedVersion",parseEnvVariable("DEPLOYED_VERSION"));
         jo.put("commitBranch",parseEnvVariable("COMMIT_BRANCH"));
