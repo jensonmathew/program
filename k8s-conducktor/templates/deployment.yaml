@@ -91,6 +91,8 @@ spec:
              value: {{ .Values.service.commitBranch | quote }}
            - name: DEPLOY_STRATEGY
              value: {{ .Values.service.deployStrategy | quote }}
+           - name: DEPLOY_PLATFORM
+             value: {{ .Values.service.deployPlatform | quote }}
            - name: NODE_NAME
              valueFrom:
               fieldRef:

@@ -1,5 +1,6 @@
 package com.tmobile.hello.controller;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -9,6 +10,10 @@ public class SpringBootHelloWorldWebController {
 
     @GetMapping("/deploy/info")
     public ModelAndView getDeployStats() {
+        StringBuilder appPlatformInfo = new StringBuilder("GitLab");
+        String deployPlatform = parseEnvVariable("DEPLOY_PLATFORM");
+        String deployStrategy = parseEnvVariable("DEPLOY_STRATEGY");
+        appPlatformInfo.append("\t").append(deployPlatform);
         ModelAndView mav = new ModelAndView();
         mav.addObject("status","active");
         mav.addObject("deployEnv",parseEnvVariable("ENVIRONMENT"));
@@ -22,13 +27,29 @@ public class SpringBootHelloWorldWebController {
         mav.addObject("commitUser",parseEnvVariable("COMMIT_USER"));
         mav.addObject("commitTimeStamp",parseEnvVariable("COMMIT_TS"));
         mav.addObject("targetHosturl",parseEnvVariable("TARGET_SERVER_URL"));
-        mav.addObject("deployStrategy",parseEnvVariable("DEPLOY_STRATEGY"));
-        mav.addObject("podName",parseEnvVariable("POD_NAME"));
-        mav.addObject("podIp",parseEnvVariable("POD_IP"));
-        mav.addObject("podNamespace",parseEnvVariable("POD_NAMESPACE"));
-        mav.addObject("nodeName",parseEnvVariable("NODE_NAME"));
-        mav.addObject("podHostIp",parseEnvVariable("POD_HOST_IP"));
-        mav.addObject("podSvcAccount",parseEnvVariable("POD_SERVICE_ACCOUNT"));  
+        mav.addObject("deployStrategy",deployStrategy);
+        mav.addObject("deployPlatform",deployPlatform);
+        if ("PCF".equalsIgnoreCase(deployPlatform)) {
+            JSONObject pcfObj = new JSONObject(parseEnvVariable("VCAP_APPLICATION"));
+            mav.addObject("appName",pcfObj.get("application_name"));
+            mav.addObject("podAddress",parseEnvVariable("CF_INSTANCE_ADDR"));
+            mav.addObject("podIp",parseEnvVariable("CF_INSTANCE_INTERNAL_IP"));
+            mav.addObject("podNamespace",pcfObj.get("space_name"));
+            mav.addObject("podOrgName",pcfObj.get("organization_name"));
+            mav.addObject("podHostIp",parseEnvVariable("CF_INSTANCE_IP"));
+            mav.addObject("podSvcAccount",parseEnvVariable("USER"));
+        } else {
+            mav.addObject("podName",parseEnvVariable("POD_NAME"));
+            mav.addObject("podIp",parseEnvVariable("POD_IP"));
+            mav.addObject("podNamespace",parseEnvVariable("POD_NAMESPACE"));
+            mav.addObject("nodeName",parseEnvVariable("NODE_NAME"));
+            mav.addObject("podHostIp",parseEnvVariable("POD_HOST_IP"));
+            mav.addObject("podSvcAccount",parseEnvVariable("POD_SERVICE_ACCOUNT"));
+            if (!("ROLLING_UPDATE".equalsIgnoreCase(deployStrategy))) {
+                appPlatformInfo.append("\t").append("Flagger");
+            }
+        }
+        mav.addObject("platformInfo",appPlatformInfo);
         mav.setViewName("welcome");
         return mav;
     }

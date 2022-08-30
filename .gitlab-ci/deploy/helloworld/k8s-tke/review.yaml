@@ -1,5 +1,5 @@
 include:
-    - local: /gitlab-ci/common.yaml
+    - local: /.gitlab-ci/common.yaml
 
 variables:
   K8S_FOUNDATION: "px-npe2203"

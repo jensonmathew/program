@@ -24,6 +24,7 @@ service:
   deployedBy: {{GITLAB_USER_NAME}}
   targetUrl: http://{{HELM_APP_NAME}}.{{K8S_DOMAIN}}
   deployStrategy: {{K8S_DEPLOY_STRATEGY}}
+  deployPlatform: TKE
   healthCheck:
     scheme: HTTP
     timeoutSeconds: 3

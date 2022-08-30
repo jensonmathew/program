@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Helloworld Demo - Kubernetes Deployments</title>
+    <title>Helloworld Demo - PCF/Kubernetes Deployments</title>
 <style>
 body {
   font-family: "Lato", sans-serif;
@@ -172,11 +172,12 @@ body {
 .footer p {
   float: right;
   padding: 5px;
-  font-size: 11px;
+  font-size: 12px;
+  margin-right: 10px;
   color: #59063f;
   text-transform: uppercase;
   letter-spacing: 5px;
-  opacity: 0.5;
+  opacity: 0.7;
   word-spacing: 20px;
 }
 
@@ -247,7 +248,7 @@ window.onload = function() {
 
 <div class="header">
   <img src="/favicon.ico" alt="CSP" />
-  <p> <b>CDP Helloworld </b><br> <small>Kubernetes [ <span class="hlt-2" th:text="${deployStrategy}"></span> ] Deployment</small></p>
+  <p> <b>CDP Helloworld </b><br> <small><span th:text="${deployPlatform}"></span>  [ <span class="hlt-2" th:text="${deployStrategy}"></span> ] Deployment</small></p>
 </div>
 
 <div class="sidebar">
@@ -255,8 +256,8 @@ window.onload = function() {
   <a th:href="@{~/api/deploy/info}" th:target="_blank"> Deployment API </a>
   <a th:href="@{~/actuator/health}" th:target="_blank"> Health Check </a>
   <a th:href="@{~/actuator/info}" th:target="_blank"> Build Info </a>
-  <a th:href="@{~/actuator/health/liveness}" th:target="_blank"> Liveness Check</a>
-  <a th:href="@{~/actuator/health/readiness}" th:target="_blank"> Readiness Check</a>
+  <a th:if="${deployPlatform != 'PCF'}" th:href="@{~/actuator/health/liveness}" th:target="_blank"> Liveness Check</a>
+  <a th:if="${deployPlatform != 'PCF'}" th:href="@{~/actuator/health/readiness}" th:target="_blank"> Readiness Check</a>
   <a th:href="@{~/}" th:target="_blank"> HLD API </a>
 </div>
 
@@ -319,26 +320,34 @@ window.onload = function() {
       <th colspan="2"><small>Environment Info: Pod</small></td>
     </tr>
     <tr>
-      <td>POD Name</td>
-      <td><span th:text="${podName}"></span></td>
-    </tr>
-    <tr>
       <td>POD IP</td>
       <td><span th:text="${podIp}"></span></td>
-    </tr>
-    <tr>
-      <td>POD Namespace</td>
-      <td><span th:text="${podNamespace}"></span></td>
-    </tr>
-    <tr>
-      <td>NODE Name</td>
-      <td><span th:text="${nodeName}"></span></td>
     </tr>
     <tr>
       <td>POD Host IP</td>
       <td><span th:text="${podHostIp}"></span></td>
     </tr>
     <tr>
+      <td>POD Namespace</td>
+      <td><span th:text="${podNamespace}"></span></td>
+    </tr>
+    <tr th:if="${deployPlatform == 'PCF'}">
+      <td>POD Address</td>
+      <td><span th:text="${podAddress}"></span></td>
+    </tr>
+    <tr th:if="${deployPlatform == 'PCF'}">
+      <td>POD Org Name</td>
+      <td><span th:text="${podOrgName}"></span></td>
+    </tr>
+    <tr th:if="${deployPlatform != 'PCF'}">
+      <td>POD Name</td>
+      <td><span th:text="${podName}"></span></td>
+    </tr>
+    <tr th:if="${deployPlatform != 'PCF'}">
+      <td>NODE Name</td>
+      <td><span th:text="${nodeName}"></span></td>
+    </tr>
+    <tr th:if="${deployPlatform != 'PCF'}">
       <td>POD SVC Account</td>
       <td><span th:text="${podSvcAccount}"></span></td>
     </tr>
@@ -352,7 +361,7 @@ window.onload = function() {
   <!-- /.container -->
 </div>
 <div class="footer">
-  <p> GitLab  Kubernetes Conducktor TKE  Flagger</p>
+  <p> <span th:text="${platformInfo}"></span></p>
 </div>
 </body>
 </html>

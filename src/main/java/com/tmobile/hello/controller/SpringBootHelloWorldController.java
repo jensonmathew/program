@@ -2,8 +2,6 @@ package com.tmobile.hello.controller;
 
 import java.security.Principal;
 
-import ch.qos.logback.classic.Logger;
-import com.tmobile.hello.SpringBootHelloWorld;
 import com.tmobile.hello.domain.SecurityUserDetails;
 import com.tmobile.hello.exception.HelloworldException;
 import org.json.JSONObject;
@@ -149,6 +147,7 @@ public class SpringBootHelloWorldController {
 
     @RequestMapping("/api/deploy/info")
     String showStatus(Principal principal) throws HelloworldException {
+        String deployPlatform = parseEnvVariable("DEPLOY_PLATFORM");
         JSONObject jo = new JSONObject();
         jo.put("status","active");
         jo.put("deployEnv",parseEnvVariable("ENVIRONMENT"));
@@ -163,12 +162,21 @@ public class SpringBootHelloWorldController {
         jo.put("commitTimeStamp",parseEnvVariable("COMMIT_TS"));
         jo.put("targetHosturl",parseEnvVariable("TARGET_SERVER_URL"));
         jo.put("deployStrategy",parseEnvVariable("DEPLOY_STRATEGY"));
-        jo.put("podName",parseEnvVariable("POD_NAME"));
-        jo.put("podIp",parseEnvVariable("POD_IP"));
-        jo.put("podNamespace",parseEnvVariable("POD_NAMESPACE"));
-        jo.put("nodeName",parseEnvVariable("NODE_NAME"));
-        jo.put("podHostIp",parseEnvVariable("POD_HOST_IP"));
-        jo.put("podSvcAccount",parseEnvVariable("POD_SERVICE_ACCOUNT"));
+        jo.put("deployPlatform",deployPlatform);
+        if ("PCF".equalsIgnoreCase(deployPlatform)) {
+            jo.put("podAddress",parseEnvVariable("CF_INSTANCE_ADDR"));
+            jo.put("podIp",parseEnvVariable("CF_INSTANCE_INTERNAL_IP"));
+            jo.put("podEnvInfo",new JSONObject(parseEnvVariable("VCAP_APPLICATION")));
+            jo.put("podHostIp",parseEnvVariable("CF_INSTANCE_IP"));
+            jo.put("podSvcAccount",parseEnvVariable("USER"));
+        } else {
+            jo.put("podName",parseEnvVariable("POD_NAME"));
+            jo.put("podIp",parseEnvVariable("POD_IP"));
+            jo.put("podNamespace",parseEnvVariable("POD_NAMESPACE"));
+            jo.put("nodeName",parseEnvVariable("NODE_NAME"));
+            jo.put("podHostIp",parseEnvVariable("POD_HOST_IP"));
+            jo.put("podSvcAccount",parseEnvVariable("POD_SERVICE_ACCOUNT"));
+        }
         return jo.toString();
     }
 

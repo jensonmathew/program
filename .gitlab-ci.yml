@@ -74,14 +74,14 @@ pages:
 npe-k8s-tke:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/k8s-tke/npe-stg.yaml
+    include: .gitlab-ci/deploy/helloworld/k8s-tke/npe-stg.yaml
     strategy: depend
   <<: *deploy-rules
 
 prod-k8s-tke:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/k8s-tke/prod.yaml
+    include: .gitlab-ci/deploy/helloworld/k8s-tke/prod.yaml
     strategy: depend
   <<: *deploy-rules
 
@@ -89,14 +89,14 @@ prod-k8s-tke:
 npe-k8s-conducktor:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/k8s-conducktor/npe-stg.yaml
+    include: .gitlab-ci/deploy/helloworld/k8s-conducktor/npe-stg.yaml
     strategy: depend
   <<: *deploy-rules  
 
 prod-k8s-conducktor:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/k8s-conducktor/prod.yaml
+    include: .gitlab-ci/deploy/helloworld/k8s-conducktor/prod.yaml
     strategy: depend
   <<: *deploy-rules  
 
@@ -104,14 +104,14 @@ prod-k8s-conducktor:
 npe-pcf:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/pcf/npe.yaml
+    include: .gitlab-ci/deploy/helloworld/pcf/npe.yaml
     strategy: depend
   <<: *deploy-rules
 
 prod-pcf:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/pcf/prod.yaml
+    include: .gitlab-ci/deploy/helloworld/pcf/prod.yaml
     strategy: depend
   <<: *deploy-rules
 
@@ -119,7 +119,7 @@ prod-pcf:
 review-pcf:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/pcf/review.yaml
+    include: .gitlab-ci/deploy/helloworld/pcf/review.yaml
     strategy: depend
   <<: *deploy-review-rules
 
@@ -127,7 +127,7 @@ review-pcf:
 review-k8s-tke:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/k8s-tke/review.yaml
+    include: .gitlab-ci/deploy/helloworld/k8s-tke/review.yaml
     strategy: depend
   <<: *deploy-review-rules
 
@@ -135,6 +135,6 @@ review-k8s-tke:
 review-k8s-conducktor:
   stage: deploy
   trigger:
-    include: gitlab-ci/deploy/helloworld/k8s-conducktor/review.yaml
+    include: .gitlab-ci/deploy/helloworld/k8s-conducktor/review.yaml
     strategy: depend
   <<: *deploy-review-rules
