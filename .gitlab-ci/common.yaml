@@ -43,9 +43,9 @@ variables:
   stage: verify
   variables:
     test_report_path: "newman/"
-    qtest_info_path: "src/test/qtest_info.json"
+    qtest_info_path: "src/test/sanity/qtest_info.json"
     NEWMAN_QTEST_PUBLISH: "true"
-    POSTMAN_COLLECTION: "src/test"
+    POSTMAN_COLLECTION: "src/test/sanity"
     POSTMAN_ITERATIONS: "100"
 
 .pcf_all_teardown:

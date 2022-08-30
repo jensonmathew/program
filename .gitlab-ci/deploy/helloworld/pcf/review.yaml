@@ -1,5 +1,5 @@
 include:
-    - local: /gitlab-ci/common.yaml
+    - local: /.gitlab-ci/common.yaml
 
 variables:
   PCF_ROUTE_HOSTNAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
