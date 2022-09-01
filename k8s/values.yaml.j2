@@ -50,7 +50,11 @@ service:
   deployedBy: {{GITLAB_USER_NAME}}
   targetUrl: http://{{HELM_APP_NAME}}.{{K8S_DOMAIN}}
   deployStrategy: {{K8S_DEPLOY_STRATEGY}}
+  {%- if EXTERNAL_DNS_TARGET is defined %}
   deployPlatform: Conducktor
+  {%- else %}
+  deployPlatform: Tke
+  {%- endif %}
   healthCheck:
     scheme: HTTP
     timeoutSeconds: 3
@@ -68,10 +72,17 @@ service:
 ingress:
   enabled: true
   namespace: {{K8S_NS}}
+  {%- if EXTERNAL_DNS_TARGET is defined %}
   annotations:
     kubernetes.io/ingress.class: nginx-internal
     external-dns.alpha.kubernetes.io/hostname: {{HELM_APP_NAME}}.{{K8S_DOMAIN}}
     external-dns.alpha.kubernetes.io/target: {{EXTERNAL_DNS_TARGET}}
+  {%- else %}
+  annotations:
+    ingress.kubernetes.io/use-port-in-redirects: 'true'
+    ingress.kubernetes.io/ssl-redirect: 'true'
+    kubernetes.io/ingress.class: std-ingress-class
+  {%- endif %}
   hosts:
     - host: {{HELM_APP_NAME}}.{{K8S_DOMAIN}}
       paths:
