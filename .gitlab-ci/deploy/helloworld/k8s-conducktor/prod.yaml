@@ -7,11 +7,7 @@ variables:
   K8S_NS: "hld-plb-duck-plb-w2"
   K8S_API_LOGIN_URL: "https://api.conducktor.t-mobile.com/api/v3/login?provider=conducktor"
   K8S_SERVER_URL: "https://west.plb.duck.master.kube.t-mobile.com:6443"
-  HELM_VALUES: "./k8s-conducktor/values.yaml"
   HELM_APP_NAME: $CI_PROJECT_NAME
-  HELM_CHARTS_DIR: "./k8s-conducktor/"
-  HELM_HISTORY_MAX: "3"
-  HELM_WAIT: "true"
   EXTERNAL_DNS_TARGET: "internal-plb-k8s-duck-ing-int-w2-517343465.us-west-2.elb.amazonaws.com"
   K8S_DEPLOY_STRATEGY: "BLUE_GREEN"
 
