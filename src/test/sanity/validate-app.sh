@@ -51,7 +51,7 @@ do
     deployedVer=$(< "${appRespFile}" jq -r '.deployedVersion')
     pipelineId=$(< "${appRespFile}" jq -r '.pipelineId')
     commitSha=$(< "${appRespFile}" jq -r '.commitSha')
-    if [[ "${deployedVer}" == "${APP_VERSION}-${BUILD_NUMBER}" ]]
+    if [[ "${deployedVer}" == "${APP_VERSION}-${BUILD_NUMBER}" ]] && [[ "${pipelineId//#}" == "${CI_PIPELINE_ID}" ]]
     then
         tmoLog "App RESP, Ver: [ ${deployedVer} ], Pipeline ID: [ ${pipelineId} ], SHA: [ ${commitSha} ]" "success"
         if [ -z "${TEST_ROLLBACK}" ]; then validationSuccess="true"; fi;
