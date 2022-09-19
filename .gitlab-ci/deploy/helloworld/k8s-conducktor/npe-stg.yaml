@@ -59,7 +59,31 @@ duck-stg-w2-sanity:
   retry: 1
 
 validate_duck-stg-w2-promote:
+  variables:
+    VALIDATE_PHASE: "PROMOTION"
   stage: verify
   extends: .validate_app
   needs: ["duck-stg-w2-deploy","duck-stg-w2-promote"]
   dependencies: ["duck-stg-w2-deploy","duck-stg-w2-promote"]
+
+duck-stg-w2-rollback:
+  stage: rollback
+  extends: .helm_rollback
+  environment:
+    name: stg/$K8S_CLUSTER/smoke
+    url: $DYNAMIC_ENVIRONMENT_URL/login
+    deployment_tier: staging
+  resource_group: $CI_JOB_NAME
+  needs: ["validate_duck-stg-w2-promote"]
+  rules:
+    - if: $PARENT_PIPELINE_SOURCE != "schedule"
+      when: manual
+      allow_failure: true
+    - when: on_success
+
+validate_duck-stg-w2-rollback:
+  variables:
+    VALIDATE_PHASE: "ROLLBACK"
+  stage: verify-rollback
+  extends: .validate_app
+  needs: ["duck-stg-w2-rollback"]

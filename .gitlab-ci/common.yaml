@@ -5,6 +5,7 @@ include:
       - /gitlab-ci/.tmo.function.pcf.gitlab-ci.yml
       - /gitlab-ci/.tmo.function.helm-deploy.gitlab-ci.yml
       - /gitlab-ci/.tmo.function.newman.gitlab-ci.yml
+      - /gitlab-ci/.tmo.function.helm-rollback.gitlab-ci.yml
 
 stages:
     - tmo
@@ -13,6 +14,8 @@ stages:
     - post-deploy
     - promote
     - verify
+    - rollback
+    - verify-rollback
     - stop
 
 variables:
@@ -80,6 +83,6 @@ variables:
     - bash src/test/sanity/validate-app.sh
   retry: 1
   when: delayed
-  start_in: 30 seconds
+  start_in: 60 seconds
   tags:
     - tiny
