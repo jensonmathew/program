@@ -14,7 +14,7 @@ kubectl create secret docker-registry "tmobile-cdp-image-pull" --docker-server=r
 
 tmoLog "Modifying host file for host resolution"
 tmoLogCollapsed "$(cat /etc/hosts)" "HOSTS FILE"
-dockerIp=`grep "docker " /etc/hosts | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])'`
+dockerIp=$(grep "docker " /etc/hosts | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])')
 tmoLog "dockerIp parsed from /etc/hosts:- $dockerIp"
 if [ -z "$dockerIp" ];then tmoLog "dockerIp parsing failed" "warn"; fi;
 echo "${dockerIp}       ${HELM_APP_NAME}.${K8S_DOMAIN}" >> /etc/hosts
@@ -33,7 +33,7 @@ fi
 
 # Helm chart installation
 tmoLog "Helloworld App Installation initiated" "tmo"
-helm upgrade --install $HELM_APP_NAME $HELM_CHART_DIR --namespace=ingress-nginx
+helm upgrade --install "$HELM_APP_NAME" "$HELM_CHART_DIR" --namespace=ingress-nginx
 
 sleep 50
 echo "------------------------------------------------------------------------------------------"
