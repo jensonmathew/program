@@ -1,0 +1,42 @@
+include:
+  - local: /.gitlab-ci/common.yaml
+
+variables:  
+  K8S_DOMAIN: "ephemeral.ci"
+  K8S_NS: "ingress-nginx"
+  K8S_DEPLOY_STRATEGY: "ROLLING_UPDATE"
+  HELM_APP_NAME: $CI_PROJECT_NAME
+
+.ephemeral-config:
+  image: docker:stable
+  variables:
+    KUBECTL_VERSION: "v1.25.0"
+    KIND_VERSION: "v0.15.0"
+    HELM_VERSION: "v3.9.4"
+  services:
+    - docker:dind
+  before_script:
+    - !reference [default, before_script]
+    - if ! exists "bash" ; then installPackage "bash"; fi;
+    - bash .gitlab-ci/deploy/helloworld/k8s-kind/scripts/setupCluster.sh
+    - tmoLog "Ephemeral cluster setup completed!!!" "tmo"
+  after_script:
+    - !reference [default, after_script]
+    - if ! exists "bash" ; then installPackage "bash"; fi;
+    - bash .gitlab-ci/deploy/helloworld/k8s-kind/scripts/terminateCluster.sh
+    - tmoLog "Ephemeral cluster cleanup completed!!!" "tmo"
+  timeout: 20m
+
+ephemeral-deploy:
+  stage: deploy
+  extends: 
+    - .ephemeral-config
+  script:
+    - if ! exists "bash" ; then installPackage "bash"; fi;
+    - bash .gitlab-ci/deploy/helloworld/k8s-kind/scripts/deployEphemeral.sh
+    - tmoLog "Deployment to ephemeral cluster completed!!!" "tmo"
+  environment:
+    name: dev/ephemeral/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    url: http://$HELM_APP_NAME.$K8S_DOMAIN
+    deployment_tier: development
+    auto_stop_in: 2 hours

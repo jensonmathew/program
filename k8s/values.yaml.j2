@@ -52,6 +52,8 @@ service:
   deployStrategy: {{K8S_DEPLOY_STRATEGY}}
   {%- if EXTERNAL_DNS_TARGET is defined %}
   deployPlatform: Conducktor
+  {% elif CI_JOB_NAME == 'ephemeral-deploy' %}
+  deployPlatform: KinD
   {%- else %}
   deployPlatform: Tke
   {%- endif %}
@@ -77,6 +79,9 @@ ingress:
     kubernetes.io/ingress.class: nginx-internal
     external-dns.alpha.kubernetes.io/hostname: {{HELM_APP_NAME}}.{{K8S_DOMAIN}}
     external-dns.alpha.kubernetes.io/target: {{EXTERNAL_DNS_TARGET}}
+  {%- elif CI_JOB_NAME == 'ephemeral-deploy' %}
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
   {%- else %}
   annotations:
     ingress.kubernetes.io/use-port-in-redirects: 'true'

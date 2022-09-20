@@ -28,7 +28,7 @@ variables:
     PCF_TLOGGER: "true"
     HELM_VERSION: "v3.8.1"
     HELM_VALUES: "./k8s/values.yaml"
-    HELM_CHARTS_DIR: "./k8s/"
+    HELM_CHARTS_DIR: "./k8s"
     HELM_HISTORY_MAX: "3"
     HELM_WAIT: "true"
 
