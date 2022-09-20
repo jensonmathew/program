@@ -45,11 +45,5 @@ tmoLog "Creating NameSpace and installing Nginx ingress controller"
 kubectl apply -f .gitlab-ci/deploy/helloworld/k8s-kind/config/ingress-controller.yaml
 
 # Configure context to use newly created NS
-kubectl config set-context kind-cdp-hw --namespace=ingress-nginx 
-
-# Ensure all good before moving further
-kubectl wait --namespace ingress-nginx \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
-  --timeout=90s
+kubectl config set-context kind-cdp-hw --namespace=ingress-nginx
 
