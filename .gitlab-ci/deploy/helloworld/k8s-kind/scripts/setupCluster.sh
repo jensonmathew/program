@@ -33,7 +33,7 @@ tmoLog "Installed helm                :   [ $(helm version --short) ]" "tmo"
 
 # Cluster creation
 tmoLog "Initiating KinD cluster"
-kind create cluster --name=cdp-hw --config=./config/kind-gitlab.yaml --wait 180s
+kind create cluster --name=cdp-hw --config=.gitlab-ci/deploy/helloworld/k8s-kind/config/kind-gitlab.yaml --wait 180s
 sed -i -E -e 's/localhost|0\.0\.0\.0/docker/g' "$HOME/.kube/config"
 tmoLog "KinD installation complete!!!"
 
@@ -42,7 +42,7 @@ kubectl config set-cluster kind-cdp-hw --insecure-skip-tls-verify=true
 
 # Install IC
 tmoLog "Creating NameSpace and installing Nginx ingress controller"
-kubectl apply -f config/ingress-controller.yaml
+kubectl apply -f .gitlab-ci/deploy/helloworld/k8s-kind/config/ingress-controller.yaml
 
 # Configure context to use newly created NS
 kubectl config set-context kind-cdp-hw --namespace=ingress-nginx 
