@@ -35,7 +35,3 @@ fi
 tmoLog "Helloworld App Installation initiated" "tmo"
 helm upgrade --install "$HELM_APP_NAME" "$HELM_CHART_DIR" --namespace=ingress-nginx
 
-sleep 50
-echo "------------------------------------------------------------------------------------------"
-helm get manifest "$HELM_APP_NAME" --namespace=ingress-nginx 
-echo "------------------------------------------------------------------------------------------"
