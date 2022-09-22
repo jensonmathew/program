@@ -138,3 +138,11 @@ review-k8s-conducktor:
     include: .gitlab-ci/deploy/helloworld/k8s-conducktor/review.yaml
     strategy: depend
   <<: *deploy-review-rules
+
+# K8s Ephemeral deployment
+ephemeral-k8s:
+  stage: deploy
+  trigger:
+    include: .gitlab-ci/deploy/helloworld/k8s-kind/ephemeral.yaml
+    strategy: depend
+  <<: *deploy-review-rules
