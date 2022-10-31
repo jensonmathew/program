@@ -102,8 +102,8 @@ case "${VALIDATE_PHASE}" in
         fi
         ;;
     *)
-        if [ "${perc}" -lt 30 ]; then
-            tmoLog "App DEPLOYMENT validation Failed for strategy, [ ${K8S_DEPLOY_STRATEGY} ]. The percentage of [ N+1 ] versions against total requests, [ ${perc}% ] is not meeting the threshold, [ 30% ]" "error"
+        if [ "${perc}" -lt 40 ]; then
+            tmoLog "App DEPLOYMENT validation Failed for strategy, [ ${K8S_DEPLOY_STRATEGY} ]. The percentage of [ N+1 ] versions against total requests, [ ${perc}% ] is not meeting the threshold, [ 40% ]" "error"
             exit 1
         fi
         ;;

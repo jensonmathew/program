@@ -10,7 +10,8 @@ variables:
   HELM_APP_NAME: $CI_PROJECT_NAME
   EXTERNAL_DNS_TARGET: "internal-plb-k8s-duck-ing-int-w2-517343465.us-west-2.elb.amazonaws.com"
   K8S_DEPLOY_STRATEGY: "CANARY"
-  CANARY_INTERVAL: "15s"
+  CANARY_INTERVAL: "25s"
+  CANARY_STEP_WEIGHTS: "[1, 2, 5, 10, 30, 50]"
 
 # Deploy on conducktor namespace (hld-plb-duck-plb-w2)
 duck-plb-w2-deploy:
