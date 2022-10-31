@@ -11,7 +11,7 @@ variables:
   EXTERNAL_DNS_TARGET: "internal-plb-k8s-duck-ing-int-w2-517343465.us-west-2.elb.amazonaws.com"
   K8S_DEPLOY_STRATEGY: "CANARY"
   CANARY_INTERVAL: "25s"
-  CANARY_STEP_WEIGHTS: "[1, 2, 5, 10, 30, 50]"
+  CANARY_STEP_WEIGHTS: "[1, 2, 5, 10, 20, 50]"
 
 # Deploy on conducktor namespace (hld-plb-duck-plb-w2)
 duck-plb-w2-deploy:
@@ -19,7 +19,6 @@ duck-plb-w2-deploy:
   extends: .helm_deploy
   variables:
      FLAGGER_MONITORING: "true"
-     FLG_CANARY_MOINITOR_DURATION_SECS: "150"
   environment:
     name: prod/$K8S_CLUSTER/smoke
     url: $DYNAMIC_ENVIRONMENT_URL/login
@@ -37,7 +36,6 @@ duck-plb-w2-promote:
   extends: .k8s_promote_app
   variables:
      FLAGGER_MONITORING: "true"
-     FLG_CANARY_MOINITOR_DURATION_SECS: "150"
   needs: ["duck-plb-w2-deploy","validate_duck-plb-w2-deploy"]
   dependencies: ["duck-plb-w2-deploy","validate_duck-plb-w2-deploy"]
   environment:
@@ -73,7 +71,6 @@ duck-plb-w2-rollback:
   extends: .helm_rollback
   variables:
      FLAGGER_MONITORING: "true"
-     FLG_CANARY_MOINITOR_DURATION_SECS: "150"
   environment:
     name: prod/$K8S_CLUSTER/smoke
     url: $DYNAMIC_ENVIRONMENT_URL/login

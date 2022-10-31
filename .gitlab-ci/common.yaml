@@ -82,7 +82,5 @@ variables:
   script:
     - bash src/test/sanity/validate-app.sh
   retry: 1
-  when: delayed
-  start_in: 60 seconds
   tags:
     - tiny
