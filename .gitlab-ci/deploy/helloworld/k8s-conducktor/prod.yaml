@@ -10,8 +10,8 @@ variables:
   HELM_APP_NAME: $CI_PROJECT_NAME
   EXTERNAL_DNS_TARGET: "internal-plb-k8s-duck-ing-int-w2-517343465.us-west-2.elb.amazonaws.com"
   K8S_DEPLOY_STRATEGY: "CANARY"
-  CANARY_INTERVAL: "25s"
-  CANARY_STEP_WEIGHTS: "[1, 2, 5, 10, 20, 50]"
+  CANARY_INTERVAL: "35s"
+  SYNTHETIC_TEST_URL: "https://$HELM_APP_NAME.duck-plb-w2.kube.t-mobile.com/api/deploy/info"
 
 # Deploy on conducktor namespace (hld-plb-duck-plb-w2)
 duck-plb-w2-deploy:
@@ -19,52 +19,29 @@ duck-plb-w2-deploy:
   extends: .helm_deploy
   variables:
      FLAGGER_MONITORING: "true"
+     CANARY_PROMOTION_AUTO: "true"
   environment:
     name: prod/$K8S_CLUSTER/smoke
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: production
   resource_group: $CI_JOB_NAME
-
-validate_duck-plb-w2-deploy:
-  stage: post-deploy
-  extends: .validate_app
-  needs: ["duck-plb-w2-deploy"]
-  dependencies: ["duck-plb-w2-deploy"]
-
-duck-plb-w2-promote:
-  stage: promote
-  extends: .k8s_promote_app
-  variables:
-     FLAGGER_MONITORING: "true"
-  needs: ["duck-plb-w2-deploy","validate_duck-plb-w2-deploy"]
-  dependencies: ["duck-plb-w2-deploy","validate_duck-plb-w2-deploy"]
-  environment:
-    name: prod/$K8S_CLUSTER/smoke
-    url: $DYNAMIC_ENVIRONMENT_URL/login
-    deployment_tier: production
-  resource_group: $CI_JOB_NAME
-  rules:
-    - if: $PARENT_PIPELINE_SOURCE != "schedule"
-      when: manual
-      allow_failure: true
-    - when: on_success
 
 duck-plb-w2-sanity:
   extends: .sanity
-  needs: ["duck-plb-w2-deploy","duck-plb-w2-promote"]
-  dependencies: ["duck-plb-w2-deploy","duck-plb-w2-promote"]
+  needs: ["duck-plb-w2-deploy"]
+  dependencies: ["duck-plb-w2-deploy"]
   environment:
     name: prod/$K8S_CLUSTER/smoke
     action: verify
   retry: 1
 
-validate_duck-plb-w2-promote:
+validate_duck-plb-w2-deploy:
   variables:
     VALIDATE_PHASE: "PROMOTION"
   stage: verify
   extends: .validate_app
-  needs: ["duck-plb-w2-deploy","duck-plb-w2-promote"]
-  dependencies: ["duck-plb-w2-deploy","duck-plb-w2-promote"]
+  needs: ["duck-plb-w2-deploy"]
+  dependencies: ["duck-plb-w2-deploy"]
 
 duck-plb-w2-rollback:
   stage: rollback
@@ -76,7 +53,7 @@ duck-plb-w2-rollback:
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: production
   resource_group: $CI_JOB_NAME
-  needs: ["validate_duck-plb-w2-promote"]
+  needs: ["validate_duck-plb-w2-deploy"]
   rules:
     - if: $PARENT_PIPELINE_SOURCE != "schedule"
       when: manual
