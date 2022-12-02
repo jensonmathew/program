@@ -91,14 +91,24 @@ npe-k8s-conducktor:
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-conducktor/npe-stg.yaml
     strategy: depend
-  <<: *deploy-rules  
+  rules:
+   - if: '$SKIP_NPE_K8S_CONDUCKTOR_DEPLOY'
+     when: never
+   - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
+     when: on_success
+   - when: never  
 
 prod-k8s-conducktor:
   stage: deploy
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-conducktor/prod.yaml
     strategy: depend
-  <<: *deploy-rules  
+  rules:
+   - if: '$SKIP_PROD_K8S_CONDUCKTOR_DEPLOY'
+     when: never
+   - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
+     when: on_success
+   - when: never 
 
 # PCF Deployments
 npe-pcf:
