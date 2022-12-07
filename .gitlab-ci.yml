@@ -56,13 +56,15 @@ pages:
     - if: $CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"
       when: on_success
 
-.deploy-rules: &deploy-rules
+# Rules for default branch pipelines
+.deploy-rules:
   rules:
    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
      when: on_success
    - when: never
 
-.deploy-review-rules: &deploy-review-rules
+# Rules for feature branch pipelines
+.deploy-review-rules:
   rules:
    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH #only topic branches
      when: never
@@ -76,14 +78,20 @@ npe-k8s-tke:
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-tke/npe-stg.yaml
     strategy: depend
-  <<: *deploy-rules
+  rules:
+    - if: '$SKIP_NPE_K8S_TKE_DEPLOY'
+      when: never
+    - !reference [.deploy-rules, rules]
 
 prod-k8s-tke:
   stage: deploy
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-tke/prod.yaml
     strategy: depend
-  <<: *deploy-rules
+  rules:
+    - if: '$SKIP_PROD_K8S_TKE_DEPLOY'
+      when: never
+    - !reference [.deploy-rules, rules]
 
 # K8s-conducktor Deployments
 npe-k8s-conducktor:
@@ -94,9 +102,7 @@ npe-k8s-conducktor:
   rules:
    - if: '$SKIP_NPE_K8S_CONDUCKTOR_DEPLOY'
      when: never
-   - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
-     when: on_success
-   - when: never  
+   - !reference [.deploy-rules, rules]
 
 prod-k8s-conducktor:
   stage: deploy
@@ -106,9 +112,7 @@ prod-k8s-conducktor:
   rules:
    - if: '$SKIP_PROD_K8S_CONDUCKTOR_DEPLOY'
      when: never
-   - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $DEPLOY_ALL == "true"
-     when: on_success
-   - when: never 
+   - !reference [.deploy-rules, rules]
 
 # PCF Deployments
 npe-pcf:
@@ -116,14 +120,20 @@ npe-pcf:
   trigger:
     include: .gitlab-ci/deploy/helloworld/pcf/npe.yaml
     strategy: depend
-  <<: *deploy-rules
+  rules:
+   - if: '$SKIP_NPE_PCF_DEPLOY'
+     when: never
+   - !reference [.deploy-rules, rules]
 
 prod-pcf:
   stage: deploy
   trigger:
     include: .gitlab-ci/deploy/helloworld/pcf/prod.yaml
     strategy: depend
-  <<: *deploy-rules
+  rules:
+   - if: '$SKIP_PROD_PCF_DEPLOY'
+     when: never
+   - !reference [.deploy-rules, rules]
 
 # PCF Reviews
 review-pcf:
@@ -131,7 +141,10 @@ review-pcf:
   trigger:
     include: .gitlab-ci/deploy/helloworld/pcf/review.yaml
     strategy: depend
-  <<: *deploy-review-rules
+  rules:
+   - if: '$SKIP_REVIEW_PCF_DEPLOY'
+     when: never
+   - !reference [.deploy-review-rules, rules]
 
 # K8s-tke Reviews
 review-k8s-tke:
@@ -139,7 +152,10 @@ review-k8s-tke:
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-tke/review.yaml
     strategy: depend
-  <<: *deploy-review-rules
+  rules:
+   - if: '$SKIP_REVIEW_K8S_TKE_DEPLOY'
+     when: never
+   - !reference [.deploy-review-rules, rules]
 
 # K8s-conducktor Reviews
 review-k8s-conducktor:
@@ -147,7 +163,10 @@ review-k8s-conducktor:
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-conducktor/review.yaml
     strategy: depend
-  <<: *deploy-review-rules
+  rules:
+   - if: '$SKIP_REVIEW_K8S_CONDUCKTOR_DEPLOY'
+     when: never
+   - !reference [.deploy-review-rules, rules]
 
 # K8s Ephemeral deployment
 ephemeral-k8s:
@@ -155,4 +174,7 @@ ephemeral-k8s:
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-kind/ephemeral.yaml
     strategy: depend
-  <<: *deploy-review-rules
+  rules:
+   - if: '$SKIP_EPHM_K8S_DEPLOY'
+     when: never
+   - !reference [.deploy-review-rules, rules]

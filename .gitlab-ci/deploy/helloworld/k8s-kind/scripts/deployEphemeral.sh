@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-#set -x
-
-# Exit if any issues
-set -e
-
 # shellcheck source=./tmo-common/shared.sh
 . "${TMO_SHARED_SH}"
 
@@ -13,17 +8,25 @@ validateAppDeployment(){
     appRespFile="response.json"
     helloworldBaseUrl="http://helloworld.ephemeral.ci"
     deployApiUrl="${helloworldBaseUrl}/api/deploy/info"
-    status_code=$(curl --max-time 10 -s -H "Content-Type: application/json" -o "$appRespFile" -w "%{http_code}" "$deployApiUrl")
-    tmoLog "httpStatusCode: [ ${status_code} ] for [ ${deployApiUrl} ]" "debug"
-    if [ "$status_code" = 200 ]; then
-         tmoLogCollapsed "$(cat "${appRespFile}")" "Helloworld Api Response"
-         deployedVer=$(< "${appRespFile}" jq -r '.deployedVersion')
-         pipelineId=$(< "${appRespFile}" jq -r '.pipelineId')
-         commitSha=$(< "${appRespFile}" jq -r '.commitSha')
-         tmoLog "App RESP, Ver: [ ${deployedVer} ], Pipeline ID: [ ${pipelineId} ], SHA: [ ${commitSha} ]" "success"
-    else
-         tmoLog "Helloworld App Deploy API Status [ ${status_code} ]" "error"
-    fi
+    local retryCount=0
+    local retryLt=3
+    while [ "${retryCount}" -le "${retryLt}" ]
+    do
+         status_code=$(curl --max-time 10 -s -H "Content-Type: application/json" -o "$appRespFile" -w "%{http_code}" "$deployApiUrl")
+         tmoLog "Helloworld App Deploy API Status is [ ${status_code} ] for [ ${deployApiUrl} ]" "debug"
+         if [ "$status_code" = 200 ]; then
+            tmoLogCollapsed "$(cat "${appRespFile}")" "Helloworld Api Response"
+            deployedVer=$(< "${appRespFile}" jq -r '.deployedVersion')
+            pipelineId=$(< "${appRespFile}" jq -r '.pipelineId')
+            commitSha=$(< "${appRespFile}" jq -r '.commitSha')
+            tmoLog "App RESP, Ver: [ ${deployedVer} ], Pipeline ID: [ ${pipelineId} ], SHA: [ ${commitSha} ]" "success"
+            break;
+         fi
+         retryCount=$((retryCount+1))
+         tmoLog "Non 200 response obtained. [RETRY:- [ ${retryCount} ] will be done post 20s." "warn"
+         sleep 20
+    done
+    if [ -z "${commitSha}" ]; then return 1; fi;
 }
 
 # Prepare necessary charts for ephemeral deployment 
@@ -58,13 +61,18 @@ fi
 
 # Helm chart installation
 tmoLog "Helloworld App Installation initiated" "tmo"
-helm upgrade --install "$HELM_APP_NAME" "$HELM_CHART_DIR" --namespace=ingress-nginx --wait
+helm upgrade --install "$HELM_APP_NAME" "$HELM_CHART_DIR" --namespace=ingress-nginx --debug --timeout=8m0s  --wait
 
 sleep 5
+
 echo "------------------------------------------------------------------------------------------"
 helm get manifest "$HELM_APP_NAME" --namespace=ingress-nginx 
 echo "------------------------------------------------------------------------------------------"
 
 # Check if the app is available
-validateAppDeployment
+if ! validateAppDeployment; then
+   tmoLog "Helloworld App validation failed, even after multiple retries." "error"
+   exit 1
+fi
+
 

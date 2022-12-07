@@ -29,6 +29,7 @@ variables:
 
 ephemeral-deploy:
   stage: deploy
+  retry: 1
   extends: 
     - .ephemeral-config
   script:

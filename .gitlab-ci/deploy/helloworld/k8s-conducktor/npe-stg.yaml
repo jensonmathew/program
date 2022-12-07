@@ -10,6 +10,7 @@ variables:
   HELM_APP_NAME: $CI_PROJECT_NAME
   EXTERNAL_DNS_TARGET: "internal-stg-k8s-duck-ing-int-w2-327646687.us-west-2.elb.amazonaws.com"
   K8S_DEPLOY_STRATEGY: "BLUE_GREEN"
+  CANARY_INTERVAL: "1m"
 
 # Deploy on Conducktor Namespace (hld-stg-duck-stg-w2)
 duck-stg-w2-deploy:
@@ -55,6 +56,8 @@ duck-stg-w2-sanity:
     name: stg/$K8S_CLUSTER/smoke
     action: verify
   retry: 1
+  when: delayed
+  start_in: 60 seconds
 
 validate_duck-stg-w2-promote:
   variables:
@@ -67,6 +70,8 @@ validate_duck-stg-w2-promote:
 duck-stg-w2-rollback:
   stage: rollback
   extends: .helm_rollback
+  variables:
+     FLAGGER_MONITORING: "true"
   environment:
     name: stg/$K8S_CLUSTER/smoke
     url: $DYNAMIC_ENVIRONMENT_URL/login

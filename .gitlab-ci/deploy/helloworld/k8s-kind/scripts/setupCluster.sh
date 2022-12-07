@@ -44,6 +44,10 @@ kubectl config set-cluster kind-cdp-hw --insecure-skip-tls-verify=true
 tmoLog "Creating NameSpace and installing Nginx ingress controller"
 kubectl apply -f .gitlab-ci/deploy/helloworld/k8s-kind/config/ingress-controller.yaml
 
+# Remove the Validating Webhook entirely:
+# REF: https://stackoverflow.com/questions/61616203/nginx-ingress-controller-failed-calling-webhook
+kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+
 # Configure context to use newly created NS
 kubectl config set-context kind-cdp-hw --namespace=ingress-nginx
 
