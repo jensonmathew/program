@@ -8,6 +8,8 @@ Workflow: Continuous Delivery and Continuous Deployments
 - Epehemeral Enviroments tracks the life cycle of each non-trunk branch. If a branch goes idle for 14 days or merge request changes status to merged or closed, the environment is "stop" - which means purged.
 - A sanity test is run after each deployment to ensure the endpoint yields the expected results.
 
+The helm chart values include the deployment annotation `rollme: "{{ randAlphaNum 5 | quote }}"` to ensure that a new redeployment is being triggered for every deploy (even if it's the same code/objects). See: [Helm Documentation - Automatically Roll Deployments](https://v3.helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments)
+
 Deployment Flags:
 -----------
 
