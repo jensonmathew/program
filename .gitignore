@@ -1,3 +1,11 @@
 .idea/
 data/
 target/
+k8s/Chart.yaml
+k8s/values.yaml
+.mvn
+mvnw
+mvnw.cmd
+logs/
+.cache_ggshield
+springdoc/

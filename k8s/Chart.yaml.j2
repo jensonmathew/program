@@ -1,5 +1,5 @@
 apiVersion: v2
-name: {{ HELM_APP_NAME }}
+name: {{ HELM_APP_NAME | default ("helloworld") }}
 description: A Helm chart for Kubernetes Helloworld Deployment to TKE, Conducktor and ephemeral (KinD) clusters
 
 # A chart can be either an 'application' or a 'library' chart.
@@ -15,4 +15,4 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: {{CI_PIPELINE_ID}}
+version: "{{ CI_PIPELINE_ID |default ("00000000") }}"

@@ -20,22 +20,15 @@ Local Builds:
 Set the following environment variables:
 
 ```bash
-export CI_PROJECT_NAME=helloworld
-export APP_VERSION=1.2.3
-export BUILD_NUMBER=999
+    brew install maven
+    export CI_PROJECT_NAME=helloworld
+    export APP_VERSION=1.2.3
+    export BUILD_NUMBER=999
+    mvn -N io.takari:maven:wrapper
+    ./mvnw spring-boot:run
 ```
 
 Note: These env vars are placeholders for local build. Gitlab CI will use its own `CI_PROJECT_NAME` and pick `APP_VERSION` and `BUILD_NUMBER` from [.gitlab-ci.yml](https://gitlab.com/tmobile/templates_projects/helloworld-1/blob/tmo/master/.gitlab-ci.yml)
-
-
-Compile:
--------
-To compile the app please run the following command:
-
-```bash
-    wget https://raw.githubusercontent.com/takari/maven-wrapper/master/mvnw && chmod +x mvnw
-    ./mvnw clean package
-```
 
 Note: `mvnw` [Maven wrapper](https://github.com/takari/maven-wrapper) auto-downloads Maven on a dev's machine who doesn't yet have it installed. 
 
@@ -167,3 +160,15 @@ In the case of browser based validation, user can make use of the respective Web
 **Post Promotion:** 
 
 Post the manual promotion of the application, if we hit the respective web and api endpoints the version served will always be the latest, `N+1` and the version `N` will no longer be accessible. The cookie/header values won't have any significance post promotion of the application and irrespective of their presence the application will always respond with the version, `N+1`.
+
+
+**Debugging Helm and jinja2**
+
+```bash
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+pip install j2cli
+rm -rf k8s/values.yaml k8s/Chart.yaml
+j2 k8s/values.yaml.j2 -o k8s/values.yaml
+j2 k8s/Chart.yaml.j2 -o k8s/Chart.yaml
+helm template --debug k8s -f k8s/values.yaml
+```
