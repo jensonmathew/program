@@ -14,7 +14,7 @@ variables:
 rev-duck-dev-w2:
   stage: deploy
   extends: .helm_deploy
-  resource_group: review-deploy-$K8S_CLUSTER-$CI_COMMIT_REF_SLUG
+  resource_group: $K8S_CLUSTER-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     url: $DYNAMIC_ENVIRONMENT_URL/login
@@ -36,7 +36,7 @@ rev-duck-dev-w2-sanity:
 rev-stop-duck-dev-w2:
   needs: ["rev-duck-dev-w2"]
   extends: .k8s_teardown
-  resource_group: review-deploy-$K8S_CLUSTER-$CI_COMMIT_REF_SLUG
+  resource_group: $K8S_CLUSTER-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: stop

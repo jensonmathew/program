@@ -5,6 +5,7 @@ include:
 # px-npe02b-development
 npe02b:
   extends: .deploy-pcf
+  resource_group: $PCF_SPACE-$PCF_API
   variables:
     PCF_API: "api.sys.px-npe02b.cf.t-mobile.com"
     DOMAIN: "dev.px-npe02b.cf.t-mobile.com"
@@ -23,7 +24,7 @@ npe02b-sanity:
 
 delete-all-routes-apps-px-npe02b:
   extends: .pcf_all_teardown
-  resource_group: stop_all_px-npe02b
+  resource_group: $PCF_SPACE-$PCF_API
   variables:
     PCF_API: "api.sys.px-npe02b.cf.t-mobile.com"
     DOMAIN: "dev.px-npe02b.cf.t-mobile.com"
@@ -35,6 +36,7 @@ delete-all-routes-apps-px-npe02b:
 # px-npe02c development
 npe02c:
   extends: .deploy-pcf
+  resource_group: $PCF_SPACE-$PCF_API
   variables:
     PCF_API: "api.sys.px-npe02c.cf.t-mobile.com"
     DOMAIN: "dev.px-npe02c.cf.t-mobile.com"
@@ -53,7 +55,7 @@ npe02c-sanity:
 
 delete-all-routes-apps-px-npe02c:
   extends: .pcf_all_teardown
-  resource_group: stop_all_px-npe02c
+  resource_group: $PCF_SPACE-$PCF_API
   variables:
     PCF_API: "api.sys.px-npe02c.cf.t-mobile.com"
     DOMAIN: "dev.px-npe02c.cf.t-mobile.com"
@@ -64,6 +66,7 @@ delete-all-routes-apps-px-npe02c:
 # px-npe03a development
 npe03a:
   extends: .deploy-pcf
+  resource_group: $PCF_SPACE-$PCF_API
   variables:
     PCF_API: "api.sys.px-npe03a.cf.t-mobile.com"
     DOMAIN: "dev.px-npe03a.cf.t-mobile.com"
@@ -82,7 +85,7 @@ npe03a-sanity:
 
 delete-all-routes-apps-px-npe03a:
   extends: .pcf_all_teardown
-  resource_group: stop_all_px-npe03a
+  resource_group: $PCF_SPACE-$PCF_API
   variables:
     PCF_API: "api.sys.px-npe03a.cf.t-mobile.com"
     DOMAIN: "dev.px-npe03a.cf.t-mobile.com"
@@ -93,6 +96,7 @@ delete-all-routes-apps-px-npe03a:
 # px-npe03b development
 npe03b:
   extends: .deploy-pcf
+  resource_group: $PCF_SPACE-$PCF_API
   variables:
     PCF_API: "api.sys.px-npe03b.cf.t-mobile.com"
     DOMAIN: "dev.px-npe03b.cf.t-mobile.com"
@@ -111,7 +115,7 @@ npe03b-dev-sanity:
 
 delete-all-routes-apps-px-npe03b:
   extends: .pcf_all_teardown
-  resource_group: stop_all_px-npe03b
+  resource_group: $PCF_SPACE-$PCF_API
   variables:
     PCF_API: "api.sys.px-npe03b.cf.t-mobile.com"
     DOMAIN: "dev.px-npe03b.cf.t-mobile.com"
@@ -123,6 +127,7 @@ delete-all-routes-apps-px-npe03b:
 npe03d:
   extends: 
      - .deploy-pcf
+  resource_group: $PCF_SPACE-$PCF_API
   variables:
     PCF_API: "api.sys.px-npe03d.cf.t-mobile.com"
     DOMAIN: "dev.px-npe03d.cf.t-mobile.com"
@@ -142,7 +147,7 @@ npe03d-sanity:
 
 delete-all-routes-apps-px-npe03d:
   extends: .pcf_all_teardown
-  resource_group: stop_all_px-npe03d
+  resource_group: $PCF_SPACE-$PCF_API
   variables:
     PCF_API: "api.sys.px-npe03d.cf.t-mobile.com"
     DOMAIN: "dev.px-npe03d.cf.t-mobile.com"

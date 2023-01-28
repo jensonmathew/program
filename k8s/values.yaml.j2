@@ -34,7 +34,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: {{ SERVER_PORT|default(80) }}
   targetPort: http
   healthCheck:
     scheme: HTTP

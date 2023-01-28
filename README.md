@@ -161,7 +161,6 @@ In the case of browser based validation, user can make use of the respective Web
 
 Post the manual promotion of the application, if we hit the respective web and api endpoints the version served will always be the latest, `N+1` and the version `N` will no longer be accessible. The cookie/header values won't have any significance post promotion of the application and irrespective of their presence the application will always respond with the version, `N+1`.
 
-
 **Debugging Helm and jinja2**
 
 ```bash

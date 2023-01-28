@@ -1,12 +1,13 @@
-DROP TABLE IF EXISTS featureflags;  
+DROP TABLE IF EXISTS featureflags;
+
 CREATE TABLE featureflags (
-id INT(11) DEFAULT NULL, 
+id INT DEFAULT NULL, 
 user VARCHAR2(15) DEFAULT NULL, 
 email VARCHAR2(50) DEFAULT NULL, 
 password VARCHAR2(15) DEFAULT NULL, 
 active boolean DEFAULT NULL, 
 roles VARCHAR2(15) DEFAULT NULL);
-                        
+
 INSERT INTO featureflags
 (id, user, email, password, active, roles) 
 VALUES
