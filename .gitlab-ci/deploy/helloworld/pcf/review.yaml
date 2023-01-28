@@ -10,7 +10,7 @@ variables:
 
 px-npe02a:
   extends: .deploy-pcf
-  resource_group: review-deploy-$CI_COMMIT_REF_SLUG
+  resource_group: $CI_JOB_NAME-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     url: $DYNAMIC_ENVIRONMENT_URL

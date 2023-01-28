@@ -9,3 +9,4 @@ mvnw.cmd
 logs/
 .cache_ggshield
 springdoc/
+.vscode/

@@ -14,7 +14,7 @@ variables:
 rev-px-npe2203:
   stage: deploy
   extends: .helm_deploy
-  resource_group: review-deploy-$K8S_FOUNDATION-$CI_COMMIT_REF_SLUG
+  resource_group: $K8S_CLUSTER-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     url: $DYNAMIC_ENVIRONMENT_URL/login
@@ -33,7 +33,7 @@ rev-px-npe2203-sanity:
 rev-stop-px-npe2203:
   needs: ["rev-px-npe2203"]
   extends: .k8s_teardown
-  resource_group: review-deploy-$K8S_FOUNDATION-$CI_COMMIT_REF_SLUG
+  resource_group: $K8S_CLUSTER-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: stop
