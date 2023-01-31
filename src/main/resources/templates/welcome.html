@@ -192,58 +192,6 @@ span.hlt-2 {
 }
 
 </style>
-<script>
-function getCookie(name) {
-    var cookieArr = document.cookie.split(";");
-    console.log("getCookie, List: " + cookieArr);
-    for(var i = 0; i < cookieArr.length; i++) {
-        var cookiePair = cookieArr[i].split("=");
-        if(name == cookiePair[0].trim()) {
-            return decodeURIComponent(cookiePair[1]);
-        }
-    }
-    return null;
-}
-
-function setCookie() {
-    var c_name="canary"
-    var value="always"
-    var exdays="1"
-    var exdate = new Date();
-    exdate.setDate(exdate.getDate() + exdays);
-    var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
-    console.log("setCookie: " + c_name + "=" +c_value);
-    document.cookie = c_name + "=" + c_value;
-    location.reload();
-}
-
-function removeCookie() {
-    var name="canary"
-    console.log("removeCookie: " + name);
-    document.cookie = name+'=; Max-Age=-99999999;';
-    location.reload();
-}
-
-window.onload = function() {
-  var canaryCookieVal = getCookie("canary");
-  console.log("On Load, [canary] Cookie: " + canaryCookieVal);
-  if (canaryCookieVal) {
-      if (canaryCookieVal == "always") {
-        spanHtml="Cookie, [canary] is currently set to [always]. <a href='javascript:removeCookie()'>Remove Cookie</a>";
-      }else{
-        spanHtml="Cookie, [canary] is currently set to [" + canaryCookieVal + "]. <a href='javascript:setCookie()'>Update Cookie</a>";
-      }
-  }else {
-      spanHtml="Cookie, [canary] is not set for this site. <a href='javascript:setCookie()'>Add Cookie</a>";
-  }
-  console.log("spanHtml:- " + spanHtml);
-  var element =  document.getElementById('cookie-hld');
-  if (typeof(element) != 'undefined' && element != null){
-      document.getElementById('cookie-hld').innerHTML = spanHtml;
-  }
-};
-
-</script>
 </head>
 
 <div class="header">
@@ -350,11 +298,6 @@ window.onload = function() {
     <tr th:if="${deployPlatform != 'PCF'}">
       <td>POD SVC Account</td>
       <td><span th:text="${podSvcAccount}"></span></td>
-    </tr>
-    <tr th:if="${deployStrategy == 'BLUE_GREEN'}">
-      <td class="msg" colspan="2">
-            <span id="cookie-hld">Checking if Cookie [canary] is set...</span>
-      </td>
     </tr>
   </tbody></table>
   </main>
