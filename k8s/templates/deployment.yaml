@@ -21,6 +21,10 @@ spec:
       labels:
         {{- include "helloworld.selectorLabels" . | nindent 8 }}
     spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       terminationGracePeriodSeconds: 60
       imagePullSecrets: 
         - name: {{ .Values.imagePullSecrets }}
