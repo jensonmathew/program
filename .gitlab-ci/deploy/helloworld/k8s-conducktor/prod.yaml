@@ -12,6 +12,7 @@ variables:
   K8S_DEPLOY_STRATEGY: "CANARY"
   CANARY_INTERVAL: "50s"
   SYNTHETIC_TEST_URL: "https://$HELM_APP_NAME.duck-plb-w2.kube.t-mobile.com/api/deploy/info"
+  SYNTHETIC_TEST_HEY_CMD_ARGS: "-z 30s -q 15 -c 2"
 
 # Deploy on conducktor namespace (hld-plb-duck-plb-w2)
 duck-plb-w2-deploy:

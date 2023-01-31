@@ -126,7 +126,14 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+# The EXTERNAL_DNS_TARGET is set only for Conducktor deployments and nodegroup needs to be specified for conducktor deployments.
+# https://jirasd.t-mobile.com/servicedesk/customer/portal/20/CSRE-21034
+{%- if EXTERNAL_DNS_TARGET is defined %}
+nodeSelector:
+  nodegroup: agent
+{%- else %}
 nodeSelector: {}
+{%- endif %}
 
 tolerations: []
 
