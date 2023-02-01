@@ -47,7 +47,6 @@ public class SpringBootHelloWorldController {
         if (environment == null || environment.isEmpty()) {
             environment = "unset";
         }
-        LOGGER.info("ENVIRONMENT set to:" + environment);
 
         if (instanceId != null && unleashAPI != null){
             UnleashConfig unleashConfig = UnleashConfig.builder()
