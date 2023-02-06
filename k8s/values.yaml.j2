@@ -72,6 +72,18 @@ service:
       value: "{{ CI_COMMIT_REF_NAME | default ("localbuildbranch") }}"
     - name: DEPLOY_STRATEGY
       value: "{{K8S_DEPLOY_STRATEGY | default ("localbuildstrategy") }}"
+    - name: DEPLOY_PLATFORM
+      {%- if 'conducktor' in K8S_API_LOGIN_URL|default ("local") %}
+      value: "Conducktor"
+      {%- elif CI_JOB_NAME|default ("local") == 'ephemeral-deploy' %}
+      value: "KinD"
+      {%- elif ('pksapi' in K8S_API_LOGIN_URL|default ("local")) or ('dex' in K8S_API_LOGIN_URL|default ("local"))%}
+      value: "Tke"
+      {%- else %}
+      value: "Local"
+      {%- endif %}
+    - name: TARGET_SERVER_URL
+      value: "http://{{ HELM_APP_NAME | default ("helloworld") }}.{{ K8S_DOMAIN |default ("localdomain") }}"
     {%- if not 'production' in CI_ENVIRONMENT_TIER|default ("local") %}
     - name: http_proxy
       value: "http://proxy.internal.t-mobile.com:9090"
@@ -87,8 +99,6 @@ service:
       value: "198.0.0.0/8,10.0.0.0/8,.t-mobile.com,.gsm1900.org,localhost,127.0.0.1,.cluster.local"
     - name: JAVA_OPTS
       value: "-Dhttp.proxyHost=proxy.internal.t-mobile.com -Dhttp.proxyPort=9090 -Dhttps.proxyHost=proxy.internal.t-mobile.com -Dhttps.proxyPort=9090"
-    - name: TARGET_SERVER_URL
-      value: "http://{{ HELM_APP_NAME | default ("helloworld") }}.{{ K8S_DOMAIN |default ("localdomain") }}"
     {%- endif %}
 
 ingress:
@@ -128,7 +138,7 @@ resources:
 
 # The EXTERNAL_DNS_TARGET is set only for Conducktor deployments and nodegroup needs to be specified for conducktor deployments.
 # https://jirasd.t-mobile.com/servicedesk/customer/portal/20/CSRE-21034
-{%- if EXTERNAL_DNS_TARGET is defined %}
+{%- if 'conducktor' in K8S_API_LOGIN_URL|default ("local") %}
 nodeSelector:
   nodegroup: agent
 {%- else %}
