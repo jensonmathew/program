@@ -1,0 +1,19 @@
+{{- if .Values.virtualService -}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "helloworld.fullname" . }}
+  namespace: {{ .Values.virtualService.namespace }}
+spec:
+  hosts:
+  - {{ .Values.virtualService.hostName }}
+  gateways:
+  - istio-system/std-https-gateway
+  http:
+  - route:
+    - destination:
+        host: {{ include "helloworld.fullname" . }}.{{ .Values.virtualService.namespace }}.svc.cluster.local
+        port:
+          number: {{ .Values.virtualService.destinationPort }}
+    timeout: {{ .Values.virtualService.route.timeout }}
+{{- end }}

@@ -101,6 +101,24 @@ service:
       value: "-Dhttp.proxyHost=proxy.internal.t-mobile.com -Dhttp.proxyPort=9090 -Dhttps.proxyHost=proxy.internal.t-mobile.com -Dhttps.proxyPort=9090"
     {%- endif %}
 
+
+# The hellworld deployment by default makes use of NGINX as the ingress provider and below yaml files are utilized for the deployment
+#    - k8s/templates/{deployment.yaml,service.yaml,ingress.yaml}
+# If hellworld deployment needs to utilize ISTIO then, INGRESS_PROVIDER needs to be set to "istio" and then the below yaml files are utilized
+#    - k8s/templates/{deployment.yaml,service.yaml,virtualservice.yaml}
+
+{%- if (INGRESS_PROVIDER is defined and INGRESS_PROVIDER == "istio") %}
+
+virtualService:
+  enabled: true
+  namespace: {{K8S_NS}}
+  hostName: {{ HELM_APP_NAME | default ("helloworld") }}.{{ K8S_DOMAIN | default ("localbuildk8sdomain") }}
+  destinationPort: 80
+  route:
+    timeout: "30s"
+
+{%- else %}
+
 ingress:
   enabled: true
   namespace: {{ K8S_NS |default ("localbuildnamespace") }}
@@ -123,6 +141,8 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+
+{%- endif %}
 
 resources: 
   # We usually recommend not to specify default resources and to leave this as a conscious
