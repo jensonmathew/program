@@ -38,6 +38,16 @@ Windows:
     wget https://raw.githubusercontent.com/takari/maven-wrapper/master/mvnw.cmd
 ```
 
+If you want to include the private maven package registry, you will need to have a default settings.xml, download latest with the following commands:
+
+```bash
+export GITLAB_PAT=$(cat ~/glpat)
+export TEMPLATES_PROJECT_ID=11160640
+export TEMPLATES_TRUNK_BRANCH=tmo/master
+curl --location --header "PRIVATE-TOKEN: ${GITLAB_PAT}" "https://gitlab.com/api/v4/projects/${TEMPLATES_PROJECT_ID}/jobs/artifacts/${TEMPLATES_TRUNK_BRANCH}/raw/files/maven/settings.xml?job=artifact-build" -o settings.xml
+
+```
+
 Test Coverage Report Using Jacoco
 ==================================
 
