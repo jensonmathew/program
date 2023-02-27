@@ -2,68 +2,64 @@ include:
     - local: /.gitlab-ci/common.yaml
 
 variables:
-  K8S_CLUSTER: "duck-plb-w2"
-  K8S_DOMAIN: "$K8S_CLUSTER.kube.t-mobile.com"
   K8S_NS: "hld-plb-duck-plb-w2"
   K8S_API_LOGIN_URL: "https://api.conducktor.t-mobile.com/api/v3/login?provider=conducktor"
   K8S_SERVER_URL: "https://west.plb.duck.master.kube.t-mobile.com:6443"
-  HELM_APP_NAME: $CI_PROJECT_NAME
   EXTERNAL_DNS_TARGET: "internal-plb-k8s-duck-ing-int-w2-517343465.us-west-2.elb.amazonaws.com"
   K8S_DEPLOY_STRATEGY: "CANARY"
   CANARY_INTERVAL: "50s"
-  SYNTHETIC_TEST_URL: "https://$HELM_APP_NAME.duck-plb-w2.kube.t-mobile.com/api/deploy/info"
   SYNTHETIC_TEST_HEY_CMD_ARGS: "-z 30s -q 15 -c 2"
 
 # Deploy on conducktor namespace (hld-plb-duck-plb-w2)
-duck-plb-w2-deploy:
+duck-plb-deploy:
   stage: deploy 
   extends: .helm_deploy
   variables:
      FLAGGER_MONITORING: "true"
      CANARY_PROMOTION_AUTO: "true"
   environment:
-    name: prod/$K8S_CLUSTER/smoke
+    name: prod/$K8S_CLUSTER/smoke-$HELM_APP_NAME
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: production
-  resource_group: $CI_JOB_NAME
+  resource_group: $CI_JOB_NAME-$HELM_APP_NAME
 
-duck-plb-w2-sanity:
+duck-plb-sanity:
   extends: .sanity
-  needs: ["duck-plb-w2-deploy"]
-  dependencies: ["duck-plb-w2-deploy"]
+  needs: ["duck-plb-deploy"]
+  dependencies: ["duck-plb-deploy"]
   environment:
-    name: prod/$K8S_CLUSTER/smoke
+    name: prod/$K8S_CLUSTER/smoke-$HELM_APP_NAME
     action: verify
   retry: 1
 
-validate_duck-plb-w2-deploy:
+validate_duck-plb-deploy:
   variables:
     VALIDATE_PHASE: "PROMOTION"
   stage: verify
   extends: .validate_app
-  needs: ["duck-plb-w2-deploy"]
-  dependencies: ["duck-plb-w2-deploy"]
+  needs: ["duck-plb-deploy"]
+  dependencies: ["duck-plb-deploy"]
 
-duck-plb-w2-rollback:
+duck-plb-rollback:
   stage: rollback
   extends: .helm_rollback
   variables:
      FLAGGER_MONITORING: "true"
   environment:
-    name: prod/$K8S_CLUSTER/smoke
+    name: prod/$K8S_CLUSTER/smoke-$HELM_APP_NAME
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: production
-  resource_group: $CI_JOB_NAME
-  needs: ["validate_duck-plb-w2-deploy"]
+  resource_group: $CI_JOB_NAME-$HELM_APP_NAME
+  needs: ["validate_duck-plb-deploy"]
   rules:
     - if: $PARENT_PIPELINE_SOURCE != "schedule"
       when: manual
       allow_failure: true
     - when: on_success
 
-validate_duck-plb-w2-rollback:
+validate_duck-plb-rollback:
   variables:
     VALIDATE_PHASE: "ROLLBACK"
   stage: verify-rollback
   extends: .validate_app
-  needs: ["duck-plb-w2-rollback"]
+  needs: ["duck-plb-rollback"]
