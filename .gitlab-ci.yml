@@ -72,49 +72,17 @@ pages:
      when: on_success
    - when: never
 
-# K8s-tke Deployments
-npe-k8s-tke:
+# PCF Deployment - Review, NPE & Prod
+review-pcf:
   stage: deploy
   trigger:
-    include: .gitlab-ci/deploy/helloworld/k8s-tke/npe-stg.yaml
+    include: .gitlab-ci/deploy/helloworld/pcf/review.yaml
     strategy: depend
   rules:
-    - if: '$SKIP_NPE_K8S_TKE_DEPLOY'
-      when: never
-    - !reference [.deploy-rules, rules]
-
-prod-k8s-tke:
-  stage: deploy
-  trigger:
-    include: .gitlab-ci/deploy/helloworld/k8s-tke/prod.yaml
-    strategy: depend
-  rules:
-    - if: '$SKIP_PROD_K8S_TKE_DEPLOY'
-      when: never
-    - !reference [.deploy-rules, rules]
-
-# K8s-conducktor Deployments
-npe-k8s-conducktor:
-  stage: deploy
-  trigger:
-    include: .gitlab-ci/deploy/helloworld/k8s-conducktor/npe-stg.yaml
-    strategy: depend
-  rules:
-   - if: '$SKIP_NPE_K8S_CONDUCKTOR_DEPLOY'
+   - if: '$SKIP_REVIEW_PCF_DEPLOY'
      when: never
-   - !reference [.deploy-rules, rules]
+   - !reference [.deploy-review-rules, rules]
 
-prod-k8s-conducktor:
-  stage: deploy
-  trigger:
-    include: .gitlab-ci/deploy/helloworld/k8s-conducktor/prod.yaml
-    strategy: depend
-  rules:
-   - if: '$SKIP_PROD_K8S_CONDUCKTOR_DEPLOY'
-     when: never
-   - !reference [.deploy-rules, rules]
-
-# PCF Deployments
 npe-pcf:
   stage: deploy
   trigger:
@@ -135,18 +103,8 @@ prod-pcf:
      when: never
    - !reference [.deploy-rules, rules]
 
-# PCF Reviews
-review-pcf:
-  stage: deploy
-  trigger:
-    include: .gitlab-ci/deploy/helloworld/pcf/review.yaml
-    strategy: depend
-  rules:
-   - if: '$SKIP_REVIEW_PCF_DEPLOY'
-     when: never
-   - !reference [.deploy-review-rules, rules]
 
-# K8s-tke Reviews
+# K8s TKE Deployments - Review, NPE & PROD
 review-k8s-tke:
   stage: deploy
   trigger:
@@ -157,9 +115,31 @@ review-k8s-tke:
      when: never
    - !reference [.deploy-review-rules, rules]
 
-# K8s-conducktor Reviews
-review-k8s-conducktor:
+npe-k8s-tke:
   stage: deploy
+  trigger:
+    include: .gitlab-ci/deploy/helloworld/k8s-tke/npe-stg.yaml
+    strategy: depend
+  rules:
+    - if: '$SKIP_NPE_K8S_TKE_DEPLOY'
+      when: never
+    - !reference [.deploy-rules, rules]
+
+prod-k8s-tke:
+  stage: deploy
+  trigger:
+    include: .gitlab-ci/deploy/helloworld/k8s-tke/prod.yaml
+    strategy: depend
+  rules:
+    - if: '$SKIP_PROD_K8S_TKE_DEPLOY'
+      when: never
+    - !reference [.deploy-rules, rules]
+
+# K8s-Conducktor Deployments [NGINX & ISTIO] - Review, NPE & PROD Common Jobs
+.review-k8s-conducktor:
+  stage: deploy
+  variables:
+    K8S_CLUSTER: "duck-dev-w2"
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-conducktor/review.yaml
     strategy: depend
@@ -168,8 +148,83 @@ review-k8s-conducktor:
      when: never
    - !reference [.deploy-review-rules, rules]
 
-# K8s Ephemeral deployment
-ephemeral-k8s:
+.npe-k8s-conducktor:
+  stage: deploy
+  variables:
+    K8S_CLUSTER: "duck-stg-w2"
+  trigger:
+    include: .gitlab-ci/deploy/helloworld/k8s-conducktor/npe-stg.yaml
+    strategy: depend
+  rules:
+   - if: '$SKIP_NPE_K8S_CONDUCKTOR_DEPLOY'
+     when: never
+   - !reference [.deploy-rules, rules]
+
+.prod-k8s-conducktor:
+  stage: deploy
+  variables:
+    K8S_CLUSTER: "duck-plb-w2"
+  trigger:
+    include: .gitlab-ci/deploy/helloworld/k8s-conducktor/prod.yaml
+    strategy: depend
+  rules:
+   - if: '$SKIP_PROD_K8S_CONDUCKTOR_DEPLOY'
+     when: never
+   - !reference [.deploy-rules, rules]
+
+# Review - K8s-Conducktor NGINX Deployment, Strategy Def (ROLLING_UPDATE)
+review-k8s-conducktor[nginx]:
+  extends: .review-k8s-conducktor
+  variables:
+    HELM_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    K8S_DOMAIN: "$K8S_CLUSTER.kube.t-mobile.com"
+
+# Review - K8s-Conducktor ISTIO Deployment, Strategy Def (ROLLING_UPDATE)
+review-k8s-conducktor[istio]:
+  extends: .review-k8s-conducktor
+  variables:
+    INGRESS_PROVIDER: "istio"
+    HELM_APP_NAME: review-istio-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    K8S_DOMAIN: "$K8S_CLUSTER.npe-mesh.kube.t-mobile.com"
+
+# NPE - K8s-Conducktor NGINX Deployment, Strategy - BLUE_GREEN
+npe-k8s-conducktor[nginx-b/g]:
+  extends: .npe-k8s-conducktor
+  variables:
+    HELM_APP_NAME: $CI_PROJECT_NAME
+    K8S_DOMAIN: "$K8S_CLUSTER.kube.t-mobile.com"
+
+# NPE - K8s-Conducktor ISTIO Deployment, Strategy - BLUE_GREEN
+npe-k8s-conducktor[istio-b/g]:
+  extends: .npe-k8s-conducktor
+  variables:
+    INGRESS_PROVIDER: "istio"
+    HELM_APP_NAME: $CI_PROJECT_NAME-istio
+    K8S_DOMAIN: "$K8S_CLUSTER.npe-mesh.kube.t-mobile.com"
+    CANARY_INGRESS_PROVIDER: "$INGRESS_PROVIDER"
+    CANARY_ISTIO_VIRTUAL_SERVICE_NAME: "$HELM_APP_NAME.duck-stg-w2.npe-mesh.kube.t-mobile.com"
+
+# PROD - K8s-Conducktor NGINX Deployment, Strategy - CANARY
+prod-k8s-conducktor[nginx-canary]:
+  extends: .prod-k8s-conducktor
+  variables:
+    HELM_APP_NAME: $CI_PROJECT_NAME
+    K8S_DOMAIN: "$K8S_CLUSTER.kube.t-mobile.com"
+    SYNTHETIC_TEST_URL: "https://$HELM_APP_NAME.duck-plb-w2.kube.t-mobile.com/api/deploy/info"
+
+# PROD - K8s-Conducktor ISTIO Deployment, Strategy - CANARY
+prod-k8s-conducktor[istio-canary]:
+  extends: .prod-k8s-conducktor
+  variables:
+    INGRESS_PROVIDER: "istio"
+    HELM_APP_NAME: $CI_PROJECT_NAME-istio
+    K8S_DOMAIN: "$K8S_CLUSTER.npe-mesh.kube.t-mobile.com"
+    CANARY_INGRESS_PROVIDER: $INGRESS_PROVIDER
+    CANARY_ISTIO_VIRTUAL_SERVICE_NAME: "$HELM_APP_NAME.$K8S_CLUSTER.npe-mesh.kube.t-mobile.com"
+    SYNTHETIC_TEST_URL: "https://$CANARY_ISTIO_VIRTUAL_SERVICE_NAME/api/deploy/info"
+
+# K8s Kind Ephemeral deployment
+ephm-k8s-kind:
   stage: deploy
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-kind/ephemeral.yaml

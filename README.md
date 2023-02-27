@@ -123,6 +123,8 @@ Helloworld - Kubernetes Blue/Green and Canary Deployments:
 
 The helloworld deployments to the Conducktor platform follows the [Flagger](https://docs.flagger.app/) based Kubernetes [BLUE/GREEN](https://docs.flagger.app/usage/deployment-strategies#blue-green-deployments) deployment strategy in [Staging](.gitlab-ci/deploy/helloworld/k8s-conducktor/npe-stg.yaml) and the Kubernetes [CANARY](https://docs.flagger.app/usage/deployment-strategies#canary-release) deployment strategy in [Production](.gitlab-ci/deploy/helloworld/k8s-conducktor/prod.yaml) environments. 
 
+> **PS:** The scheduled stage and prod pipelines for `helloworld` are configured to do deployments utilizing **nginx** ingress controller by default for Flagger based Blue_Green and Canary deployments. In addition to nginx, the helloworld scheduled pipeline is capable of doing Flagger based Canary and Blue_Green deployments to prod and stage environments utilizing **istio** service mesh as well. The `HELM_APP_NAME` is set to `helloworld-istio` for those deployments.
+
 For achieving the same the helloworld project makes use of (`extends`) the [helm deployment community template](https://gitlab.com/tmobile/templates/-/blob/tmo/master/gitlab-ci/.tmo.function.helm-deploy.gitlab-ci.yml) jobs, `.helm_deploy`, for deployment and `.k8s_promote_app`, for application promotion post validation. The detailed documentation on how to leverage the helm deployment community template for achieving the Kubernetes CANARY or BLUE/GREEN deployment for an application is available [here](https://gitlab.com/tmobile/templates/-/blob/tmo/master/documentation/K8s-HELM.md#canaryblue_green-deployments).
 
 **How to validate/test helloworld Blue/Green or Canary Deployments?**
@@ -130,12 +132,20 @@ For achieving the same the helloworld project makes use of (`extends`) the [helm
 The [scheduled pipeline](https://gitlab.com/tmobile/templates_projects/helloworld/-/pipelines/631097690) that runs for the helloworld project `tmo/main` branch has validation jobs for stage and prod pipelines. The jobs validate both blue/green and canary deployments as part of the pipeline and auto trigger the respective promotion jobs, once the validation is successful. For other `tmo/main` branch pipeline runs (manual/merged) the promotion jobs are kept manual and hence can be leveraged for manual validation using any of the below helloworld app endpoints.
 
 - [PROD](.gitlab-ci/deploy/helloworld/k8s-conducktor/prod.yaml) - (K8S_DEPLOY_STRATEGY: CANARY"):
-  - [API - /api/deploy/info](https://helloworld.duck-plb-w2.kube.t-mobile.com/api/deploy/info)
-  - [WEB - /deploy/info](https://helloworld.duck-plb-w2.kube.t-mobile.com/deploy/info)
+  - **NGINX:**
+    - [API - /api/deploy/info](https://helloworld.duck-plb-w2.kube.t-mobile.com/api/deploy/info)
+    - [WEB - /deploy/info](https://helloworld.duck-plb-w2.kube.t-mobile.com/deploy/info)
+  - **ISTIO:**
+    - [API - /api/deploy/info](https://helloworld-istio.duck-plb-w2.npe-mesh.kube.t-mobile.com/api/deploy/info)
+    - [WEB - /deploy/info](https://helloworld-istio.duck-plb-w2.npe-mesh.kube.t-mobile.com/deploy/info)
 
 - [STAGE](.gitlab-ci/deploy/helloworld/k8s-conducktor/npe-stg.yaml) - (K8S_DEPLOY_STRATEGY: "BLUE_GREEN"):
-   - [API - /api/deploy/info](http://helloworld.duck-stg-w2.kube.t-mobile.com/api/deploy/info)
-   - [WEB - /deploy/info](http://helloworld.duck-stg-w2.kube.t-mobile.com/deploy/info)
+  - **NGINX:**
+    - [API - /api/deploy/info](http://helloworld.duck-stg-w2.kube.t-mobile.com/api/deploy/info)
+    - [WEB - /deploy/info](http://helloworld.duck-stg-w2.kube.t-mobile.com/deploy/info)
+  - **ISTIO:**
+    - [API - /api/deploy/info](https://helloworld-istio.duck-stg-w2.npe-mesh.kube.t-mobile.com/api/deploy/info)
+    - [WEB - /deploy/info](https://helloworld-istio.duck-stg-w2.npe-mesh.kube.t-mobile.com/deploy/info)
 
 `PS:` The above application endpoints have enough details pertaining to a specific code deployment and the deployment pipeline, that will help identify whether the application response is being served from the canary version(`N+1`) or the primary version(`N`) of the application.
 

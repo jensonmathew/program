@@ -4,96 +4,38 @@ include:
 variables:
   K8S_API_LOGIN_URL: "https://api.conducktor.t-mobile.com/api/v3/login?provider=conducktor"
   K8S_SERVER_URL: "https://west.dev.duck.master.kube.t-mobile.com:6443"
-  K8S_CLUSTER: "duck-dev-w2"
   K8S_NS: "hld-dev-duck-dev-w2"
   EXTERNAL_DNS_TARGET: "internal-dev-k8s-duck-ing-int-w2-1678771246.us-west-2.elb.amazonaws.com"
 
-# The hellworld deployment by default makes use of NGINX as the ingress provider and below yaml files are utilized for the deployment
-#    - k8s/templates/{deployment.yaml,service.yaml,ingress.yaml}
-.nginx-common:
-  variables:
-    HELM_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    K8S_DOMAIN: "$K8S_CLUSTER.kube.t-mobile.com"
-  resource_group: $K8S_CLUSTER-$CI_COMMIT_REF_SLUG-nginx
-
-# If hellworld deployment needs to utilize ISTIO then, INGRESS_PROVIDER needs to be set to "istio" and then the below yaml files are utilized
-#    - k8s/templates/{deployment.yaml,service.yaml,virtualservice.yaml}
-.istio-common:
-  variables:
-    INGRESS_PROVIDER: "istio"
-    HELM_APP_NAME: review-istio-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    K8S_DOMAIN: "$K8S_CLUSTER.npe-mesh.kube.t-mobile.com"
-  resource_group: $K8S_CLUSTER-$CI_COMMIT_REF_SLUG-istio
-
-# Deploy on Conducktor namespace ( hld-dev-duck-dev-w2 ) - NGINX Ingress provider (default)
-nginx-rev-duck-dev-w2:
+# Deploy on Conducktor namespace ( hld-dev-duck-dev-w2 )
+duck-rev-deploy:
   stage: deploy
-  extends: 
-    - .nginx-common
-    - .helm_deploy
+  extends: .helm_deploy
+  resource_group: $K8S_CLUSTER-$HELM_APP_NAME
   environment:
-    name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG-nginx
+    name: review/$K8S_CLUSTER/$HELM_APP_NAME
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: development
-    on_stop: nginx-rev-stop-duck-dev-w2
+    on_stop: duck-rev-stop
     auto_stop_in: 2 days
 
-nginx-rev-duck-dev-w2-sanity:
+duck-rev-sanity:
   extends: .sanity
-  needs: ["nginx-rev-duck-dev-w2"]
-  dependencies: ["nginx-rev-duck-dev-w2"]
+  needs: ["duck-rev-deploy"]
+  dependencies: ["duck-rev-deploy"]
   retry: 1
   when: delayed
   start_in: 3 minutes
   environment:
-    name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG-nginx
+    name: review/$K8S_CLUSTER/$HELM_APP_NAME
     action: verify
 
-nginx-rev-stop-duck-dev-w2:
-  needs: ["nginx-rev-duck-dev-w2"]
-  extends: 
-    - .k8s_teardown
-    - .nginx-common
+duck-rev-stop:
+  needs: ["duck-rev-deploy"]
+  extends: .k8s_teardown
+  resource_group: $K8S_CLUSTER-$HELM_APP_NAME
   environment:
-    name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG-nginx
-    action: stop
-    deployment_tier: development
-  rules:
-    - when: manual
-      allow_failure: true
-
-
-# Deploy on Conducktor namespace ( hld-dev-duck-dev-w2 ) - ISTIO Ingress provider utilized
-istio-rev-duck-dev-w2:
-  stage: deploy
-  extends: 
-    - .helm_deploy
-    - .istio-common
-  environment:
-    name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG-istio
-    url: $DYNAMIC_ENVIRONMENT_URL/login
-    deployment_tier: development
-    on_stop: istio-rev-stop-duck-dev-w2
-    auto_stop_in: 2 days
-
-istio-rev-duck-dev-w2-sanity:
-  extends: .sanity
-  needs: ["istio-rev-duck-dev-w2"]
-  dependencies: ["istio-rev-duck-dev-w2"]
-  retry: 1
-  when: delayed
-  start_in: 3 minutes
-  environment:
-    name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG-istio
-    action: verify
-
-istio-rev-stop-duck-dev-w2:
-  needs: ["istio-rev-duck-dev-w2"]
-  extends: 
-    - .k8s_teardown
-    - .istio-common
-  environment:
-    name: review/$K8S_CLUSTER/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG-istio
+    name: review/$K8S_CLUSTER/$HELM_APP_NAME
     action: stop
     deployment_tier: development
   rules:

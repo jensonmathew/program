@@ -4,6 +4,8 @@ kind: VirtualService
 metadata:
   name: {{ include "helloworld.fullname" . }}
   namespace: {{ .Values.virtualService.namespace }}
+  labels:
+    {{- include "helloworld.labels" . | nindent 4 }}
 spec:
   hosts:
   - {{ .Values.virtualService.hostName }}
