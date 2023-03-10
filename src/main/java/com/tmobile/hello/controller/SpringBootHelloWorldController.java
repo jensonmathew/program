@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import com.tmobile.hello.domain.SecurityUserDetails;
 import com.tmobile.hello.exception.HelloworldException;
+
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,7 +166,12 @@ public class SpringBootHelloWorldController {
         if ("PCF".equalsIgnoreCase(deployPlatform)) {
             jo.put("podAddress",parseEnvVariable("CF_INSTANCE_ADDR"));
             jo.put("podIp",parseEnvVariable("CF_INSTANCE_INTERNAL_IP"));
-            jo.put("podEnvInfo",new JSONObject(parseEnvVariable("VCAP_APPLICATION")));
+            String appInfo=parseEnvVariable("VCAP_APPLICATION");
+            if ("unset".equalsIgnoreCase(appInfo)){
+                jo.put("podEnvInfo",appInfo);
+            }else{
+                jo.put("podEnvInfo",new JSONObject(appInfo));
+            }
             jo.put("podHostIp",parseEnvVariable("CF_INSTANCE_IP"));
             jo.put("podSvcAccount",parseEnvVariable("USER"));
         } else {
@@ -183,9 +189,13 @@ public class SpringBootHelloWorldController {
         String keyVal = null;
         keyVal=System.getenv(key);
         if (keyVal == null || keyVal.isEmpty()) {
+            keyVal = env.getProperty(key);
+        }
+        if (keyVal == null || keyVal.isEmpty()) {
             keyVal = "unset";
-        } 
+        }
         return keyVal.trim();
     }
+
 
 }

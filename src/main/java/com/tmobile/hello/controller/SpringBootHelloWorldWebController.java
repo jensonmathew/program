@@ -1,12 +1,26 @@
 package com.tmobile.hello.controller;
 
+import org.slf4j.LoggerFactory;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 @Controller
 public class SpringBootHelloWorldWebController {
+
+    // Logger
+    private org.slf4j.Logger LOGGER= LoggerFactory.getLogger(SpringBootHelloWorldController.class);
+
+    // To pull from application.properties
+    @Autowired
+    private Environment env;
+
+    public SpringBootHelloWorldWebController(Environment environment){
+        env = environment;
+    }
 
     @GetMapping("/deploy/info")
     public ModelAndView getDeployStats() {
@@ -30,12 +44,17 @@ public class SpringBootHelloWorldWebController {
         mav.addObject("deployStrategy",deployStrategy);
         mav.addObject("deployPlatform",deployPlatform);
         if ("PCF".equalsIgnoreCase(deployPlatform)) {
-            JSONObject pcfObj = new JSONObject(parseEnvVariable("VCAP_APPLICATION"));
-            mav.addObject("appName",pcfObj.get("application_name"));
+            String appInfo=parseEnvVariable("VCAP_APPLICATION");
+            if ("unset".equalsIgnoreCase(appInfo)){
+                mav.addObject("podEnvInfo",appInfo);
+            }else{
+                JSONObject pcfObj = new JSONObject(parseEnvVariable("VCAP_APPLICATION"));
+                mav.addObject("appName",pcfObj.get("application_name"));
+                mav.addObject("podNamespace",pcfObj.get("space_name"));
+                mav.addObject("podOrgName",pcfObj.get("organization_name"));
+            }
             mav.addObject("podAddress",parseEnvVariable("CF_INSTANCE_ADDR"));
             mav.addObject("podIp",parseEnvVariable("CF_INSTANCE_INTERNAL_IP"));
-            mav.addObject("podNamespace",pcfObj.get("space_name"));
-            mav.addObject("podOrgName",pcfObj.get("organization_name"));
             mav.addObject("podHostIp",parseEnvVariable("CF_INSTANCE_IP"));
             mav.addObject("podSvcAccount",parseEnvVariable("USER"));
         } else {
@@ -58,8 +77,11 @@ public class SpringBootHelloWorldWebController {
         String keyVal = null;
         keyVal=System.getenv(key);
         if (keyVal == null || keyVal.isEmpty()) {
+            keyVal = env.getProperty(key);
+        }
+        if (keyVal == null || keyVal.isEmpty()) {
             keyVal = "unset";
-        } 
+        }
         return keyVal.trim();
     }
 
