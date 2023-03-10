@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.mockito.*;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import static org.junit.Assert.*;
+
+import org.hamcrest.CoreMatchers;
 import org.springframework.mock.env.MockEnvironment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -82,12 +84,60 @@ public class SpringBootHelloWorldControllerTest {
 		jo.put("awesomefeature","false");
 		assertEquals(jo.toString(), hc.getFF("awesomefeature"));
 	}
+
+	
 	@Test
-    public void testShowStatus() throws Exception {
+    public void testShowStatusForTKE() throws Exception {
 		MockEnvironment env = new MockEnvironment();
+		env.setProperty("DEPLOY_PLATFORM", "TKE");
 		SpringBootHelloWorldController hc = new SpringBootHelloWorldController(env);
 		String result = hc.showStatus(() -> null);
 
 		assertNotNull(result);
+		assertEquals(new JSONObject(result).getString("deployPlatform"), "TKE");
+
     }
+	
+	@Test
+    public void testShowStatusForConducktor() throws Exception {
+		MockEnvironment env = new MockEnvironment();
+		env.setProperty("DEPLOY_PLATFORM", "CONDUCKTOR");
+		SpringBootHelloWorldController hc = new SpringBootHelloWorldController(env);
+		String result = hc.showStatus(() -> null);
+
+		assertNotNull(result);
+		assertEquals(new JSONObject(result).getString("deployPlatform"), "CONDUCKTOR");
+
+	}
+
+	@Test
+    public void testShowStatusForPCF() throws Exception {
+		MockEnvironment env = new MockEnvironment();
+		env.setProperty("DEPLOY_PLATFORM", "PCF");
+		SpringBootHelloWorldController hc = new SpringBootHelloWorldController(env);
+		String result = hc.showStatus(() -> null);
+
+		assertNotNull(result);
+		assertEquals(new JSONObject(result).getString("deployPlatform"), "PCF");
+		assertEquals(new JSONObject(result).getString("podEnvInfo"), "unset");
+	}
+
+	@Test
+    public void testShowStatusForPCFWithPodInfo() throws Exception {
+		MockEnvironment env = new MockEnvironment();
+		env.setProperty("DEPLOY_PLATFORM", "PCF");
+		JSONObject podInfoJson = new JSONObject();
+		podInfoJson.put("organization_name","tmo-test");
+		podInfoJson.put("application_name","helloworld-test");
+		podInfoJson.put("space_name","test");
+		env.setProperty("VCAP_APPLICATION", podInfoJson.toString());
+		SpringBootHelloWorldController hc = new SpringBootHelloWorldController(env);
+		String result = hc.showStatus(() -> null);
+
+		assertNotNull(result);
+		assertEquals(new JSONObject(result).getString("deployPlatform"), "PCF");
+		assertThat(new JSONObject(result).getString("podEnvInfo"), CoreMatchers.containsString(podInfoJson.toString()));
+
+	}
+
 }
