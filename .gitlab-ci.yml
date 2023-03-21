@@ -11,6 +11,7 @@ include:
       - /gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.shellcheck.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.docker.gitlab-ci.yml
+      - /gitlab-ci/.tmo.function.relic.lictor.gitlab-ci.yml
      # - /gitlab-ci/.tmo.job.container-scan.gitlab-ci.yml
 
 stages: 
@@ -20,6 +21,7 @@ stages:
   - package
   - publish
   - ci
+  - push
   - deploy
 
 testjob:
@@ -233,3 +235,29 @@ ephm-k8s-kind:
    - if: '$SKIP_EPHM_K8S_DEPLOY'
      when: never
    - !reference [.deploy-review-rules, rules]
+
+# Push configuration to NPE Relic
+lictor_job_npe:
+  extends: .lictor-template
+  stage: push
+  variables:
+    CI_ENVIRONMENT: "qlab01" # tmobile/L2/L3/env/branch/config
+    DATACENTER: "npeprd"
+    # Optional
+    CONFIG_ROOT_DIR: "config"
+    LICTOR_LOG_LEVEL: "trace"
+
+# Push configuration to PROD Relic
+lictor_job_prod:
+  extends: .lictor-template
+  stage: push
+  variables:
+    CI_ENVIRONMENT: "prod" # tmobile/L2/L3/env/branch/config
+    DATACENTER: "prd"
+    # Optional
+    CONFIG_ROOT_DIR: "config"
+    LICTOR_LOG_LEVEL: "trace"
+  rules:
+   - if: '$SKIP_PROD_PCF_DEPLOY'
+     when: never
+   - !reference [.deploy-rules, rules]
