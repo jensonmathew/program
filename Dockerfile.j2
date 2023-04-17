@@ -1,5 +1,5 @@
-## Below command will download image from Docker Hub
-FROM registry.gitlab.com/tmobile/citadel/containers/tmo-java-base:17
+## Below command will download the tmo-java-base image from tmobile/citadel/containers
+FROM registry.gitlab.com/tmobile/citadel/containers/tmo-java-base:{{TMO_JAVA_BASE_IMAGE_VERSION}}
 
 ## Variable intake from .gitlab-ci.yml 
 ARG APP_VERSION

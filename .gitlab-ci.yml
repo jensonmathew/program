@@ -246,6 +246,10 @@ lictor_job_npe:
     # Optional
     CONFIG_ROOT_DIR: "config"
     LICTOR_LOG_LEVEL: "trace"
+  rules:
+   - if: '$SKIP_LICTOR_RUN_NPE'
+     when: never
+   - !reference [.deploy-rules, rules]
 
 # Push configuration to PROD Relic
 lictor_job_prod:
@@ -258,6 +262,8 @@ lictor_job_prod:
     CONFIG_ROOT_DIR: "config"
     LICTOR_LOG_LEVEL: "trace"
   rules:
+   - if: '$SKIP_LICTOR_RUN_PROD'
+     when: never
    - if: '$SKIP_PROD_PCF_DEPLOY'
      when: never
    - !reference [.deploy-rules, rules]
