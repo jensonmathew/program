@@ -11,6 +11,8 @@ variables:
 duck-rev-deploy:
   stage: deploy
   extends: .helm_deploy
+  variables:
+    AUTO_SCALING: "true"
   resource_group: $K8S_CLUSTER-$HELM_APP_NAME
   environment:
     name: review/$K8S_CLUSTER/$HELM_APP_NAME
