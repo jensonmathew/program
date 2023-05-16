@@ -14,6 +14,8 @@ variables:
 rev-px-npe2203:
   stage: deploy
   extends: .helm_deploy
+  variables:
+    AUTO_SCALING: "true"
   resource_group: $K8S_CLUSTER-$CI_COMMIT_REF_SLUG
   environment:
     name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
