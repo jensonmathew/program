@@ -107,8 +107,10 @@ prod-pcf:
 
 
 # K8s TKE Deployments - Review, NPE & PROD
-review-k8s-tke:
+.review-k8s-tke:
   stage: deploy
+  variables:
+    K8S_FOUNDATION: "px-npe2203"
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-tke/review.yaml
     strategy: depend
@@ -117,8 +119,11 @@ review-k8s-tke:
      when: never
    - !reference [.deploy-review-rules, rules]
 
-npe-k8s-tke:
+.npe-k8s-tke:
   stage: deploy
+  variables:
+    K8S_DEPLOY_STRATEGY: "BLUE_GREEN"
+    K8S_FOUNDATION: "tt-prd2103"
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-tke/npe-stg.yaml
     strategy: depend
@@ -126,6 +131,38 @@ npe-k8s-tke:
     - if: '$SKIP_NPE_K8S_TKE_DEPLOY'
       when: never
     - !reference [.deploy-rules, rules]
+
+# Review - K8s-TKE NGINX Deployment, Strategy (Default - ROLLING_UPDATE)
+review-k8s-tke[nginx]:
+  extends: .review-k8s-tke
+  variables:
+    K8S_DOMAIN: "$K8S_FOUNDATION.tke.t-mobile.com"
+    HELM_APP_NAME: review-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+
+# Review - K8s-TKE ISTIO Deployment, Strategy (Default - ROLLING_UPDATE)
+review-k8s-tke[istio]:
+  extends: .review-k8s-tke
+  variables:
+    K8S_DOMAIN: "$K8S_FOUNDATION.mesh.t-mobile.com"
+    HELM_APP_NAME: review-istio-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    INGRESS_PROVIDER: "istio"
+
+# NPE - K8s-TKE NGINX Deployment, Strategy - BLUE_GREEN
+npe-k8s-tke[nginx-b/g]:
+  extends: .npe-k8s-tke
+  variables:
+    HELM_APP_NAME: $CI_PROJECT_NAME
+    K8S_DOMAIN: "$K8S_FOUNDATION.tke.t-mobile.com"
+
+# NPE - K8s-TKE ISTIO Deployment, Strategy - BLUE_GREEN
+npe-k8s-tke[istio-b/g]:
+  extends: .npe-k8s-tke
+  variables:
+    HELM_APP_NAME: $CI_PROJECT_NAME-istio
+    K8S_DOMAIN: "$K8S_FOUNDATION.mesh.t-mobile.com"
+    INGRESS_PROVIDER: "istio"
+    CANARY_INGRESS_PROVIDER: "$INGRESS_PROVIDER"
+    CANARY_ISTIO_VIRTUAL_SERVICE_NAME: "$HELM_APP_NAME.$K8S_FOUNDATION.mesh.t-mobile.com"
 
 prod-k8s-tke:
   stage: deploy
