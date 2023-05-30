@@ -166,6 +166,9 @@ npe-k8s-tke[istio-b/g]:
 
 prod-k8s-tke:
   stage: deploy
+  variables:
+    K8S_DEPLOY_STRATEGY: "CANARY"
+    K8S_NS: "cdp-helloworld-prd"
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-tke/prod.yaml
     strategy: depend
