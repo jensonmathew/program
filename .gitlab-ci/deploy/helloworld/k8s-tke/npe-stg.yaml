@@ -54,7 +54,7 @@ tt-stg2103-sanity:
     action: verify
   retry: 1
   when: delayed
-  start_in: 60 seconds
+  start_in: 90 seconds
 
 validate_tt-stg2103-promote:
   variables:

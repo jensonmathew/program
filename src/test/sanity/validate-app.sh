@@ -12,6 +12,7 @@ helloworldBaseUrl="${DYNAMIC_ENVIRONMENT_URL:-"https://${HELM_APP_NAME}.${K8S_DO
 deployApiUrl="${helloworldBaseUrl}/api/deploy/info"
 totalReq=${TEST_ITERATION:-50}
 
+tmoLog "VALIDATE_PHASE :- [ ${VALIDATE_PHASE} ]" "debug"
 tmoLog "K8S_DEPLOY_STRATEGY:- [ ${K8S_DEPLOY_STRATEGY} ]"
 tmoLog "DYNAMIC_ENVIRONMENT_URL identified as :- ${DYNAMIC_ENVIRONMENT_URL}" "debug"
 tmoLog "deployApiUrl set as:- [ ${deployApiUrl} ]" "debug"
@@ -23,6 +24,11 @@ successCount=0
 newVer="-"
 oldVer="-"
 perc=0
+
+if [ "${VALIDATE_PHASE}" = "ROLLBACK" ]; then
+    tmoLog "Waiting 90s before initiating rollback validation for [ ${HELM_APP_NAME} ]" "debug"
+    sleep 90
+fi
 
 for i in $(seq "$totalReq");
 do
@@ -61,7 +67,7 @@ do
         ((oldVerCount++))
         oldVer=${deployedVer}
     fi
-    sleep 1
+    sleep 2
 done
 
 if [ "${VALIDATE_PHASE}" = "ROLLBACK" ]; then
@@ -97,7 +103,7 @@ case "${VALIDATE_PHASE}" in
         ;;
     ROLLBACK)
         if [ "${perc}" -lt 80 ]; then
-            tmoLog "App ROLLBACK validation Failed. The percentage of [ N+1 ] versions against total requests, [ ${perc}% ] is not meeting the threshold, [ 80% ]" "error"
+            tmoLog "App ROLLBACK validation Failed. The percentage of [ N ] versions against total requests, [ ${perc}% ] is not meeting the threshold, [ 80% ]" "error"
             exit 1
         fi
         ;;

@@ -54,6 +54,8 @@ px-prd5103-sanity:
     name: prod/$K8S_FOUNDATION/development/smoke-$HELM_APP_NAME
     action: verify
   retry: 1
+  when: delayed
+  start_in: 90 seconds
 
 validate_px-prd5103-deploy:
   variables:
@@ -118,6 +120,8 @@ px-prd4203-sanity:
     name: prod/$K8S_FOUNDATION/development/smoke-$HELM_APP_NAME
     action: verify
   retry: 1
+  when: delayed
+  start_in: 90 seconds
 
 validate_px-prd4203-deploy:
   variables:

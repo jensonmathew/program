@@ -124,6 +124,7 @@ prod-pcf:
   variables:
     K8S_DEPLOY_STRATEGY: "BLUE_GREEN"
     K8S_FOUNDATION: "tt-prd2103"
+    HPA_ENABLED: "true"
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-tke/npe-stg.yaml
     strategy: depend
@@ -169,6 +170,7 @@ prod-k8s-tke:
   variables:
     K8S_DEPLOY_STRATEGY: "CANARY"
     K8S_NS: "cdp-helloworld-prd"
+    HPA_ENABLED: "true"
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-tke/prod.yaml
     strategy: depend
@@ -193,7 +195,9 @@ prod-k8s-tke:
 .npe-k8s-conducktor:
   stage: deploy
   variables:
+    K8S_DEPLOY_STRATEGY: "BLUE_GREEN"
     K8S_CLUSTER: "duck-stg-w2"
+    HPA_ENABLED: "true"
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-conducktor/npe-stg.yaml
     strategy: depend
@@ -205,7 +209,9 @@ prod-k8s-tke:
 .prod-k8s-conducktor:
   stage: deploy
   variables:
+    K8S_DEPLOY_STRATEGY: "CANARY"
     K8S_CLUSTER: "duck-plb-w2"
+    HPA_ENABLED: "true"
   trigger:
     include: .gitlab-ci/deploy/helloworld/k8s-conducktor/prod.yaml
     strategy: depend

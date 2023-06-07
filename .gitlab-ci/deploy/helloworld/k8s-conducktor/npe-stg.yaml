@@ -6,8 +6,7 @@ variables:
   K8S_SERVER_URL: "https://west.stg.duck.master.kube.t-mobile.com:6443"
   K8S_NS: "hld-stg-duck-stg-w2"
   EXTERNAL_DNS_TARGET: "internal-stg-k8s-duck-ing-int-w2-327646687.us-west-2.elb.amazonaws.com"
-  K8S_DEPLOY_STRATEGY: "BLUE_GREEN"
-  CANARY_INTERVAL: "1m"
+  CANARY_INTERVAL: "90s"
 
 # Deploy on Conducktor Namespace (hld-stg-duck-stg-w2)
 duck-stg-deploy:
@@ -54,7 +53,7 @@ duck-stg-sanity:
     action: verify
   retry: 1
   when: delayed
-  start_in: 60 seconds
+  start_in: 90 seconds
 
 validate_duck-stg-promote:
   variables:
