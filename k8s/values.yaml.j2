@@ -150,11 +150,11 @@ resources:
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
-    cpu: "1"
-    memory: 1Gi
-  requests:
-    cpu: 250m
+    cpu: "0.75"
     memory: 512Mi
+  requests:
+    cpu: 150m
+    memory: 256Mi
 
 # The EXTERNAL_DNS_TARGET is set only for Conducktor deployments and nodegroup needs to be specified for conducktor deployments.
 # https://jirasd.t-mobile.com/servicedesk/customer/portal/20/CSRE-21034
@@ -169,10 +169,10 @@ tolerations: []
 
 affinity: {}
 
-{%- if (AUTO_SCALING is defined and AUTO_SCALING == "true") %}
+{%- if (HPA_ENABLED is defined and HPA_ENABLED == "true") %}
 autoscaling:
   enabled: true
   minReplicas: 1
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 50
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 75
 {%- endif %}

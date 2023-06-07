@@ -6,7 +6,6 @@ variables:
   K8S_API_LOGIN_URL: "https://api.conducktor.t-mobile.com/api/v3/login?provider=conducktor"
   K8S_SERVER_URL: "https://west.plb.duck.master.kube.t-mobile.com:6443"
   EXTERNAL_DNS_TARGET: "internal-plb-k8s-duck-ing-int-w2-517343465.us-west-2.elb.amazonaws.com"
-  K8S_DEPLOY_STRATEGY: "CANARY"
   CANARY_INTERVAL: "50s"
   SYNTHETIC_TEST_HEY_CMD_ARGS: "-z 30s -q 15 -c 2"
 
@@ -31,6 +30,8 @@ duck-plb-sanity:
     name: prod/$K8S_CLUSTER/smoke-$HELM_APP_NAME
     action: verify
   retry: 1
+  when: delayed
+  start_in: 90 seconds
 
 validate_duck-plb-deploy:
   variables:
