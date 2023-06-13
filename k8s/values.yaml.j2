@@ -141,6 +141,12 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+  {%- if (TLS_ENABLED is defined and TLS_ENABLED == "true") %}
+  tls:
+    - hosts:
+      - {{ HELM_APP_NAME | default ("helloworld") }}.{{ K8S_DOMAIN | default ("localbuildk8sdomain") }}
+      secretName: cdp-helloworld
+  {%- endif %}
 
 {%- endif %}
 
