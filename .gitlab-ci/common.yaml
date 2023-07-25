@@ -10,6 +10,7 @@ include:
 stages:
     - tmo
     - test
+    - publish
     - deploy
     - post-deploy
     - promote

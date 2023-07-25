@@ -1,9 +1,12 @@
 include:
-    - local: /.gitlab-ci/common.yaml
+  - local: /.gitlab-ci/common.yaml
+  - project: 'tmobile/templates'
+    file:
+      - /gitlab-ci/.tmo.function.relic.k8s.gitlab-ci.yml
 
 variables:
   K8S_NS: "cdp-helloworld-npe"
-  K8S_API_LOGIN_URL: "pksapi.$K8S_FOUNDATION.tke.t-mobile.com"
+  K8S_API_LOGIN_URL: "dex.$K8S_FOUNDATION.tke.t-mobile.com"
   K8S_CLUSTER: "api-$K8S_FOUNDATION.tke.t-mobile.com"
   K8S_SERVER_URL: "https://api-$K8S_FOUNDATION.tke.t-mobile.com:8443"
 
@@ -39,3 +42,61 @@ rev-stop-px-npe2203:
     - when: manual
       allow_failure: true
 
+ConfigMap-tke:
+  extends: .relic-common
+  stage: publish
+  variables:
+    L2_ASSET_ID: "APM0201849"
+    RESOURCE_TYPE: "configmap"
+    CONFIGMAP_NAME: "helloworld-relic-config-qlab01"
+    K8S_FOUNDATION: "px-npe2203"
+    K8S_SERVER_URL: "https://api-${K8S_FOUNDATION}.tke.t-mobile.com:8443"
+    K8S_API_LOGIN_URL: "dex.${K8S_FOUNDATION}.tke.t-mobile.com"
+    K8S_CLUSTER: "api-${K8S_FOUNDATION}.tke.t-mobile.com"
+    K8S_CONFIG_CONTEXT: "api-${K8S_FOUNDATION}.tke.t-mobile.com"
+    K8S_NS: "cdp-helloworld-npe"
+    RELIC_URL: "https://relic-npeprd.t-mobile.com"
+    VAULT_ADDR: "https://vault-dev.npe-services.t-mobile.com"
+    KV_PATH: "tmobile/APM0201849/APM0201850/qlab01/feat.APCDP-614/config"
+    CONFIG_DIR: "config"
+    CONFIG_ENVIRONMENT: "qlab01"
+    UPDATE_CONFIGMAP: "true"
+    LICTOR_UNIFY_MODE: "true"
+    DATA_ENV_FORMAT: "true"
+  environment:
+    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    - if: '$CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME != "$CI_DEFAULT_BRANCH"'
+      when: on_success
+
+Secret-tke:
+  extends: .relic-common
+  stage: publish
+  variables:
+    L2_ASSET_ID: "APM0201849"
+    RESOURCE_TYPE: "secrets"
+    SECRET_NAME: "helloworld-vault-secret-qlab01"
+    K8S_FOUNDATION: "px-npe2203"
+    K8S_SERVER_URL: "https://api-${K8S_FOUNDATION}.tke.t-mobile.com:8443"
+    K8S_API_LOGIN_URL: "dex.${K8S_FOUNDATION}.tke.t-mobile.com"
+    K8S_CLUSTER: "api-${K8S_FOUNDATION}.tke.t-mobile.com"
+    K8S_CONFIG_CONTEXT: "api-${K8S_FOUNDATION}.tke.t-mobile.com"
+    K8S_NS: "cdp-helloworld-npe"
+    VAULT_ADDR: "https://vault-dev.npe-services.t-mobile.com"
+    SECRET_PATH: "tmobile/APM0201849/APM0201850/qlab01"
+    SECRET_GROUP: ""
+    UPDATE_SECRET: "true"
+    SECRETS_YAML_ROOT: "true"
+  environment:
+    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    - if: '$CI_COMMIT_REF_NAME == "$CI_DEFAULT_BRANCH"'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME != "$CI_DEFAULT_BRANCH"'
+      when: on_success
