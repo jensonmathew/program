@@ -93,6 +93,13 @@ spec:
               valueFrom:
                fieldRef:
                  fieldPath: status.hostIP
+            {{- if contains "review/px-npe2203" .Values.environment }}
+            - name: smokeURL
+              valueFrom:
+                configMapKeyRef:
+                  key: helloworld.helloworld-2-smoke.url
+                  name: helloworld-relic-config-qlab01
+            {{- end }}
             {{- range .Values.service.env }}
             - name: {{ .name }}
               value: {{ .value | quote |trim}}

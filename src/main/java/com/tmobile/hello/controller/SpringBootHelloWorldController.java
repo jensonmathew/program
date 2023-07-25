@@ -150,6 +150,7 @@ public class SpringBootHelloWorldController {
         String deployPlatform = parseEnvVariable("DEPLOY_PLATFORM");
         JSONObject jo = new JSONObject();
         jo.put("status","active");
+        jo.put("smokeURL",parseEnvVariable("smokeURL"));
         jo.put("deployEnv",parseEnvVariable("ENVIRONMENT"));
         jo.put("commitSha",parseEnvVariable("COMMIT_SHA"));
         jo.put("appName",parseEnvVariable("APP_NAME"));

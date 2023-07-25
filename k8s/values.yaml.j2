@@ -101,6 +101,7 @@ service:
       value: "-Dhttp.proxyHost=proxy.internal.t-mobile.com -Dhttp.proxyPort=9090 -Dhttps.proxyHost=proxy.internal.t-mobile.com -Dhttps.proxyPort=9090"
     {%- endif %}
 
+environment: "{{ CI_ENVIRONMENT_NAME | default ("local") }}"
 
 # The hellworld deployment by default makes use of NGINX as the ingress provider and below yaml files are utilized for the deployment
 #    - k8s/templates/{deployment.yaml,service.yaml,ingress.yaml}

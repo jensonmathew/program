@@ -30,6 +30,7 @@ public class SpringBootHelloWorldWebController {
         appPlatformInfo.append("\t").append(deployPlatform);
         ModelAndView mav = new ModelAndView();
         mav.addObject("status","active");
+        mav.addObject("smokeURL",parseEnvVariable("smokeURL"));
         mav.addObject("deployEnv",parseEnvVariable("ENVIRONMENT"));
         mav.addObject("commitSha",parseEnvVariable("COMMIT_SHA"));
         mav.addObject("appName",parseEnvVariable("APP_NAME"));
