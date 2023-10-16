@@ -49,6 +49,10 @@ variables:
 
   MAVEN_BUILD_SINGLE_JOB: "true"
 
+  #https://github.com/raphw/byte-buddy/issues/1396
+  MAVEN_BUILD_ARGS: "clean package -Dnet.bytebuddy.experimental=true"
+  MAVEN_TEST_ARGS: "clean test -Dnet.bytebuddy.experimental=true"        
+
 # Create json for badges 
 pages:
   extends: .badge_pages
