@@ -17,10 +17,9 @@ include:
 stages: 
   - tmo
   - build
-  - test
   - package
+  - test
   - publish
-  - ci
   - push
   - deploy
 
