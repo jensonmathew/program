@@ -1,7 +1,6 @@
 include:
   - project: 'tmobile/templates'
     file:
-      - /gitlab-ci/.tmo.global.common.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.mavenTest.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.mavenBuild.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml
