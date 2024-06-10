@@ -146,7 +146,7 @@ ingress:
   tls:
     - hosts:
       - {{ HELM_APP_NAME | default ("helloworld") }}.{{ K8S_DOMAIN | default ("localbuildk8sdomain") }}
-      secretName: cdp-helloworld
+      secretName: {{ TLS_SECRET_NAME }}
   {%- endif %}
 
 {%- endif %}
