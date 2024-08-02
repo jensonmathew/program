@@ -13,7 +13,7 @@ duck-rev-deploy:
   extends: .helm_deploy
   resource_group: $K8S_CLUSTER-$HELM_APP_NAME
   environment:
-    name: review/$K8S_CLUSTER/$HELM_APP_NAME
+    name: dev/$K8S_CLUSTER/$HELM_APP_NAME
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: development
     on_stop: duck-rev-stop
@@ -27,7 +27,7 @@ duck-rev-sanity:
   when: delayed
   start_in: 3 minutes
   environment:
-    name: review/$K8S_CLUSTER/$HELM_APP_NAME
+    name: dev/$K8S_CLUSTER/$HELM_APP_NAME
     action: verify
 
 duck-rev-stop:
@@ -35,7 +35,7 @@ duck-rev-stop:
   extends: .k8s_teardown
   resource_group: $K8S_CLUSTER-$HELM_APP_NAME
   environment:
-    name: review/$K8S_CLUSTER/$HELM_APP_NAME
+    name: dev/$K8S_CLUSTER/$HELM_APP_NAME
     action: stop
     deployment_tier: development
   rules:

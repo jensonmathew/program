@@ -12,7 +12,7 @@ px-npe02a:
   extends: .deploy-pcf
   resource_group: $CI_JOB_NAME-$CI_COMMIT_REF_SLUG
   environment:
-    name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: dev/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     url: $DYNAMIC_ENVIRONMENT_URL
     deployment_tier: development
     on_stop: stop-px-npe02a
@@ -23,7 +23,7 @@ px-npe02a-sanity:
   needs: ["px-npe02a"]
   dependencies: ["px-npe02a"]
   environment:
-    name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: dev/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: verify
 
 stop-px-npe02a:
@@ -32,7 +32,7 @@ stop-px-npe02a:
   needs: ["px-npe02a"]
   resource_group: review-deploy-$CI_COMMIT_REF_SLUG
   environment:
-    name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: dev/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: stop
     deployment_tier: development
   rules:
@@ -43,5 +43,5 @@ delete-all-routes-apps-px-npe02a:
   extends: .pcf_all_teardown
   resource_group: stop_all_px-npe02a
   environment:
-    name: review/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: dev/$PCF_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: stop

@@ -16,7 +16,7 @@ rev-px-npe2203:
   extends: .helm_deploy 
   resource_group: $K8S_FOUNDATION-$HELM_APP_NAME
   environment:
-    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: dev/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: development
     on_stop: rev-stop-px-npe2203
@@ -27,7 +27,7 @@ rev-px-npe2203-sanity:
   needs: ["rev-px-npe2203"]
   dependencies: ["rev-px-npe2203"]
   environment:
-    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: dev/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: verify
 
 rev-stop-px-npe2203:
@@ -35,7 +35,7 @@ rev-stop-px-npe2203:
   extends: .k8s_teardown
   resource_group: $K8S_FOUNDATION-$HELM_APP_NAME
   environment:
-    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: dev/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     action: stop
     deployment_tier: development
   rules:
@@ -64,7 +64,7 @@ ConfigMap-tke:
     LICTOR_UNIFY_MODE: "true"
     DATA_ENV_FORMAT: "true"
   environment:
-    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: dev/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
   rules:
     - if: $CI_MERGE_REQUEST_ID
       when: never
@@ -92,7 +92,7 @@ Secret-tke:
     UPDATE_SECRET: "true"
     SECRETS_YAML_ROOT: "true"
   environment:
-    name: review/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    name: dev/$K8S_FOUNDATION/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
   rules:
     - if: $CI_MERGE_REQUEST_ID
       when: never

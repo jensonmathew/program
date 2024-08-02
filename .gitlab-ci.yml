@@ -4,7 +4,6 @@ include:
       - /gitlab-ci/.tmo.job.mavenTest.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.mavenBuild.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.mavenPublish.gitlab-ci.yml
-      - /gitlab-ci/.tmo.job.fortify.gitlab-ci.yml
       - /gitlab-ci/.tmo.job.sonar.gitlab-ci.yml
       - /gitlab-ci/.tmo.function.badge.gitlab-ci.yml
       - /gitlab-ci/.tmo.function.ctp-e2egating.gitlab-ci.yml
