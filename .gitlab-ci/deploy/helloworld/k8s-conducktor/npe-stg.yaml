@@ -15,7 +15,7 @@ duck-stg-deploy:
   variables:
      FLAGGER_MONITORING: "true"
   environment:
-    name: stg/$K8S_CLUSTER/smoke-$HELM_APP_NAME
+    name: prod_staging/$K8S_CLUSTER/smoke-$HELM_APP_NAME
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: staging
   resource_group: $CI_JOB_NAME-$HELM_APP_NAME
@@ -34,7 +34,7 @@ duck-stg-promote:
   needs: ["duck-stg-deploy","validate_duck-stg-deploy"]
   dependencies: ["duck-stg-deploy","validate_duck-stg-deploy"]
   environment:
-    name: stg/$K8S_CLUSTER/smoke-$HELM_APP_NAME
+    name: prod_staging/$K8S_CLUSTER/smoke-$HELM_APP_NAME
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: staging
   resource_group: $CI_JOB_NAME-$HELM_APP_NAME
@@ -49,7 +49,7 @@ duck-stg-sanity:
   needs: ["duck-stg-deploy","duck-stg-promote"]
   dependencies: ["duck-stg-deploy","duck-stg-promote"]
   environment:
-    name: stg/$K8S_CLUSTER/smoke-$HELM_APP_NAME
+    name: prod_staging/$K8S_CLUSTER/smoke-$HELM_APP_NAME
     action: verify
   retry: 1
   when: delayed
@@ -69,7 +69,7 @@ duck-stg-rollback:
   variables:
      FLAGGER_MONITORING: "true"
   environment:
-    name: stg/$K8S_CLUSTER/smoke-$HELM_APP_NAME
+    name: prod_staging/$K8S_CLUSTER/smoke-$HELM_APP_NAME
     url: $DYNAMIC_ENVIRONMENT_URL/login
     deployment_tier: staging
   resource_group: $CI_JOB_NAME-$HELM_APP_NAME
