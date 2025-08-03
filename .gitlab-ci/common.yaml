@@ -18,6 +18,7 @@ stages:
     - rollback
     - verify-rollback
     - stop
+    - start
 
 variables:
     PCF_ORG: "Continuous-Delivery-Platform"
